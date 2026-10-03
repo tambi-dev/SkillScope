@@ -1,0 +1,36 @@
+﻿group,skill,vacancies_with_skill,vacancy_denominator,share
+kg,Excel,3,4,0.75
+kg,SQL,3,4,0.75
+kg,Power BI,2,4,0.5
+kg,Python,2,4,0.5
+kg,NumPy,1,4,0.25
+kg,Pandas,1,4,0.25
+kg,Statistics,1,4,0.25
+kg,Tableau,1,4,0.25
+kz,Python,27,38,0.7105
+kz,SQL,27,38,0.7105
+kz,Machine Learning,19,38,0.5
+kz,Excel,15,38,0.3947
+kz,Power BI,14,38,0.3684
+kz,Statistics,11,38,0.2895
+kz,Pandas,9,38,0.2368
+kz,scikit-learn,8,38,0.2105
+kz,NumPy,7,38,0.1842
+kz,Docker,6,38,0.1579
+kz,PostgreSQL,6,38,0.1579
+kz,Tableau,5,38,0.1316
+kz,Git,4,38,0.1053
+uz,Python,36,42,0.8571
+uz,SQL,35,42,0.8333
+uz,Pandas,24,42,0.5714
+uz,Power BI,22,42,0.5238
+uz,Machine Learning,17,42,0.4048
+uz,Excel,12,42,0.2857
+uz,Git,12,42,0.2857
+uz,NumPy,12,42,0.2857
+uz,Tableau,11,42,0.2619
+uz,scikit-learn,10,42,0.2381
+uz,Docker,9,42,0.2143
+uz,PostgreSQL,9,42,0.2143
+uz,Statistics,6,42,0.1429
+uz,AWS,1,42,0.0238

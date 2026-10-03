@@ -1,0 +1,1053 @@
+{
+  "created_at": "2026-10-01T08:30:10.924575+00:00",
+  "dataset": {
+    "candidate_vacancies": 95,
+    "excluded_candidates": 11,
+    "included_vacancies": 84,
+    "markets": [
+      "kg",
+      "kz",
+      "uz"
+    ],
+    "role_counts": {
+      "bi_analyst": 5,
+      "data_analyst": 43,
+      "data_scientist": 14,
+      "ml_engineer": 22
+    },
+    "salary_coverage_by_market": {
+      "kg": {
+        "coverage": 0.25,
+        "included_vacancies": 4,
+        "with_reported_salary": 1
+      },
+      "kz": {
+        "coverage": 0.1316,
+        "included_vacancies": 38,
+        "with_reported_salary": 5
+      },
+      "uz": {
+        "coverage": 0.0952,
+        "included_vacancies": 42,
+        "with_reported_salary": 4
+      }
+    },
+    "seniority_confidence_counts": {
+      "high": 25,
+      "low": 29,
+      "medium": 30
+    },
+    "seniority_counts": {
+      "Junior": 4,
+      "Middle": 36,
+      "Senior": 15,
+      "Unknown": 29
+    }
+  },
+  "interpretation_limits": [
+    "One snapshot describes vacancies returned by the configured HeadHunter search; it is not a labour-market census.",
+    "Skill frequencies are based on explicit vacancy text and key skills; missing mentions do not prove a skill is not required.",
+    "Salary summaries use reported values and local currencies; currencies are not pooled across countries.",
+    "Small salary groups are descriptive only and do not support reliable inference or salary prediction.",
+    "Seniority may be inferred from experience bands and is not always employer-declared.",
+    "The role and seniority rules have not yet been independently human-validated."
+  ],
+  "salary_summary": [
+    {
+      "complete_salary_ranges": 1,
+      "currency": "KGS",
+      "market": "kg",
+      "median_midpoint_local": 55000.0,
+      "role_family": "data_analyst"
+    },
+    {
+      "complete_salary_ranges": 3,
+      "currency": "KZT",
+      "market": "kz",
+      "median_midpoint_local": 600000.0,
+      "role_family": "data_analyst"
+    },
+    {
+      "complete_salary_ranges": 1,
+      "currency": "UZS",
+      "market": "uz",
+      "median_midpoint_local": 17500000.0,
+      "role_family": "data_analyst"
+    }
+  ],
+  "schema_version": 1,
+  "skill_cooccurrence": [
+    {
+      "skill_a": "Python",
+      "skill_b": "SQL",
+      "vacancies_together": 57
+    },
+    {
+      "skill_a": "Power BI",
+      "skill_b": "SQL",
+      "vacancies_together": 37
+    },
+    {
+      "skill_a": "Pandas",
+      "skill_b": "Python",
+      "vacancies_together": 34
+    },
+    {
+      "skill_a": "Power BI",
+      "skill_b": "Python",
+      "vacancies_together": 33
+    },
+    {
+      "skill_a": "Machine Learning",
+      "skill_b": "Python",
+      "vacancies_together": 32
+    },
+    {
+      "skill_a": "Pandas",
+      "skill_b": "SQL",
+      "vacancies_together": 32
+    },
+    {
+      "skill_a": "Machine Learning",
+      "skill_b": "SQL",
+      "vacancies_together": 25
+    },
+    {
+      "skill_a": "Excel",
+      "skill_b": "SQL",
+      "vacancies_together": 22
+    },
+    {
+      "skill_a": "NumPy",
+      "skill_b": "Pandas",
+      "vacancies_together": 20
+    },
+    {
+      "skill_a": "NumPy",
+      "skill_b": "Python",
+      "vacancies_together": 20
+    },
+    {
+      "skill_a": "NumPy",
+      "skill_b": "SQL",
+      "vacancies_together": 18
+    },
+    {
+      "skill_a": "Pandas",
+      "skill_b": "Power BI",
+      "vacancies_together": 18
+    },
+    {
+      "skill_a": "Python",
+      "skill_b": "scikit-learn",
+      "vacancies_together": 18
+    },
+    {
+      "skill_a": "Excel",
+      "skill_b": "Power BI",
+      "vacancies_together": 17
+    },
+    {
+      "skill_a": "Excel",
+      "skill_b": "Python",
+      "vacancies_together": 17
+    },
+    {
+      "skill_a": "Machine Learning",
+      "skill_b": "Pandas",
+      "vacancies_together": 17
+    },
+    {
+      "skill_a": "Python",
+      "skill_b": "Statistics",
+      "vacancies_together": 17
+    },
+    {
+      "skill_a": "SQL",
+      "skill_b": "Tableau",
+      "vacancies_together": 17
+    },
+    {
+      "skill_a": "SQL",
+      "skill_b": "scikit-learn",
+      "vacancies_together": 17
+    },
+    {
+      "skill_a": "Git",
+      "skill_b": "Python",
+      "vacancies_together": 16
+    },
+    {
+      "skill_a": "Machine Learning",
+      "skill_b": "scikit-learn",
+      "vacancies_together": 16
+    },
+    {
+      "skill_a": "Power BI",
+      "skill_b": "Tableau",
+      "vacancies_together": 16
+    },
+    {
+      "skill_a": "Python",
+      "skill_b": "Tableau",
+      "vacancies_together": 16
+    },
+    {
+      "skill_a": "SQL",
+      "skill_b": "Statistics",
+      "vacancies_together": 16
+    },
+    {
+      "skill_a": "Docker",
+      "skill_b": "Python",
+      "vacancies_together": 15
+    },
+    {
+      "skill_a": "Docker",
+      "skill_b": "Machine Learning",
+      "vacancies_together": 14
+    },
+    {
+      "skill_a": "Git",
+      "skill_b": "SQL",
+      "vacancies_together": 14
+    },
+    {
+      "skill_a": "Pandas",
+      "skill_b": "scikit-learn",
+      "vacancies_together": 14
+    },
+    {
+      "skill_a": "PostgreSQL",
+      "skill_b": "Python",
+      "vacancies_together": 14
+    },
+    {
+      "skill_a": "Docker",
+      "skill_b": "SQL",
+      "vacancies_together": 13
+    },
+    {
+      "skill_a": "Git",
+      "skill_b": "Pandas",
+      "vacancies_together": 13
+    },
+    {
+      "skill_a": "PostgreSQL",
+      "skill_b": "SQL",
+      "vacancies_together": 13
+    },
+    {
+      "skill_a": "NumPy",
+      "skill_b": "Power BI",
+      "vacancies_together": 11
+    },
+    {
+      "skill_a": "Git",
+      "skill_b": "Machine Learning",
+      "vacancies_together": 10
+    },
+    {
+      "skill_a": "Pandas",
+      "skill_b": "Statistics",
+      "vacancies_together": 10
+    },
+    {
+      "skill_a": "Power BI",
+      "skill_b": "Statistics",
+      "vacancies_together": 10
+    },
+    {
+      "skill_a": "Docker",
+      "skill_b": "scikit-learn",
+      "vacancies_together": 9
+    },
+    {
+      "skill_a": "Excel",
+      "skill_b": "Pandas",
+      "vacancies_together": 9
+    },
+    {
+      "skill_a": "Machine Learning",
+      "skill_b": "NumPy",
+      "vacancies_together": 9
+    },
+    {
+      "skill_a": "Pandas",
+      "skill_b": "PostgreSQL",
+      "vacancies_together": 9
+    },
+    {
+      "skill_a": "Pandas",
+      "skill_b": "Tableau",
+      "vacancies_together": 9
+    },
+    {
+      "skill_a": "Docker",
+      "skill_b": "Git",
+      "vacancies_together": 8
+    },
+    {
+      "skill_a": "Git",
+      "skill_b": "scikit-learn",
+      "vacancies_together": 8
+    },
+    {
+      "skill_a": "Machine Learning",
+      "skill_b": "PostgreSQL",
+      "vacancies_together": 8
+    },
+    {
+      "skill_a": "Machine Learning",
+      "skill_b": "Statistics",
+      "vacancies_together": 8
+    },
+    {
+      "skill_a": "NumPy",
+      "skill_b": "scikit-learn",
+      "vacancies_together": 8
+    },
+    {
+      "skill_a": "Docker",
+      "skill_b": "Pandas",
+      "vacancies_together": 7
+    },
+    {
+      "skill_a": "Git",
+      "skill_b": "NumPy",
+      "vacancies_together": 7
+    },
+    {
+      "skill_a": "Statistics",
+      "skill_b": "Tableau",
+      "vacancies_together": 7
+    },
+    {
+      "skill_a": "Docker",
+      "skill_b": "PostgreSQL",
+      "vacancies_together": 6
+    },
+    {
+      "skill_a": "Excel",
+      "skill_b": "NumPy",
+      "vacancies_together": 6
+    },
+    {
+      "skill_a": "Excel",
+      "skill_b": "Statistics",
+      "vacancies_together": 6
+    },
+    {
+      "skill_a": "Excel",
+      "skill_b": "Tableau",
+      "vacancies_together": 6
+    },
+    {
+      "skill_a": "Git",
+      "skill_b": "Power BI",
+      "vacancies_together": 6
+    },
+    {
+      "skill_a": "NumPy",
+      "skill_b": "PostgreSQL",
+      "vacancies_together": 6
+    },
+    {
+      "skill_a": "PostgreSQL",
+      "skill_b": "Power BI",
+      "vacancies_together": 6
+    },
+    {
+      "skill_a": "Docker",
+      "skill_b": "NumPy",
+      "vacancies_together": 5
+    },
+    {
+      "skill_a": "Git",
+      "skill_b": "PostgreSQL",
+      "vacancies_together": 5
+    },
+    {
+      "skill_a": "NumPy",
+      "skill_b": "Statistics",
+      "vacancies_together": 5
+    },
+    {
+      "skill_a": "NumPy",
+      "skill_b": "Tableau",
+      "vacancies_together": 5
+    },
+    {
+      "skill_a": "Power BI",
+      "skill_b": "scikit-learn",
+      "vacancies_together": 5
+    },
+    {
+      "skill_a": "Excel",
+      "skill_b": "Git",
+      "vacancies_together": 4
+    },
+    {
+      "skill_a": "Excel",
+      "skill_b": "Machine Learning",
+      "vacancies_together": 4
+    },
+    {
+      "skill_a": "Excel",
+      "skill_b": "PostgreSQL",
+      "vacancies_together": 4
+    },
+    {
+      "skill_a": "PostgreSQL",
+      "skill_b": "Tableau",
+      "vacancies_together": 4
+    },
+    {
+      "skill_a": "Statistics",
+      "skill_b": "scikit-learn",
+      "vacancies_together": 4
+    },
+    {
+      "skill_a": "Git",
+      "skill_b": "Statistics",
+      "vacancies_together": 3
+    },
+    {
+      "skill_a": "Machine Learning",
+      "skill_b": "Power BI",
+      "vacancies_together": 3
+    },
+    {
+      "skill_a": "PostgreSQL",
+      "skill_b": "Statistics",
+      "vacancies_together": 3
+    },
+    {
+      "skill_a": "PostgreSQL",
+      "skill_b": "scikit-learn",
+      "vacancies_together": 3
+    },
+    {
+      "skill_a": "Git",
+      "skill_b": "Tableau",
+      "vacancies_together": 2
+    },
+    {
+      "skill_a": "AWS",
+      "skill_b": "Docker",
+      "vacancies_together": 1
+    },
+    {
+      "skill_a": "AWS",
+      "skill_b": "Git",
+      "vacancies_together": 1
+    },
+    {
+      "skill_a": "AWS",
+      "skill_b": "Machine Learning",
+      "vacancies_together": 1
+    },
+    {
+      "skill_a": "AWS",
+      "skill_b": "Python",
+      "vacancies_together": 1
+    },
+    {
+      "skill_a": "Docker",
+      "skill_b": "Excel",
+      "vacancies_together": 1
+    },
+    {
+      "skill_a": "Docker",
+      "skill_b": "Power BI",
+      "vacancies_together": 1
+    },
+    {
+      "skill_a": "Docker",
+      "skill_b": "Statistics",
+      "vacancies_together": 1
+    },
+    {
+      "skill_a": "Excel",
+      "skill_b": "scikit-learn",
+      "vacancies_together": 1
+    },
+    {
+      "skill_a": "Tableau",
+      "skill_b": "scikit-learn",
+      "vacancies_together": 1
+    }
+  ],
+  "skills_by_market": [
+    {
+      "group": "kg",
+      "share": 0.75,
+      "skill": "Excel",
+      "vacancies_with_skill": 3,
+      "vacancy_denominator": 4
+    },
+    {
+      "group": "kg",
+      "share": 0.75,
+      "skill": "SQL",
+      "vacancies_with_skill": 3,
+      "vacancy_denominator": 4
+    },
+    {
+      "group": "kg",
+      "share": 0.5,
+      "skill": "Power BI",
+      "vacancies_with_skill": 2,
+      "vacancy_denominator": 4
+    },
+    {
+      "group": "kg",
+      "share": 0.5,
+      "skill": "Python",
+      "vacancies_with_skill": 2,
+      "vacancy_denominator": 4
+    },
+    {
+      "group": "kg",
+      "share": 0.25,
+      "skill": "NumPy",
+      "vacancies_with_skill": 1,
+      "vacancy_denominator": 4
+    },
+    {
+      "group": "kg",
+      "share": 0.25,
+      "skill": "Pandas",
+      "vacancies_with_skill": 1,
+      "vacancy_denominator": 4
+    },
+    {
+      "group": "kg",
+      "share": 0.25,
+      "skill": "Statistics",
+      "vacancies_with_skill": 1,
+      "vacancy_denominator": 4
+    },
+    {
+      "group": "kg",
+      "share": 0.25,
+      "skill": "Tableau",
+      "vacancies_with_skill": 1,
+      "vacancy_denominator": 4
+    },
+    {
+      "group": "kz",
+      "share": 0.7105,
+      "skill": "Python",
+      "vacancies_with_skill": 27,
+      "vacancy_denominator": 38
+    },
+    {
+      "group": "kz",
+      "share": 0.7105,
+      "skill": "SQL",
+      "vacancies_with_skill": 27,
+      "vacancy_denominator": 38
+    },
+    {
+      "group": "kz",
+      "share": 0.5,
+      "skill": "Machine Learning",
+      "vacancies_with_skill": 19,
+      "vacancy_denominator": 38
+    },
+    {
+      "group": "kz",
+      "share": 0.3947,
+      "skill": "Excel",
+      "vacancies_with_skill": 15,
+      "vacancy_denominator": 38
+    },
+    {
+      "group": "kz",
+      "share": 0.3684,
+      "skill": "Power BI",
+      "vacancies_with_skill": 14,
+      "vacancy_denominator": 38
+    },
+    {
+      "group": "kz",
+      "share": 0.2895,
+      "skill": "Statistics",
+      "vacancies_with_skill": 11,
+      "vacancy_denominator": 38
+    },
+    {
+      "group": "kz",
+      "share": 0.2368,
+      "skill": "Pandas",
+      "vacancies_with_skill": 9,
+      "vacancy_denominator": 38
+    },
+    {
+      "group": "kz",
+      "share": 0.2105,
+      "skill": "scikit-learn",
+      "vacancies_with_skill": 8,
+      "vacancy_denominator": 38
+    },
+    {
+      "group": "kz",
+      "share": 0.1842,
+      "skill": "NumPy",
+      "vacancies_with_skill": 7,
+      "vacancy_denominator": 38
+    },
+    {
+      "group": "kz",
+      "share": 0.1579,
+      "skill": "Docker",
+      "vacancies_with_skill": 6,
+      "vacancy_denominator": 38
+    },
+    {
+      "group": "kz",
+      "share": 0.1579,
+      "skill": "PostgreSQL",
+      "vacancies_with_skill": 6,
+      "vacancy_denominator": 38
+    },
+    {
+      "group": "kz",
+      "share": 0.1316,
+      "skill": "Tableau",
+      "vacancies_with_skill": 5,
+      "vacancy_denominator": 38
+    },
+    {
+      "group": "kz",
+      "share": 0.1053,
+      "skill": "Git",
+      "vacancies_with_skill": 4,
+      "vacancy_denominator": 38
+    },
+    {
+      "group": "uz",
+      "share": 0.8571,
+      "skill": "Python",
+      "vacancies_with_skill": 36,
+      "vacancy_denominator": 42
+    },
+    {
+      "group": "uz",
+      "share": 0.8333,
+      "skill": "SQL",
+      "vacancies_with_skill": 35,
+      "vacancy_denominator": 42
+    },
+    {
+      "group": "uz",
+      "share": 0.5714,
+      "skill": "Pandas",
+      "vacancies_with_skill": 24,
+      "vacancy_denominator": 42
+    },
+    {
+      "group": "uz",
+      "share": 0.5238,
+      "skill": "Power BI",
+      "vacancies_with_skill": 22,
+      "vacancy_denominator": 42
+    },
+    {
+      "group": "uz",
+      "share": 0.4048,
+      "skill": "Machine Learning",
+      "vacancies_with_skill": 17,
+      "vacancy_denominator": 42
+    },
+    {
+      "group": "uz",
+      "share": 0.2857,
+      "skill": "Excel",
+      "vacancies_with_skill": 12,
+      "vacancy_denominator": 42
+    },
+    {
+      "group": "uz",
+      "share": 0.2857,
+      "skill": "Git",
+      "vacancies_with_skill": 12,
+      "vacancy_denominator": 42
+    },
+    {
+      "group": "uz",
+      "share": 0.2857,
+      "skill": "NumPy",
+      "vacancies_with_skill": 12,
+      "vacancy_denominator": 42
+    },
+    {
+      "group": "uz",
+      "share": 0.2619,
+      "skill": "Tableau",
+      "vacancies_with_skill": 11,
+      "vacancy_denominator": 42
+    },
+    {
+      "group": "uz",
+      "share": 0.2381,
+      "skill": "scikit-learn",
+      "vacancies_with_skill": 10,
+      "vacancy_denominator": 42
+    },
+    {
+      "group": "uz",
+      "share": 0.2143,
+      "skill": "Docker",
+      "vacancies_with_skill": 9,
+      "vacancy_denominator": 42
+    },
+    {
+      "group": "uz",
+      "share": 0.2143,
+      "skill": "PostgreSQL",
+      "vacancies_with_skill": 9,
+      "vacancy_denominator": 42
+    },
+    {
+      "group": "uz",
+      "share": 0.1429,
+      "skill": "Statistics",
+      "vacancies_with_skill": 6,
+      "vacancy_denominator": 42
+    },
+    {
+      "group": "uz",
+      "share": 0.0238,
+      "skill": "AWS",
+      "vacancies_with_skill": 1,
+      "vacancy_denominator": 42
+    }
+  ],
+  "skills_by_role": [
+    {
+      "group": "bi_analyst",
+      "share": 1.0,
+      "skill": "Power BI",
+      "vacancies_with_skill": 5,
+      "vacancy_denominator": 5
+    },
+    {
+      "group": "bi_analyst",
+      "share": 1.0,
+      "skill": "SQL",
+      "vacancies_with_skill": 5,
+      "vacancy_denominator": 5
+    },
+    {
+      "group": "bi_analyst",
+      "share": 0.8,
+      "skill": "Python",
+      "vacancies_with_skill": 4,
+      "vacancy_denominator": 5
+    },
+    {
+      "group": "bi_analyst",
+      "share": 0.2,
+      "skill": "Excel",
+      "vacancies_with_skill": 1,
+      "vacancy_denominator": 5
+    },
+    {
+      "group": "bi_analyst",
+      "share": 0.2,
+      "skill": "NumPy",
+      "vacancies_with_skill": 1,
+      "vacancy_denominator": 5
+    },
+    {
+      "group": "bi_analyst",
+      "share": 0.2,
+      "skill": "Pandas",
+      "vacancies_with_skill": 1,
+      "vacancy_denominator": 5
+    },
+    {
+      "group": "bi_analyst",
+      "share": 0.2,
+      "skill": "Statistics",
+      "vacancies_with_skill": 1,
+      "vacancy_denominator": 5
+    },
+    {
+      "group": "bi_analyst",
+      "share": 0.2,
+      "skill": "Tableau",
+      "vacancies_with_skill": 1,
+      "vacancy_denominator": 5
+    },
+    {
+      "group": "data_analyst",
+      "share": 0.8372,
+      "skill": "SQL",
+      "vacancies_with_skill": 36,
+      "vacancy_denominator": 43
+    },
+    {
+      "group": "data_analyst",
+      "share": 0.6977,
+      "skill": "Python",
+      "vacancies_with_skill": 30,
+      "vacancy_denominator": 43
+    },
+    {
+      "group": "data_analyst",
+      "share": 0.6744,
+      "skill": "Power BI",
+      "vacancies_with_skill": 29,
+      "vacancy_denominator": 43
+    },
+    {
+      "group": "data_analyst",
+      "share": 0.6047,
+      "skill": "Excel",
+      "vacancies_with_skill": 26,
+      "vacancy_denominator": 43
+    },
+    {
+      "group": "data_analyst",
+      "share": 0.3721,
+      "skill": "Pandas",
+      "vacancies_with_skill": 16,
+      "vacancy_denominator": 43
+    },
+    {
+      "group": "data_analyst",
+      "share": 0.3488,
+      "skill": "Tableau",
+      "vacancies_with_skill": 15,
+      "vacancy_denominator": 43
+    },
+    {
+      "group": "data_analyst",
+      "share": 0.2558,
+      "skill": "Statistics",
+      "vacancies_with_skill": 11,
+      "vacancy_denominator": 43
+    },
+    {
+      "group": "data_analyst",
+      "share": 0.2326,
+      "skill": "NumPy",
+      "vacancies_with_skill": 10,
+      "vacancy_denominator": 43
+    },
+    {
+      "group": "data_analyst",
+      "share": 0.186,
+      "skill": "PostgreSQL",
+      "vacancies_with_skill": 8,
+      "vacancy_denominator": 43
+    },
+    {
+      "group": "data_analyst",
+      "share": 0.1395,
+      "skill": "Git",
+      "vacancies_with_skill": 6,
+      "vacancy_denominator": 43
+    },
+    {
+      "group": "data_analyst",
+      "share": 0.0465,
+      "skill": "Machine Learning",
+      "vacancies_with_skill": 2,
+      "vacancy_denominator": 43
+    },
+    {
+      "group": "data_analyst",
+      "share": 0.0465,
+      "skill": "scikit-learn",
+      "vacancies_with_skill": 2,
+      "vacancy_denominator": 43
+    },
+    {
+      "group": "data_analyst",
+      "share": 0.0233,
+      "skill": "Docker",
+      "vacancies_with_skill": 1,
+      "vacancy_denominator": 43
+    },
+    {
+      "group": "data_scientist",
+      "share": 0.8571,
+      "skill": "Machine Learning",
+      "vacancies_with_skill": 12,
+      "vacancy_denominator": 14
+    },
+    {
+      "group": "data_scientist",
+      "share": 0.7857,
+      "skill": "Python",
+      "vacancies_with_skill": 11,
+      "vacancy_denominator": 14
+    },
+    {
+      "group": "data_scientist",
+      "share": 0.7143,
+      "skill": "SQL",
+      "vacancies_with_skill": 10,
+      "vacancy_denominator": 14
+    },
+    {
+      "group": "data_scientist",
+      "share": 0.4286,
+      "skill": "Pandas",
+      "vacancies_with_skill": 6,
+      "vacancy_denominator": 14
+    },
+    {
+      "group": "data_scientist",
+      "share": 0.4286,
+      "skill": "scikit-learn",
+      "vacancies_with_skill": 6,
+      "vacancy_denominator": 14
+    },
+    {
+      "group": "data_scientist",
+      "share": 0.3571,
+      "skill": "Statistics",
+      "vacancies_with_skill": 5,
+      "vacancy_denominator": 14
+    },
+    {
+      "group": "data_scientist",
+      "share": 0.2143,
+      "skill": "Docker",
+      "vacancies_with_skill": 3,
+      "vacancy_denominator": 14
+    },
+    {
+      "group": "data_scientist",
+      "share": 0.2143,
+      "skill": "Excel",
+      "vacancies_with_skill": 3,
+      "vacancy_denominator": 14
+    },
+    {
+      "group": "data_scientist",
+      "share": 0.2143,
+      "skill": "NumPy",
+      "vacancies_with_skill": 3,
+      "vacancy_denominator": 14
+    },
+    {
+      "group": "data_scientist",
+      "share": 0.1429,
+      "skill": "Git",
+      "vacancies_with_skill": 2,
+      "vacancy_denominator": 14
+    },
+    {
+      "group": "data_scientist",
+      "share": 0.1429,
+      "skill": "Power BI",
+      "vacancies_with_skill": 2,
+      "vacancy_denominator": 14
+    },
+    {
+      "group": "data_scientist",
+      "share": 0.0714,
+      "skill": "PostgreSQL",
+      "vacancies_with_skill": 1,
+      "vacancy_denominator": 14
+    },
+    {
+      "group": "data_scientist",
+      "share": 0.0714,
+      "skill": "Tableau",
+      "vacancies_with_skill": 1,
+      "vacancy_denominator": 14
+    },
+    {
+      "group": "ml_engineer",
+      "share": 1.0,
+      "skill": "Machine Learning",
+      "vacancies_with_skill": 22,
+      "vacancy_denominator": 22
+    },
+    {
+      "group": "ml_engineer",
+      "share": 0.9091,
+      "skill": "Python",
+      "vacancies_with_skill": 20,
+      "vacancy_denominator": 22
+    },
+    {
+      "group": "ml_engineer",
+      "share": 0.6364,
+      "skill": "SQL",
+      "vacancies_with_skill": 14,
+      "vacancy_denominator": 22
+    },
+    {
+      "group": "ml_engineer",
+      "share": 0.5,
+      "skill": "Docker",
+      "vacancies_with_skill": 11,
+      "vacancy_denominator": 22
+    },
+    {
+      "group": "ml_engineer",
+      "share": 0.5,
+      "skill": "Pandas",
+      "vacancies_with_skill": 11,
+      "vacancy_denominator": 22
+    },
+    {
+      "group": "ml_engineer",
+      "share": 0.4545,
+      "skill": "scikit-learn",
+      "vacancies_with_skill": 10,
+      "vacancy_denominator": 22
+    },
+    {
+      "group": "ml_engineer",
+      "share": 0.3636,
+      "skill": "Git",
+      "vacancies_with_skill": 8,
+      "vacancy_denominator": 22
+    },
+    {
+      "group": "ml_engineer",
+      "share": 0.2727,
+      "skill": "NumPy",
+      "vacancies_with_skill": 6,
+      "vacancy_denominator": 22
+    },
+    {
+      "group": "ml_engineer",
+      "share": 0.2727,
+      "skill": "PostgreSQL",
+      "vacancies_with_skill": 6,
+      "vacancy_denominator": 22
+    },
+    {
+      "group": "ml_engineer",
+      "share": 0.0909,
+      "skill": "Power BI",
+      "vacancies_with_skill": 2,
+      "vacancy_denominator": 22
+    },
+    {
+      "group": "ml_engineer",
+      "share": 0.0455,
+      "skill": "AWS",
+      "vacancies_with_skill": 1,
+      "vacancy_denominator": 22
+    },
+    {
+      "group": "ml_engineer",
+      "share": 0.0455,
+      "skill": "Statistics",
+      "vacancies_with_skill": 1,
+      "vacancy_denominator": 22
+    }
+  ],
+  "source_file": "vacancies_latest.jsonl"
+}

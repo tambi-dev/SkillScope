@@ -1,0 +1,540 @@
+{
+  "authenticated": true,
+  "collection_id": "20261001T080412Z",
+  "finished_at": "2026-10-01T08:04:38.109859+00:00",
+  "markets": [
+    {
+      "area_id": "48",
+      "code": "kg",
+      "currency": "KGS",
+      "host": "headhunter.kg",
+      "name": "Kyrgyzstan"
+    },
+    {
+      "area_id": "40",
+      "code": "kz",
+      "currency": "KZT",
+      "host": "hh.kz",
+      "name": "Kazakhstan"
+    },
+    {
+      "area_id": "97",
+      "code": "uz",
+      "currency": "UZS",
+      "host": "hh.uz",
+      "name": "Uzbekistan"
+    }
+  ],
+  "overall": {
+    "salary_coverage": 0.1579,
+    "unique_candidates": 95,
+    "with_salary": 15
+  },
+  "queries": [
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data analyst",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 4,
+      "candidates_fetched": 4,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "аналитик данных",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "дата-аналитик",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "BI analyst",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "BI-аналитик",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "аналитик BI",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data scientist",
+      "role": "data_scientist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data science",
+      "role": "data_scientist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "machine learning engineer",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "ML engineer",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер машинного обучения",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 9,
+      "candidates_fetched": 9,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data analyst",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 12,
+      "candidates_fetched": 12,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "аналитик данных",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "дата-аналитик",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "BI analyst",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 2,
+      "candidates_fetched": 2,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "BI-аналитик",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 2,
+      "candidates_fetched": 2,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "аналитик BI",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 9,
+      "candidates_fetched": 9,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data scientist",
+      "role": "data_scientist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data science",
+      "role": "data_scientist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "machine learning engineer",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 8,
+      "candidates_fetched": 8,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "ML engineer",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер машинного обучения",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 14,
+      "candidates_fetched": 14,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data analyst",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 13,
+      "candidates_fetched": 13,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "аналитик данных",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "дата-аналитик",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 2,
+      "candidates_fetched": 2,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "BI analyst",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "BI-аналитик",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "аналитик BI",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 8,
+      "candidates_fetched": 8,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data scientist",
+      "role": "data_scientist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data science",
+      "role": "data_scientist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "machine learning engineer",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 12,
+      "candidates_fetched": 12,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "ML engineer",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер машинного обучения",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    }
+  ],
+  "role_summary": [
+    {
+      "label": "Data Analyst",
+      "market": "kg",
+      "role": "data_analyst",
+      "salary_coverage": 0.4,
+      "unique_candidates": 5,
+      "with_salary": 2
+    },
+    {
+      "label": "BI Analyst",
+      "market": "kg",
+      "role": "bi_analyst",
+      "salary_coverage": 0.0,
+      "unique_candidates": 1,
+      "with_salary": 0
+    },
+    {
+      "label": "Data Scientist",
+      "market": "kg",
+      "role": "data_scientist",
+      "salary_coverage": 1.0,
+      "unique_candidates": 1,
+      "with_salary": 1
+    },
+    {
+      "label": "ML Engineer",
+      "market": "kg",
+      "role": "ml_engineer",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "Data Analyst",
+      "market": "kz",
+      "role": "data_analyst",
+      "salary_coverage": 0.2381,
+      "unique_candidates": 21,
+      "with_salary": 5
+    },
+    {
+      "label": "BI Analyst",
+      "market": "kz",
+      "role": "bi_analyst",
+      "salary_coverage": 0.0,
+      "unique_candidates": 3,
+      "with_salary": 0
+    },
+    {
+      "label": "Data Scientist",
+      "market": "kz",
+      "role": "data_scientist",
+      "salary_coverage": 0.1,
+      "unique_candidates": 10,
+      "with_salary": 1
+    },
+    {
+      "label": "ML Engineer",
+      "market": "kz",
+      "role": "ml_engineer",
+      "salary_coverage": 0.1111,
+      "unique_candidates": 9,
+      "with_salary": 1
+    },
+    {
+      "label": "Data Analyst",
+      "market": "uz",
+      "role": "data_analyst",
+      "salary_coverage": 0.16,
+      "unique_candidates": 25,
+      "with_salary": 4
+    },
+    {
+      "label": "BI Analyst",
+      "market": "uz",
+      "role": "bi_analyst",
+      "salary_coverage": 0.0,
+      "unique_candidates": 2,
+      "with_salary": 0
+    },
+    {
+      "label": "Data Scientist",
+      "market": "uz",
+      "role": "data_scientist",
+      "salary_coverage": 0.125,
+      "unique_candidates": 8,
+      "with_salary": 1
+    },
+    {
+      "label": "ML Engineer",
+      "market": "uz",
+      "role": "ml_engineer",
+      "salary_coverage": 0.0769,
+      "unique_candidates": 13,
+      "with_salary": 1
+    }
+  ],
+  "roles": [
+    {
+      "code": "data_analyst",
+      "label": "Data Analyst",
+      "queries": [
+        "data analyst",
+        "аналитик данных",
+        "дата-аналитик"
+      ]
+    },
+    {
+      "code": "bi_analyst",
+      "label": "BI Analyst",
+      "queries": [
+        "BI analyst",
+        "BI-аналитик",
+        "аналитик BI"
+      ]
+    },
+    {
+      "code": "data_scientist",
+      "label": "Data Scientist",
+      "queries": [
+        "data scientist",
+        "data science"
+      ]
+    },
+    {
+      "code": "ml_engineer",
+      "label": "ML Engineer",
+      "queries": [
+        "machine learning engineer",
+        "ML engineer",
+        "инженер машинного обучения"
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "search_mode": "strict",
+  "started_at": "2026-10-01T08:04:12.684100+00:00",
+  "warnings": [
+    "Search candidates have not yet passed relevance classification or manual review.",
+    "API result counts can overlap across queries and role families."
+  ]
+}

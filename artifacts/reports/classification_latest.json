@@ -1,0 +1,126 @@
+{
+  "candidates": 95,
+  "created_at": "2026-10-01T08:29:10.157934+00:00",
+  "decision_counts": {
+    "excluded": 11,
+    "included": 84
+  },
+  "history_update": {
+    "existing_vacancies": 84,
+    "new_vacancies": 0,
+    "total_tracked": 96
+  },
+  "included_role_counts": {
+    "bi_analyst": 5,
+    "data_analyst": 43,
+    "data_scientist": 14,
+    "ml_engineer": 22
+  },
+  "included_seniority_counts": {
+    "Junior": 4,
+    "Middle": 36,
+    "Senior": 15,
+    "Unknown": 29
+  },
+  "included_skill_counts": {
+    "AWS": 1,
+    "Docker": 15,
+    "Excel": 30,
+    "Git": 16,
+    "Machine Learning": 36,
+    "NumPy": 20,
+    "Pandas": 34,
+    "PostgreSQL": 15,
+    "Power BI": 38,
+    "Python": 65,
+    "SQL": 65,
+    "Statistics": 18,
+    "Tableau": 17,
+    "scikit-learn": 18
+  },
+  "included_with_any_skill": 82,
+  "market_counts": {
+    "kg": {
+      "excluded": 3,
+      "included": 4
+    },
+    "kz": {
+      "excluded": 5,
+      "included": 38
+    },
+    "uz": {
+      "excluded": 3,
+      "included": 42
+    }
+  },
+  "market_summary": [
+    {
+      "candidates": 7,
+      "included": 4,
+      "market": "kg",
+      "role_counts": {
+        "bi_analyst": 1,
+        "data_analyst": 3
+      },
+      "salary_coverage": 0.25,
+      "seniority_counts": {
+        "Middle": 3,
+        "Unknown": 1
+      },
+      "with_salary": 1
+    },
+    {
+      "candidates": 43,
+      "included": 38,
+      "market": "kz",
+      "role_counts": {
+        "bi_analyst": 2,
+        "data_analyst": 18,
+        "data_scientist": 9,
+        "ml_engineer": 9
+      },
+      "salary_coverage": 0.1316,
+      "seniority_counts": {
+        "Junior": 1,
+        "Middle": 13,
+        "Senior": 8,
+        "Unknown": 16
+      },
+      "with_salary": 5
+    },
+    {
+      "candidates": 45,
+      "included": 42,
+      "market": "uz",
+      "role_counts": {
+        "bi_analyst": 2,
+        "data_analyst": 22,
+        "data_scientist": 5,
+        "ml_engineer": 13
+      },
+      "salary_coverage": 0.0952,
+      "seniority_counts": {
+        "Junior": 3,
+        "Middle": 20,
+        "Senior": 7,
+        "Unknown": 12
+      },
+      "with_salary": 4
+    }
+  ],
+  "markets": [
+    "kg",
+    "kz",
+    "uz"
+  ],
+  "outputs": {
+    "history_database": "data\\processed\\vacancy_history.sqlite3",
+    "manual_review_csv": "data\\processed\\manual_review_latest.csv",
+    "processed_jsonl": "data\\processed\\vacancies_latest.jsonl"
+  },
+  "salary_coverage_included": 0.119,
+  "schema_version": 4,
+  "search_mode": "strict",
+  "source_collection_id": "20261001T080412Z",
+  "warning": "Automatic title rules are scope filters, not ground truth; validate a sample manually before publishing analytical claims."
+}
