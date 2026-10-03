@@ -1,0 +1,55 @@
+[skills.python]
+label = "Python"
+aliases = ["python"]
+
+[skills.sql]
+label = "SQL"
+aliases = ["sql"]
+
+[skills.excel]
+label = "Excel"
+aliases = ["excel", "ms excel", "microsoft excel"]
+
+[skills.power_bi]
+label = "Power BI"
+aliases = ["power bi", "powerbi"]
+
+[skills.tableau]
+label = "Tableau"
+aliases = ["tableau"]
+
+[skills.pandas]
+label = "Pandas"
+aliases = ["pandas"]
+
+[skills.numpy]
+label = "NumPy"
+aliases = ["numpy"]
+
+[skills.scikit_learn]
+label = "scikit-learn"
+aliases = ["scikit-learn", "scikit learn", "sklearn"]
+
+[skills.machine_learning]
+label = "Machine Learning"
+aliases = ["machine learning", "ml", "машинное обучение"]
+
+[skills.statistics]
+label = "Statistics"
+aliases = ["statistics", "statistical analysis", "статистика", "статистический анализ"]
+
+[skills.git]
+label = "Git"
+aliases = ["git"]
+
+[skills.docker]
+label = "Docker"
+aliases = ["docker"]
+
+[skills.postgresql]
+label = "PostgreSQL"
+aliases = ["postgresql", "postgres"]
+
+[skills.aws]
+label = "AWS"
+aliases = ["aws", "amazon web services"]

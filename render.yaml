@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: skillscope
+    runtime: python
+    plan: free
+    buildCommand: python -m pip install ".[api]"
+    startCommand: python -m skillscope.serve
+    healthCheckPath: /api/overview
+    envVars:
+      - key: HOST
+        value: 0.0.0.0

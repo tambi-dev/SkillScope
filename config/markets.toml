@@ -1,0 +1,20 @@
+[markets.kg]
+name = "Kyrgyzstan"
+host = "headhunter.kg"
+area_id = "48"
+currency = "KGS"
+enabled = true
+
+[markets.kz]
+name = "Kazakhstan"
+host = "hh.kz"
+area_id = "40"
+currency = "KZT"
+enabled = true
+
+[markets.uz]
+name = "Uzbekistan"
+host = "hh.uz"
+area_id = "97"
+currency = "UZS"
+enabled = true
