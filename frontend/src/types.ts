@@ -1,11 +1,35 @@
 export type MarketCode = "kg" | "kz" | "uz";
-export type RoleCode =
-  | "data_analyst"
-  | "bi_analyst"
-  | "data_scientist"
-  | "ml_engineer";
+export type RoleCode = string;
+export type CategoryCode = string;
 
 export type SeniorityLevel = "Junior" | "Middle" | "Senior" | "Unknown";
+
+export interface TaxonomyRole {
+  code: RoleCode;
+  label: string;
+  category: CategoryCode;
+}
+
+export interface TaxonomyCategory {
+  code: CategoryCode;
+  label: string;
+  roles: TaxonomyRole[];
+}
+
+export interface RoleDemandItem extends TaxonomyRole {
+  vacancies: number;
+  share: number;
+  experience_observed_vacancies: number;
+  no_experience_required: number;
+  no_experience_share: number | null;
+}
+
+export interface RoleDemandResponse {
+  market: MarketCode | null;
+  category: CategoryCode | null;
+  vacancy_denominator: number;
+  items: RoleDemandItem[];
+}
 
 export interface Overview {
   data_mode: "processed" | "demo";
@@ -30,6 +54,7 @@ export interface Overview {
 export interface SkillsResponse {
   market: string | null;
   role: string | null;
+  category: CategoryCode | null;
   vacancy_denominator: number;
   items: Array<{
     skill: string;
