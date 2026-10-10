@@ -1,6 +1,6 @@
 # ADR 002: Three-country core-role scope
 
-**Status:** accepted  
+**Status:** superseded by ADR 004
 **Date:** 2026-09-25
 
 ## Decision

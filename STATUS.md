@@ -1,19 +1,21 @@
 # SkillScope — project status
 
-Last updated: 2026-10-01
+Last updated: 2026-10-10
 
 ## Current milestone
 
-Phase 8 — readable dashboard, browser verification and Render deployment preparation.
+IT role taxonomy, Market Radar and responsive frontend redesign.
 
 ## Scope
 
-- Data Analyst
-- BI Analyst
-- Data Scientist
-- ML Engineer
+- Data & AI: Data Analyst, BI Analyst, Data Scientist, ML Engineer
+- Software Engineering: Backend, Frontend, Full-stack Developer
+- DevOps & Cloud: DevOps Engineer
+- Cybersecurity: Information Security Specialist
+- QA: QA Engineer
 - Geography: Kazakhstan (`area=40`), Kyrgyzstan (`area=48`), Uzbekistan (`area=97`)
-- Adjacent analyst roles are excluded from the current code and dataset.
+- Role/category definitions and title patterns are config-driven. Expanded roles need a
+  new HeadHunter sample and manual review before their charts can support market claims.
 
 ## Completed
 
@@ -60,10 +62,31 @@ Phase 8 — readable dashboard, browser verification and Render deployment prepa
   96 unique vacancies are now present in SQLite across both snapshots.
 - Read-only FastAPI endpoints added for overview, skills, salary, seniority and model
   readiness. The API was smoke-tested against the current processed snapshot.
-- Responsive React + TypeScript dashboard added with country/role filters, skills and
-  seniority charts, salary coverage table, model-readiness notice and methodology note.
-- Production frontend build passes; chart and React dependencies are split into
-  separate bundles.
+- Added a packaged role catalog for five categories and ten roles, preserving the four
+  existing Data codes and their hybrid-title priority.
+- Extended role classification, review exports, collection reports, EDA and read-only API
+  filters to include categories. The API reports observed role counts and known
+  no-experience requirements separately from inferred seniority.
+- Expanded the skill alias list for software, cloud, security and QA technologies while
+  avoiding common ambiguous short aliases.
+- A strict HeadHunter title-search pilot covered the six new roles across KG/KZ/UZ. The
+  backend/frontend/full-stack, DevOps and QA queries returned results in all three
+  markets. Information Security returned 3 candidates in KG, 15 in KZ and 15 in UZ.
+- Rechecked 264 unique vacancy titles across the IT-role and expanded security pilots.
+  The current rules assign 249 titles to one of the six new roles and leave 15
+  unclassified. QA/QC and security-sales title exclusions are configured; stack-specific
+  titles between role and developer terms and QA Automation variants are supported.
+- The title pilot is a search sample, not full-detail manual review. Some candidates may
+  still be irrelevant, and title matching may miss valid roles. Security coverage in KG
+  is too small for reliable comparisons. Salary figures in search cards are not used as
+  salary evidence.
+- Processed and demo snapshots remain Data-only until an expanded collection is reviewed.
+- Expanded the React dashboard with taxonomy-driven market, field and role filters, role
+  demand, a cross-field skill matrix, local-currency salary summaries, seniority and a
+  separate no-experience-required access signal. Unsampled fields are labeled explicitly.
+- Playwright browser smoke passed at 1366, 1024, 390 and 320px after the dashboard update.
+- Frontend API tests pass (6); backend pytest passes (51 tests and 20 subtests).
+- Production frontend build passes, with a separate React bundle and self-hosted Manrope.
 - Added a strict-allowlist demo-data generator. The bundled snapshot retains only
   de-identified analytical fields and omits vacancy IDs, titles, employers, links and
   descriptions.
@@ -71,18 +94,25 @@ Phase 8 — readable dashboard, browser verification and Render deployment prepa
   the frontend shows which source is active.
 - Built React assets are packaged with the Python app and served by FastAPI. Local
   review now needs one server command rather than separate API and Vite processes.
-- Increased small UI labels to at least 12px and adjusted tablet/phone layouts.
-- All KPI counts now follow filters. Loading and errors hide stale results; failed
-  requests can be retried. Changing filters aborts previous requests.
-- Country composition and an expanded Methodology section are visible in the dashboard.
-- Five frontend request tests and a Playwright browser smoke script cover filtering,
-  loading, retry, empty results and 1366/1024/390/320px viewport widths.
+- Four analysis tabs share sticky filters: Overview, Roles & experience, Skills and Salaries.
+- Market Radar supports hover previews, pinned skills, frequency comparisons, keyboard
+  exploration and touch input. Scanning can be paused and respects reduced motion.
+- Charts, ranked lists and salary tables expose sample counts, proportional scales and
+  unsampled fields. Salary values stay separate by local currency.
+- All KPI counts follow filters. The previous snapshot remains labeled and inert while
+  loading; errors hide stale results and offer retry. Superseded requests are aborted.
+- Browser checks cover filters, history, keyboard navigation, loading, retry, empty states,
+  radar motion and 1366/1024/390/320px layouts. Returning to Overview preserves the
+  workspace position without a jump.
 - Render Blueprint configured for one Free Python service using the packaged frontend
   and demo data. No hosting account has been connected and nothing is published yet.
 - Built wheel checked in a temporary directory: demo API, HTML and linked static assets
   work without the repository's private data or editable source installation.
 
 ## Current snapshot
+
+The figures below are the pre-expansion baseline. They describe the four Data roles only;
+no observation is available yet for the six newly added role families.
 
 - First snapshot had 90 strict-search candidates; second snapshot has 95.
 - The current processed snapshot includes 84 vacancies and excludes 11.
@@ -99,17 +129,23 @@ Phase 8 — readable dashboard, browser verification and Render deployment prepa
 
 ## Next actions
 
-1. Connect the repository to the user's GitHub/Render accounts and publish the prepared demo.
-2. Add one purposeful Lottie visualization after deciding its data explanation.
-3. Collect another snapshot later to distinguish persistent trends from one-day changes.
+1. Collect full vacancy details for the six new roles and review title-classifier decisions.
+2. Refresh and review the sanitized demo snapshot after the role coverage is validated.
+3. Collect later snapshots to distinguish persistent trends from one-day changes.
 4. Reconsider a salary model only after complete salary observations grow substantially.
+5. Deploy the prepared demo to Render when hosting is requested.
 
 ## Verification
 
 ```powershell
 $env:PYTHONPATH = "src"
-python -m unittest discover -s tests -v
-python -m compileall -q src tests
+python -m pytest
+python -m ruff check src tests
+python -m mypy src/skillscope
+pnpm --dir frontend test
+pnpm --dir frontend build
+pnpm --dir frontend test:browser
+node frontend/tests/radar-interactions.cjs
 ```
 
 ## Guidance for a new chat

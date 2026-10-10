@@ -1,6 +1,12 @@
 # SkillScope
 
-SkillScope analyzes HeadHunter vacancies for four data roles in Kyrgyzstan, Kazakhstan and Uzbekistan. It produces a dashboard of skill mentions, inferred seniority and reported salary ranges.
+SkillScope summarizes HeadHunter vacancies across selected IT roles in Kyrgyzstan,
+Kazakhstan and Uzbekistan. Its initial scope covers Data & AI, Software Engineering,
+DevOps & Cloud, Cybersecurity and QA. The dashboard reports observed vacancy counts,
+skill mentions, inferred seniority and published salary ranges.
+
+The packaged demo snapshot still contains the previous four-role Data sample. Refresh
+and review the collected dataset before treating expanded-role charts as market evidence.
 
 ## Run the dashboard
 
@@ -21,6 +27,9 @@ The dashboard works with demo data and does not need a HeadHunter token. Copy `.
 ```powershell
 Copy-Item .env.example .env
 ```
+
+Role categories, search phrases, title patterns and overlap priority live in
+`src/skillscope/role_catalog.toml`. Skill aliases live in `config/skills.toml`.
 
 | Variable | Purpose |
 | --- | --- |
@@ -63,9 +72,32 @@ pnpm --dir frontend build
 
 Commit the regenerated files in `src/skillscope/static` with the frontend changes.
 
+The dashboard has four tabs: Overview, Roles & experience, Skills and Salaries. Shared
+filters persist across tabs. Market Radar previews and pins skill frequencies and offers
+keyboard navigation, a List view and reduced-motion support.
+
+## Checks
+
+Install Python development tools with `pip install -e ".[dev]"`, then run:
+
+```powershell
+python -m pytest
+python -m ruff check src tests
+python -m mypy src/skillscope
+pnpm --dir frontend test
+pnpm --dir frontend build
+pnpm --dir frontend exec playwright install chromium
+```
+
+With the API server running, use `pnpm --dir frontend test:browser` and
+`node frontend/tests/radar-interactions.cjs`. Set `PLAYWRIGHT_CHANNEL=chrome` to use
+installed Chrome instead, or `SKILLSCOPE_URL` to check another local server.
+
 ## API
 
 - `GET /api/overview`
+- `GET /api/taxonomy`
+- `GET /api/roles?market=kz&category=software_engineering`
 - `GET /api/skills?market=kz&role=data_analyst`
 - `GET /api/salaries`
 - `GET /api/seniority`
@@ -76,6 +108,8 @@ Interactive API documentation is available at `/docs`.
 ## Scope and limitations
 
 - Search results are a HeadHunter snapshot, not a census of the regional labour market.
+- Role counts describe vacancies returned by configured searches; they are not total
+  market demand. Categories with few records should not be ranked as if samples were equal.
 - Role and skill assignments use explicit rules and dictionaries.
 - Seniority is inferred from titles, descriptions and experience bands.
 - Salary values are sparse. Only complete local-currency ranges contribute a midpoint; currencies are not converted or pooled.
@@ -83,4 +117,4 @@ Interactive API documentation is available at `/docs`.
 
 ## Stack
 
-Python, FastAPI, SQLite, React, TypeScript, Vite and Recharts. The deployment configuration for Render is in `render.yaml`; see [deployment instructions](docs/deployment.md).
+Python, FastAPI, SQLite, React, TypeScript and Vite. The deployment configuration for Render is in `render.yaml`; see [deployment instructions](docs/deployment.md).
