@@ -14,7 +14,7 @@ from pathlib import Path
 from statistics import median
 from typing import Any
 
-from skillscope.config import Settings
+from skillscope.config import Settings, load_role_queries
 
 LOGGER = logging.getLogger("skillscope.eda")
 REVIEW_FIELDS = (
@@ -142,6 +142,7 @@ def write_validation_sample(path: Path, records: list[dict[str, Any]]) -> None:
         "vacancy_url",
         "model_decision",
         "model_role_family",
+        "model_role_category",
         "model_seniority",
         "seniority_confidence",
         "seniority_reasons",
@@ -165,6 +166,7 @@ def write_validation_sample(path: Path, records: list[dict[str, Any]]) -> None:
                     "vacancy_url": record.get("alternate_url"),
                     "model_decision": record.get("review_decision"),
                     "model_role_family": record.get("role_family") or "",
+                    "model_role_category": record.get("role_category") or "",
                     "model_seniority": record.get("seniority") or "Unknown",
                     "seniority_confidence": record.get("seniority_confidence"),
                     "seniority_reasons": ";".join(record.get("seniority_reasons", [])),
@@ -179,7 +181,19 @@ def write_validation_sample(path: Path, records: list[dict[str, Any]]) -> None:
 def build_eda_report(
     records: list[dict[str, Any]], *, source_path: Path
 ) -> dict[str, Any]:
-    included = [record for record in records if record.get("review_decision") == "included"]
+    role_config = Path(__file__).with_name("role_catalog.toml")
+    category_by_role = {
+        role.code: role.category for role in load_role_queries(role_config)
+    }
+    included = [
+        {
+            **record,
+            "role_category": record.get("role_category")
+            or category_by_role.get(str(record.get("role_family"))),
+        }
+        for record in records
+        if record.get("review_decision") == "included"
+    ]
     markets = sorted({str(record.get("market") or "unknown") for record in included})
     included_by_market = {
         market: [record for record in included if record.get("market") == market]
@@ -191,9 +205,10 @@ def build_eda_report(
     }
     skill_market_rows = _skill_frequency_rows(included, "market")
     skill_role_rows = _skill_frequency_rows(included, "role_family")
+    skill_category_rows = _skill_frequency_rows(included, "role_category")
     salary_rows = _salary_summary_rows(included)
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "created_at": datetime.now(UTC).isoformat(),
         "source_file": source_path.name,
         "dataset": {
@@ -204,6 +219,7 @@ def build_eda_report(
             ),
             "markets": markets,
             "role_counts": _counts(included, "role_family"),
+            "category_counts": _counts(included, "role_category"),
             "seniority_counts": _counts(included, "seniority"),
             "seniority_confidence_counts": _counts(included, "seniority_confidence"),
             "salary_coverage_by_market": {
@@ -219,6 +235,7 @@ def build_eda_report(
         },
         "skills_by_market": skill_market_rows,
         "skills_by_role": skill_role_rows,
+        "skills_by_category": skill_category_rows,
         "skill_cooccurrence": _skill_cooccurrence(included),
         "salary_summary": salary_rows,
         "interpretation_limits": [

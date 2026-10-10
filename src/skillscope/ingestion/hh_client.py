@@ -11,7 +11,7 @@ import urllib.parse
 import urllib.request
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
 
 class HHApiError(RuntimeError):
@@ -140,7 +140,7 @@ class HHClient:
                 return max(0.0, float(retry_after))
             except ValueError:
                 pass
-        return min(30.0, (2**attempt) + self._random_uniform(0.0, 0.5))
+        return cast(float, min(30.0, (2**attempt) + self._random_uniform(0.0, 0.5)))
 
 
 def _urllib_transport(request: urllib.request.Request, timeout: float) -> TransportResponse:

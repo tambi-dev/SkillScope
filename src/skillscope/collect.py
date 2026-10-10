@@ -11,7 +11,13 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from skillscope.config import Market, Settings, load_markets
+from skillscope.config import (
+    Market,
+    RoleQueries,
+    Settings,
+    load_markets,
+    load_role_queries,
+)
 from skillscope.history import HistoryUpdate, update_history
 from skillscope.ingestion.hh_client import HHApiError, HHClient
 from skillscope.processing.roles import classify_role, strip_html
@@ -105,6 +111,7 @@ def run_collection(
     details_dir = source_dir / "vacancies"
     skills_path = settings.project_root / "config" / "skills.toml"
     skill_definitions = load_skill_definitions(skills_path)
+    role_definitions = load_role_queries(Path(__file__).with_name("role_catalog.toml"))
     records: list[dict[str, Any]] = []
     for market in markets:
         provenance = load_candidate_provenance(source_dir, market_code=market.code)
@@ -136,6 +143,7 @@ def run_collection(
                     provenance[vacancy_id],
                     market,
                     skill_definitions,
+                    role_definitions,
                 )
             )
     if not records:
@@ -199,7 +207,7 @@ def run_collection(
     )
     market_counts = _market_counts(records)
     report = {
-        "schema_version": 4,
+        "schema_version": 5,
         "created_at": datetime.now(UTC).isoformat(),
         "source_collection_id": collection_id,
         "markets": [market.code for market in markets],
@@ -209,6 +217,15 @@ def run_collection(
         "candidates": len(records),
         "decision_counts": dict(sorted(decision_counts.items())),
         "included_role_counts": dict(sorted(role_counts.items())),
+        "included_category_counts": dict(
+            sorted(
+                Counter(
+                    str(record["role_category"])
+                    for record in included_records
+                    if record.get("role_category")
+                ).items()
+            )
+        ),
         "included_seniority_counts": dict(sorted(seniority_counts.items())),
         "included_skill_counts": dict(skill_counts.most_common()),
         "included_with_any_skill": sum(
@@ -278,23 +295,35 @@ def to_processed_record(
     provenance: dict[str, list[str]],
     market: Market,
     skill_definitions: tuple[SkillDefinition, ...],
+    role_definitions: tuple[RoleQueries, ...] | None = None,
 ) -> dict[str, Any]:
     title = str(detail.get("name") or "").strip()
     description_html = str(detail.get("description") or "")
-    salary = detail.get("salary") if isinstance(detail.get("salary"), dict) else {}
-    employer = detail.get("employer") if isinstance(detail.get("employer"), dict) else {}
-    area = detail.get("area") if isinstance(detail.get("area"), dict) else {}
-    experience = detail.get("experience") if isinstance(detail.get("experience"), dict) else {}
-    schedule = detail.get("schedule") if isinstance(detail.get("schedule"), dict) else {}
-    employment = detail.get("employment") if isinstance(detail.get("employment"), dict) else {}
-    key_skills = detail.get("key_skills") if isinstance(detail.get("key_skills"), list) else []
+    salary = detail.get("salary")
+    salary = salary if isinstance(salary, dict) else {}
+    employer = detail.get("employer")
+    employer = employer if isinstance(employer, dict) else {}
+    area = detail.get("area")
+    area = area if isinstance(area, dict) else {}
+    experience = detail.get("experience")
+    experience = experience if isinstance(experience, dict) else {}
+    schedule = detail.get("schedule")
+    schedule = schedule if isinstance(schedule, dict) else {}
+    employment = detail.get("employment")
+    employment = employment if isinstance(employment, dict) else {}
+    key_skills = detail.get("key_skills")
+    key_skills = key_skills if isinstance(key_skills, list) else []
     key_skill_names = [
         str(skill.get("name")).strip()
         for skill in key_skills
         if isinstance(skill, dict) and skill.get("name")
     ]
     description_text = " ".join(strip_html(description_html).split())
-    decision = classify_role(title, description_text)
+    role_catalog = role_definitions or load_role_queries(
+        Path(__file__).with_name("role_catalog.toml")
+    )
+    category_by_role = {role.code: role.category for role in role_catalog}
+    decision = classify_role(title, description_text, role_catalog)
     experience_id = experience.get("id")
     seniority = classify_seniority(
         title=title,
@@ -342,6 +371,7 @@ def to_processed_record(
         "candidate_query_slugs": provenance["queries"],
         "review_decision": decision.decision,
         "role_family": decision.role_family,
+        "role_category": category_by_role.get(decision.role_family or ""),
         "classification_confidence": decision.confidence,
         "classification_reasons": list(decision.reason_codes),
     }
@@ -392,6 +422,15 @@ def _market_summary(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
                     round(with_salary / len(included), 4) if included else None
                 ),
                 "role_counts": dict(sorted(roles.items())),
+                "category_counts": dict(
+                    sorted(
+                        Counter(
+                            str(record["role_category"])
+                            for record in included
+                            if record.get("role_category")
+                        ).items()
+                    )
+                ),
                 "seniority_counts": dict(sorted(seniority.items())),
             }
         )
@@ -411,6 +450,7 @@ def _write_review_csv(path: Path, records: list[dict[str, Any]]) -> None:
                 "alternate_url",
                 "review_decision",
                 "role_family",
+                "role_category",
                 "seniority",
                 "experience",
                 "seniority_reasons",
@@ -431,6 +471,7 @@ def _write_review_csv(path: Path, records: list[dict[str, Any]]) -> None:
                     "alternate_url": record["alternate_url"] or "",
                     "review_decision": record["review_decision"],
                     "role_family": record["role_family"] or "",
+                    "role_category": record["role_category"] or "",
                     "seniority": record["seniority"],
                     "experience": record["experience"] or "",
                     "seniority_reasons": ";".join(record["seniority_reasons"]),

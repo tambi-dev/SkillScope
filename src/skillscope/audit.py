@@ -25,6 +25,14 @@ def main() -> None:
     parser.add_argument(
         "--market", action="append", help="Market code; repeat to select several"
     )
+    parser.add_argument(
+        "--role", action="append", help="Role code; repeat to select a focused pilot"
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        help="Report path; defaults to the latest feasibility report",
+    )
     parser.add_argument("--max-pages", type=int, default=20)
     parser.add_argument("--per-page", type=int, default=100)
     parser.add_argument(
@@ -38,7 +46,13 @@ def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     settings = Settings.from_environment()
     markets = load_markets(settings.project_root / "config" / "markets.toml")
-    roles = load_role_queries(settings.project_root / "config" / "search_queries.toml")
+    roles = load_role_queries(Path(__file__).with_name("role_catalog.toml"))
+    if args.role:
+        selected_roles = set(args.role)
+        roles = tuple(role for role in roles if role.code in selected_roles)
+        missing = selected_roles - {role.code for role in roles}
+        if missing:
+            parser.error(f"Unknown role codes: {', '.join(sorted(missing))}")
     if args.market:
         selected = set(args.market)
         markets = tuple(market for market in markets if market.code in selected)
@@ -61,6 +75,7 @@ def main() -> None:
             max_pages=args.max_pages,
             per_page=args.per_page,
             search_mode=args.search_mode,
+            output_path=args.output,
         )
     except (HHApiError, OSError, ValueError) as error:
         LOGGER.error("Audit failed: %s", error)
@@ -77,6 +92,7 @@ def run_audit(
     max_pages: int,
     per_page: int,
     search_mode: str = "strict",
+    output_path: Path | None = None,
 ) -> Path:
     if max_pages < 1:
         raise ValueError("max_pages must be positive")
@@ -120,12 +136,19 @@ def run_audit(
         search_mode=search_mode,
     )
     _write_json(run_dir / "manifest.json", report)
-    report_name = (
-        "feasibility_latest.json"
-        if search_mode == "strict"
-        else "feasibility_broad_latest.json"
-    )
-    report_path = settings.project_root / "artifacts" / "reports" / report_name
+    if output_path is None:
+        report_name = (
+            "feasibility_latest.json"
+            if search_mode == "strict"
+            else "feasibility_broad_latest.json"
+        )
+        report_path = settings.project_root / "artifacts" / "reports" / report_name
+    else:
+        report_path = (
+            output_path
+            if output_path.is_absolute()
+            else settings.project_root / output_path
+        )
     _write_json(report_path, report)
     LOGGER.info("Audit complete: %s unique candidates", report["overall"]["unique_candidates"])
     return report_path

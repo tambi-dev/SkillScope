@@ -23,6 +23,16 @@ class RoleQueries:
     code: str
     label: str
     queries: tuple[str, ...]
+    category: str = ""
+    title_patterns: tuple[str, ...] = ()
+    priority: int = 0
+    exclude_title_patterns: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True, slots=True)
+class RoleCategory:
+    code: str
+    label: str
 
 
 @dataclass(frozen=True, slots=True)
@@ -75,21 +85,54 @@ def load_markets(path: Path) -> tuple[Market, ...]:
 
 def load_role_queries(path: Path) -> tuple[RoleQueries, ...]:
     payload = _read_toml(path)
+    categories = payload.get("categories", {})
     roles: list[RoleQueries] = []
     for code, values in payload.get("roles", {}).items():
         queries = tuple(str(query).strip() for query in values.get("queries", []))
+        title_patterns = tuple(
+            str(pattern).strip() for pattern in values.get("title_patterns", [])
+        )
+        exclude_title_patterns = tuple(
+            str(pattern).strip()
+            for pattern in values.get("exclude_title_patterns", [])
+        )
         if not queries or any(not query for query in queries):
             raise ValueError(f"Role {code!r} must contain non-empty queries")
+        category = _required_string(values, "category")
+        if category not in categories:
+            raise ValueError(f"Role {code!r} references unknown category {category!r}")
+        if not title_patterns or any(not pattern for pattern in title_patterns):
+            raise ValueError(f"Role {code!r} must contain non-empty title_patterns")
+        if any(not pattern for pattern in exclude_title_patterns):
+            raise ValueError(f"Role {code!r} contains an empty exclusion pattern")
+        priority = values.get("priority", 0)
+        if not isinstance(priority, int):
+            raise ValueError(f"Role {code!r} priority must be an integer")
         roles.append(
             RoleQueries(
                 code=code,
                 label=_required_string(values, "label"),
                 queries=queries,
+                category=category,
+                title_patterns=title_patterns,
+                priority=priority,
+                exclude_title_patterns=exclude_title_patterns,
             )
         )
     if not roles:
         raise ValueError(f"No roles found in {path}")
     return tuple(roles)
+
+
+def load_role_categories(path: Path) -> tuple[RoleCategory, ...]:
+    payload = _read_toml(path)
+    categories = tuple(
+        RoleCategory(code=code, label=_required_string(values, "label"))
+        for code, values in payload.get("categories", {}).items()
+    )
+    if not categories:
+        raise ValueError(f"No role categories found in {path}")
+    return categories
 
 
 def _read_toml(path: Path) -> dict[str, Any]:

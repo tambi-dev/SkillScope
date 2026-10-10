@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "skillscope"
 version = "0.1.0"
-description = "Reproducible analysis of core data-role vacancies in Central Asia"
+description = "Reproducible analysis of selected IT vacancies in Central Asia"
 readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "MIT" }
@@ -32,7 +32,12 @@ skillscope-serve = "skillscope.serve:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-skillscope = ["demo_vacancies.jsonl", "static/index.html", "static/assets/*"]
+skillscope = [
+  "demo_vacancies.jsonl",
+  "role_catalog.toml",
+  "static/index.html",
+  "static/assets/*",
+]
 
 [tool.ruff]
 line-length = 100
