@@ -26,3 +26,17 @@ build/
 *.egg-info/
 *.tsbuildinfo
 .DS_Store
+Thumbs.db
+
+# Local design tools and caches.
+.agents/
+.claude/
+.codex/
+.impeccable/
+.vite/
+skills-lock.json
+docs/FRONTEND_REDESIGN_CONTEXT.md
+
+# Working captures and exploratory collection reports.
+artifacts/*.png
+artifacts/reports/*_pilot_latest.json

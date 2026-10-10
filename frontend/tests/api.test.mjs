@@ -1,6 +1,6 @@
 import { afterEach, test } from "node:test";
 import assert from "node:assert/strict";
-import { getOverview, getSkills, getSalaries, getSeniority } from "../src/api.ts";
+import { getOverview, getRoles, getSkills, getSalaries, getSeniority, getTaxonomy } from "../src/api.ts";
 
 const originalFetch = globalThis.fetch;
 afterEach(() => { globalThis.fetch = originalFetch; });
@@ -10,7 +10,7 @@ test("all-market skills have a valid query and retain the zero denominator", asy
     assert.equal(url, "/api/skills?limit=8");
     return Response.json({ vacancy_denominator: 0, items: [] });
   };
-  const result = await getSkills("all", "all");
+  const result = await getSkills("all", "all", "all");
   assert.equal(result.vacancy_denominator, 0);
   assert.deepEqual(result.items, []);
 });
@@ -18,14 +18,26 @@ test("all-market skills have a valid query and retain the zero denominator", asy
 test("country and role filters reach all filtered endpoints", async () => {
   const urls = [];
   globalThis.fetch = async (url) => { urls.push(url); return Response.json([]); };
-  await getSkills("kg", "bi_analyst");
-  await getSalaries("kg", "bi_analyst");
-  await getSeniority("kg", "bi_analyst");
+  await getSkills("kg", "bi_analyst", "data_ai");
+  await getSalaries("kg", "bi_analyst", "data_ai");
+  await getSeniority("kg", "bi_analyst", "data_ai");
   for (const url of urls) {
     const query = new URL(url, "http://test").searchParams;
     assert.equal(query.get("market"), "kg");
     assert.equal(query.get("role"), "bi_analyst");
+    assert.equal(query.get("category"), "data_ai");
   }
+});
+
+test("taxonomy and role-demand endpoints are available to the dashboard", async () => {
+  const urls = [];
+  globalThis.fetch = async (url) => { urls.push(url); return Response.json([]); };
+  await getTaxonomy();
+  await getRoles("uz", "software_engineering");
+  assert.equal(urls[0], "/api/taxonomy");
+  const query = new URL(urls[1], "http://test").searchParams;
+  assert.equal(query.get("market"), "uz");
+  assert.equal(query.get("category"), "software_engineering");
 });
 
 test("server errors reject rather than becoming empty charts", async () => {
@@ -43,7 +55,7 @@ test("a superseded filter request can be cancelled", async () => {
   globalThis.fetch = (_url, { signal }) => new Promise((_resolve, reject) => {
     signal.addEventListener("abort", () => reject(signal.reason), { once: true });
   });
-  const pending = getSkills("kg", "all", controller.signal);
+  const pending = getSkills("kg", "all", "all", controller.signal);
   controller.abort();
   await assert.rejects(pending, { name: "AbortError" });
 });

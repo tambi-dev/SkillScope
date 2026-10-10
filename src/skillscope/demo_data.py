@@ -11,6 +11,8 @@ PUBLIC_FIELDS = (
     "market",
     "review_decision",
     "role_family",
+    "role_category",
+    "experience",
     "seniority",
     "last_seen_at",
     "skills_normalized",

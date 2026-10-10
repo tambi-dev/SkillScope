@@ -99,6 +99,60 @@ class ApiTests(unittest.IsolatedAsyncioTestCase):
         response = await self._get("/api/skills", {"market": "ru"})
         self.assertEqual(response.status_code, 422)
 
+    async def test_taxonomy_preserves_data_roles_and_includes_new_fields(self) -> None:
+        taxonomy = (await self._get("/api/taxonomy")).json()
+        self.assertEqual(len(taxonomy), 5)
+        self.assertEqual(sum(len(item["roles"]) for item in taxonomy), 10)
+        data_roles = next(item["roles"] for item in taxonomy if item["code"] == "data_ai")
+        self.assertEqual(
+            {item["code"] for item in data_roles},
+            {"data_analyst", "bi_analyst", "data_scientist", "ml_engineer"},
+        )
+
+    async def test_category_filters_support_legacy_records_and_unsampled_fields(self) -> None:
+        skills = (await self._get("/api/skills", {"category": "data_ai"})).json()
+        self.assertEqual(skills["vacancy_denominator"], 2)
+        skills = (await self._get("/api/skills", {"category": "software_engineering"})).json()
+        self.assertEqual(skills["vacancy_denominator"], 0)
+        self.assertEqual(skills["items"], [])
+
+        for endpoint in ("skills", "salaries", "seniority"):
+            with self.subTest(endpoint=endpoint):
+                response = await self._get(f"/api/{endpoint}", {"role": "unknown_role"})
+                self.assertEqual(response.status_code, 422)
+                response = await self._get(f"/api/{endpoint}", {"category": "unknown_field"})
+                self.assertEqual(response.status_code, 422)
+
+    async def test_role_demand_separates_experience_requirements_from_seniority(self) -> None:
+        records = [
+            {
+                "market": "kz",
+                "review_decision": "included",
+                "role_family": "backend_developer",
+                "experience": experience,
+                "seniority": "Unknown",
+            }
+            for experience in ("noExperience", "between1And3", None)
+        ]
+        self.data_path.write_text(
+            "".join(json.dumps(record) + "\n" for record in records), encoding="utf-8",
+        )
+        response = await self._get(
+            "/api/roles", {"market": "kz", "category": "software_engineering"},
+        )
+        self.assertEqual(response.status_code, 200)
+        demand = response.json()
+        backend = next(item for item in demand["items"] if item["code"] == "backend_developer")
+        self.assertEqual(demand["vacancy_denominator"], 3)
+        self.assertEqual(backend["vacancies"], 3)
+        self.assertEqual(backend["share"], 1.0)
+        self.assertEqual(backend["experience_observed_vacancies"], 2)
+        self.assertEqual(backend["no_experience_required"], 1)
+        self.assertEqual(backend["no_experience_share"], 0.5)
+        frontend = next(item for item in demand["items"] if item["code"] == "frontend_developer")
+        self.assertEqual(frontend["vacancies"], 0)
+        self.assertIsNone(frontend["no_experience_share"])
+
     async def test_demo_snapshot_supports_clean_checkout(self) -> None:
         project_root = Path(__file__).resolve().parents[1]
         demo_path = project_root / "src" / "skillscope" / "demo_vacancies.jsonl"

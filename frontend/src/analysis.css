@@ -1,0 +1,202 @@
+.section-heading h2 { font-size: 29px; }
+.section-heading { padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+.section-insight { font-size: 26px; line-height: 1.4; margin: 23px 0 15px; }
+.section-insight strong { font-weight: 750; }
+.analysis-grid { gap: 44px; grid-template-columns: 1.15fr 1fr; }
+.comparison-note { margin-bottom: 26px; }
+
+.kpi-grid { background: #edf0e3; padding: 26px 0; margin-top: 20px; border: 0; }
+.kpi-card, .kpi-card:first-child, .kpi-card:last-child { padding: 0 24px; }
+.kpi-card h3 { font-weight: 650; }
+.kpi-value { font-size: 43px; margin-top: 16px; }
+.kpi-word { font-size: 28px; }
+.kpi-card p { max-width: 27ch; line-height: 1.7; }
+.market-composition { margin: 34px 0; }
+.composition-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin-bottom: 22px; }
+.composition-heading h3 { font-size: 23px; font-weight: 600; letter-spacing: -.025em; }
+.composition-heading p { color: var(--muted); font-size: 12px; line-height: 1.7; max-width: 53ch; }
+.country-mix { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid #9bab8f; }
+.country-mix button { text-align: left; padding: 23px 25px 19px; background: transparent; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); }
+.country-mix button:first-child { padding-left: 0; }
+.country-mix button:last-child { border-right: 0; }
+.country-mix button:hover, .country-mix button:focus-visible { background: #edf0e3; }
+.country-identity { display: flex; align-items: center; gap: 12px; font-size: 13px; }
+.country-identity > span { font-size: 11px; color: var(--muted); }
+.country-mix strong { display: block; font-size: 37px; line-height: 1.3; font-weight: 600; letter-spacing: -.03em; margin: 14px 0 19px; font-variant-numeric: tabular-nums; }
+.country-mix strong small { font-size: 11px; color: var(--muted); font-weight: 500; letter-spacing: 0; padding-left: 8px; }
+.country-meter { display: block; height: 4px; background: #dfe5d5; }
+.country-meter > span { display: block; height: 100%; background: #557647; }
+.country-share { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--muted); margin-top: 14px; }
+.country-share svg, .row-explore { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; flex-shrink: 0; transition: transform 160ms ease-out; }
+.country-mix button:hover svg { transform: translateX(3px); }
+
+.role-chart { padding: 18px 22px 8px; color: #edf3df; background: var(--forest); border-radius: 4px; }
+.role-chart :focus-visible { outline-color: var(--lime); outline-offset: 2px; }
+.role-chart .role-axis { color: #b8cbb0; padding-bottom: 17px; }
+.role-chart .role-demand-list { border-color: #4a6655; }
+.role-chart .role-demand-row { border-color: #395746; min-height: 76px; }
+.role-chart .leading-role { background: #284c3b; }
+.role-chart .role-demand-row:hover, .role-chart .role-demand-row[aria-pressed="true"] { background: #345740; }
+.role-demand-name { display: flex; align-items: center; gap: 9px; }
+.row-explore { opacity: 0; }
+.role-demand-row:hover .row-explore, .role-demand-row:focus-visible .row-explore { opacity: 1; transform: translate(1px, -1px); }
+.role-chart .role-demand-track { height: 6px; background: #405d49; }
+.role-chart .role-demand-track > span { position: relative; background: #a4c185; }
+.role-chart .leading-role .role-demand-track > span { background: var(--lime); }
+.role-demand-track > span::after, .matrix-meter > span::after { content: ""; position: absolute; right: -4px; top: 50%; transform: translateY(-50%); width: 8px; height: 8px; border-radius: 50%; background: inherit; }
+[data-empty="true"] > span::after { display: none; }
+.role-chart .role-demand-count strong { font-size: 23px; font-weight: 600; }
+.role-chart .leading-role .role-demand-count strong { color: var(--lime); }
+.role-chart .role-demand-count small { color: #bed0b4; font-size: 10px; }
+.unsampled-roles { border-bottom: 1px solid var(--line); padding-bottom: 4px; }
+.unsampled-roles .role-demand-row { padding-left: 8px; padding-right: 8px; }
+.entry-signal { border-radius: 0; background: transparent; padding: 17px 0; margin-top: 20px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.entry-signal > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 18px; }
+.entry-signal > div > span { font-size: 13px; line-height: 1.5; font-weight: 600; max-width: none; padding: 0; }
+.entry-signal strong { font-size: 20px; line-height: 1.2; text-align: right; }
+.entry-signal strong small { font-size: 11px; line-height: 1.5; margin-top: 4px; font-weight: 400; }
+.entry-signal p { font-size: 11px; margin-top: 9px; max-width: none; }
+.experience-profile { padding: 24px; background: #edf0e3; border-radius: 4px; }
+.experience-profile .list-heading { font-size: 22px; line-height: 1.5; margin: 0; font-weight: 500; letter-spacing: -.025em; }
+.experience-profile .list-heading strong { font-size: 29px; font-weight: 700; color: #365832; }
+.experience-axis { display: flex; justify-content: space-between; font-size: 10px; color: #53634b; margin: 23px 0 9px; font-variant-numeric: tabular-nums; }
+.experience-composition { display: flex; height: 30px; overflow: hidden; margin: 0 0 14px; gap: 0; }
+.experience-composition span { height: 100%; }
+.experience-composition [data-level="Unknown"] { border-top: 1px dashed #899677; border-bottom: 1px dashed #899677; }
+.seniority-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; }
+.level-row { grid-template-columns: minmax(0, 1fr) auto; gap: 10px; padding: 14px 0; border-bottom: 1px solid #d4ddc7; }
+.level-dot { width: 7px; height: 7px; flex-shrink: 0; }
+.level-name { font-size: 13px; }
+.level-count strong { font-size: 20px; font-weight: 500; }
+.level-row[data-dominant="true"] .level-count strong { font-size: 26px; font-weight: 650; color: #365832; }
+.level-row[data-dominant="true"] .level-name { font-weight: 650; }
+.level-row[data-level="Unknown"] .level-dot { border: 1px solid #899677; }
+.experience-profile .section-foot { font-size: 11px; line-height: 1.8; color: #53634b; margin-top: 18px; }
+.experience-profile .section-foot strong { color: #405538; font-weight: 650; }
+.list-heading { font-size: 20px; margin-bottom: 0; }
+
+.skills-section > .section-insight { max-width: 45ch; font-size: 30px; }
+.field-coverage { background: #edf0e3; border: 0; padding: 14px 18px; margin: 24px 0; }
+.field-coverage li { border-bottom: 1px dashed #a3ae96; padding-bottom: 3px; }
+.skill-matrix { border-spacing: 0; }
+.skill-matrix thead { background: var(--forest); color: #edf3df; }
+.skill-matrix thead th, .skill-matrix thead th:first-child { padding: 17px 18px; font-weight: 600; }
+.skill-matrix thead th small { color: #c2d2b9; }
+.skill-matrix tbody th { padding-left: 18px; padding-right: 16px; font-size: 16px; }
+.skill-matrix tbody td { border-bottom: 1px solid var(--line); border-radius: 0; }
+.skill-matrix tbody th { border-bottom: 1px solid var(--line); }
+.skill-matrix tbody tr { transition: background-color 160ms ease; }
+.skill-matrix tbody tr:hover { background: #e9eedf; }
+.skill-matrix tbody tr[data-leading="true"] { background: #eef1e5; }
+.skill-matrix tbody tr[data-leading="true"] > th { font-weight: 750; }
+.skill-matrix tbody tr[data-leading="true"] .matrix-meter > span { background: #345b3c; }
+.single-field tbody td { padding: 18px; height: 79px; gap: 30px; }
+.single-field .matrix-stat strong { font-size: 25px; font-weight: 600; letter-spacing: -.025em; }
+.single-field .matrix-stat small { font-size: 11px; }
+.matrix-meter { height: 5px; background: #dbe3cf; }
+.matrix-meter > span { position: relative; }
+.single-field .matrix-meter { height: 5px; }
+.matrix-legend i { width: 22px; height: 3px; background: #628255; vertical-align: middle; }
+
+.salary-evidence { display: grid; grid-template-columns: minmax(210px, .8fr) minmax(0, 1.4fr); gap: 16px 48px; padding: 30px 34px; border-radius: 4px; background: var(--forest); color: #edf3df; }
+.salary-evidence .section-insight { grid-column: 1; grid-row: 1 / 3; font-size: 18px; line-height: 1.5; margin: 0; }
+.coverage-total { display: block; color: var(--lime); font-size: 68px; line-height: 1.1; font-weight: 500 !important; letter-spacing: -.035em; margin: 0 0 12px; }
+.coverage-total small { color: #c2d2b9; font-size: 27px; font-weight: 400; margin-left: 14px; letter-spacing: -.02em; }
+.salary-evidence > p { grid-column: 2; grid-row: 1; color: #d0dec4; font-size: 14px; line-height: 1.8; align-self: end; }
+.coverage-breakdown { grid-column: 2; grid-row: 2; }
+.coverage-meter { display: flex; height: 14px; background: #49644f; margin-top: 3px; }
+.coverage-meter > span { background: var(--lime); }
+.coverage-meter > .coverage-partial { background: #99b781; }
+.coverage-labels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; color: #d0dec4; font-size: 12px; margin-top: 15px; line-height: 1.5; }
+.coverage-labels strong { color: #edf3df; font-size: 15px; font-weight: 650; }
+.coverage-labels small { display: block; margin-top: 5px; font-size: 10px; }
+.coverage-key { display: inline-block; width: 6px; height: 6px; margin-right: 6px; vertical-align: 1px; border-radius: 50%; }
+.coverage-key.complete { background: var(--lime); }
+.coverage-key.partial { background: #99b781; }
+.coverage-key.absent { background: #49644f; border: 1px solid #aec39d; }
+.salary-table thead { background: #e7eddb; }
+.salary-table thead th { color: #405639; font-weight: 650; padding-top: 17px; padding-bottom: 17px; }
+.salary-table td:first-child, .salary-table thead th:first-child { padding-left: 16px; }
+.salary-table td:last-child, .salary-table thead th:last-child { padding-right: 16px; }
+.salary-table tbody th { font-weight: 600; }
+.salary-table tbody tr[data-market-start="true"] > * { border-top: 2px solid #a7b798; }
+.salary-table .salary-observed { background: #edf1e4; }
+.salary-table .salary-value { background: #e0e9d1; }
+.salary-table .salary-value strong { color: #274b32; font-size: 18px; }
+.salary-table tbody tr:hover { background: #e3ebd5; }
+.salary-table tbody tr:hover .salary-value { background: #d6e3c3; }
+.range-confidence { font-size: 11px; }
+.market-code { background: #dbe5cb; color: #405d37; }
+.model-note, .methodology-details { border-bottom: 1px solid var(--line); }
+.methodology-panel { background: #edf0e3; padding: 28px; border: 0; border-radius: 4px; }
+.sample-notice, .error-banner, .loading-panel { border-radius: 4px; }
+.empty-state { padding: 28px 20px; background: #edf0e3; border-top: 1px solid #b6c2a8; }
+.role-demand-track > span, .matrix-meter > span, .experience-composition > span, .coverage-meter > span, .country-meter > span { transition: width 260ms cubic-bezier(.16, 1, .3, 1); }
+
+@media (max-width: 1000px) {
+  .analysis-grid { gap: 28px; }
+  .role-chart { padding: 15px 15px 7px; }
+  .role-chart .role-axis, .role-chart .role-demand-row { grid-template-columns: minmax(95px, 1.15fr) minmax(40px, 1fr) 64px; gap: 10px; }
+  .role-demand-name { font-size: 12px; }
+  .row-explore { display: none; }
+  .salary-evidence { gap: 20px 30px; padding: 27px; }
+  .salary-table .salary-value strong { font-size: 14px; }
+  .country-mix button { padding-left: 18px; padding-right: 18px; }
+}
+@media (max-width: 700px) {
+  .analysis-grid { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .section-heading h2 { font-size: 25px; }
+  .section-insight, .skills-section > .section-insight { font-size: 23px; }
+  .composition-heading { display: block; }
+  .composition-heading h3 { font-size: 21px; }
+  .composition-heading p { margin-top: 8px; }
+  .country-identity { flex-direction: column; align-items: flex-start; gap: 6px; font-size: 11px; }
+  .country-mix button, .country-mix button:first-child { padding: 17px 10px; }
+  .country-mix strong { font-size: 31px; margin-bottom: 14px; }
+  .country-mix strong small { display: block; padding: 4px 0 0; font-size: 10px; }
+  .country-share { font-size: 10px; gap: 6px; line-height: 1.6; }
+  .country-share svg { width: 12px; height: 12px; }
+  .salary-evidence { display: block; padding: 24px; }
+  .salary-evidence > p { font-size: 12px; margin-top: 17px; }
+  .coverage-total { font-size: 56px; }
+  .coverage-breakdown { margin-top: 22px; }
+  .coverage-labels { font-size: 11px; gap: 10px; }
+  .coverage-labels small { font-size: 9px; }
+  .methodology-panel { padding: 24px; }
+}
+@media (max-width: 600px) {
+  .kpi-grid { padding: 20px 0; gap: 22px 0; }
+  .kpi-card, .kpi-card:first-child, .kpi-card:last-child { padding: 0 16px; }
+  .kpi-card h3 { min-height: 0; font-size: 11px; }
+  .kpi-value { font-size: 33px; margin-top: 12px; }
+  .kpi-word { font-size: 24px; }
+  .role-chart .role-demand-count strong { font-size: 20px; }
+  .role-chart .role-demand-row { min-height: 71px; }
+  .role-chart .role-demand-count small { font-size: 9px; }
+  .experience-profile { padding: 20px; }
+  .skill-matrix tbody { gap: 0; }
+  .skill-matrix tbody tr { padding: 17px 14px; border-bottom: 1px solid var(--line); }
+  .skill-matrix tbody th { padding: 0 0 9px; border: 0; font-size: 15px; }
+  .skill-matrix tbody td { display: grid; border: 0; padding: 10px; min-width: 0; }
+  .single-field tbody td { padding: 0; height: auto; gap: 14px; grid-template-columns: 1fr 68px; }
+  .single-field .matrix-stat { grid-column: 2; grid-row: 1; }
+  .single-field .matrix-meter { grid-column: 1; grid-row: 1; }
+  .single-field .matrix-stat strong { font-size: 22px; }
+  .single-field .matrix-stat small { font-size: 10px; }
+  .salary-table tbody tr { padding: 20px 12px; gap: 15px; }
+  .salary-table tbody tr:first-child { padding-top: 20px; }
+  .salary-table .salary-observed { margin: 0; padding: 20px 12px; }
+  .salary-table td:first-child, .salary-table td:last-child { padding: 0; }
+  .salary-table tbody tr[data-market-start="true"] { border-top: 2px solid #a7b798; }
+  .salary-table tbody tr[data-market-start="true"] > * { border-top: 0; }
+  .salary-table .salary-value { padding: 10px !important; margin: -5px; }
+  .salary-table .salary-value strong { font-size: 15px; }
+  .salary-table .market-name { font-size: 10px; }
+  .field-coverage { padding: 14px; }
+}
+@media (max-width: 420px) {
+  .salary-table .salary-value strong { font-size: 14px; }
+  .seniority-list { grid-template-columns: 1fr; }
+  .coverage-labels { grid-template-columns: 1fr; gap: 8px; }
+  .coverage-labels small { display: inline; margin-left: 8px; }
+}

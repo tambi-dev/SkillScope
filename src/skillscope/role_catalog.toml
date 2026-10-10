@@ -1,0 +1,164 @@
+[categories.data_ai]
+label = "Data & AI"
+
+[categories.software_engineering]
+label = "Software Engineering"
+
+[categories.devops_cloud]
+label = "DevOps & Cloud"
+
+[categories.cybersecurity]
+label = "Cybersecurity"
+
+[categories.qa]
+label = "QA"
+
+[roles.data_analyst]
+category = "data_ai"
+label = "Data Analyst"
+queries = ["data analyst", "аналитик данных", "дата-аналитик"]
+title_patterns = [
+  '\bdata\s+analyst\b',
+  '\bаналитик\s+данных\b',
+  '\bдата\s+аналитик\b',
+]
+priority = 60
+
+[roles.bi_analyst]
+category = "data_ai"
+label = "BI Analyst"
+queries = ["BI analyst", "BI-аналитик", "аналитик BI"]
+title_patterns = [
+  '\bbi\s+analyst\b',
+  '\bbi\s+developer\s+analyst\b',
+  '\bbi\s+аналитик\b',
+  '\bаналитик\s+bi\b',
+  '\bbusiness\s+intelligence\s+analyst\b',
+]
+priority = 70
+
+[roles.data_scientist]
+category = "data_ai"
+label = "Data Scientist"
+queries = ["data scientist", "data science", "специалист по data science"]
+title_patterns = [
+  '\bdata\s+scientist\b',
+  '\bспециалист\s+по\s+data\s+science\b',
+]
+priority = 80
+
+[roles.ml_engineer]
+category = "data_ai"
+label = "ML Engineer"
+queries = ["machine learning engineer", "ML engineer", "инженер машинного обучения"]
+title_patterns = [
+  '\bml\s+engineer\b',
+  '\bml\s+ai\s+engineer\b',
+  '\bmachine\s+learning\s+engineer\b',
+  '\bинженер\s+машинного\s+обучения\b',
+]
+priority = 100
+
+[roles.backend_developer]
+category = "software_engineering"
+label = "Backend Developer"
+queries = ["backend developer", "backend разработчик"]
+title_patterns = [
+  '\bbackend\s+(?:developer|engineer)\b',
+  '\bback\s+end\s+(?:developer|engineer)\b',
+  '\b(?:backend|бэкенд|бекенд)\s+(?:разработчик|инженер)\b',
+  '\b(?:разработчик|инженер)\s+(?:backend|бэкенд|бекенд)\b',
+  '\b(?:backend|back\s+end)\b.{0,48}\b(?:developer|engineer|разработчик|инженер)\b',
+  '\b(?:developer|engineer|разработчик|инженер)\b.{0,48}\b(?:backend|back\s+end|бэкенд|бекенд)\b',
+]
+priority = 50
+
+[roles.frontend_developer]
+category = "software_engineering"
+label = "Frontend Developer"
+queries = ["frontend developer", "frontend разработчик"]
+title_patterns = [
+  '\bfrontend\s+(?:developer|engineer)\b',
+  '\bfront\s+end\s+(?:developer|engineer)\b',
+  '\b(?:frontend|фронтенд)\s+(?:разработчик|инженер)\b',
+  '\b(?:разработчик|инженер)\s+(?:frontend|фронтенд)\b',
+  '\b(?:frontend|front\s+end)\b.{0,48}\b(?:developer|engineer|разработчик|инженер)\b',
+  '\b(?:developer|engineer|разработчик|инженер)\b.{0,48}\b(?:frontend|front\s+end|фронтенд)\b',
+]
+priority = 50
+
+[roles.fullstack_developer]
+category = "software_engineering"
+label = "Full-stack Developer"
+queries = ["full stack developer", "fullstack developer", "fullstack разработчик"]
+title_patterns = [
+  '\bfull\s*stack\s+(?:developer|engineer)\b',
+  '\b(?:fullstack|фулстек)\s+(?:разработчик|инженер)\b',
+  '\b(?:разработчик|инженер)\s+(?:fullstack|фулстек)\b',
+  '\b(?:backend|back\s+end|бэкенд|бекенд)\b.{0,48}\b(?:frontend|front\s+end|фронтенд)\b',
+  '\b(?:frontend|front\s+end|фронтенд)\b.{0,48}\b(?:backend|back\s+end|бэкенд|бекенд)\b',
+]
+priority = 90
+
+[roles.devops_engineer]
+category = "devops_cloud"
+label = "DevOps Engineer"
+queries = ["DevOps engineer", "инженер DevOps"]
+title_patterns = ['\bdevops\b', '\bдевопс\b']
+priority = 50
+
+[roles.information_security_specialist]
+category = "cybersecurity"
+label = "Information Security Specialist"
+queries = [
+  "information security",
+  "security analyst",
+  "security engineer",
+  "SOC analyst",
+  "информационная безопасность",
+  "кибербезопасность",
+  "специалист ИБ",
+  "инженер ИБ",
+]
+title_patterns = [
+  '\binformation\s+security\b',
+  '\bcyber\s*security\b',
+  '\bsecurity\s+(?:analyst|engineer|specialist)\b',
+  '\bsecurity\b.{0,24}\b(?:analyst|engineer|specialist)\b',
+  '\b(?:application|app)\s+security\b',
+  '\bappsec\b',
+  '\bsoc\s+analyst\b',
+  '\b(?:специалист|инженер|аналитик)\s+(?:по\s+)?(?:информационной\s+)?безопасности\b',
+  '\b(?:специалист|инженер|аналитик)\s+иб\b',
+  '\bкибербезопасност\w*\b',
+  '\bбезопасност\w*\s+приложени\w*\b',
+]
+exclude_title_patterns = [
+  '\bsales\b',
+  '\bbusiness\s+development\b',
+  '\bbdm\b',
+  '\bменеджер\s+по\s+продажам\b',
+  '\bменеджер\s+по\s+развитию\s+бизнеса\b',
+]
+priority = 50
+
+[roles.qa_engineer]
+category = "qa"
+label = "QA Engineer"
+queries = ["QA engineer", "инженер по тестированию", "тестировщик ПО"]
+title_patterns = [
+  '\bqa\b.{0,40}\b(?:engineer|specialist|tester|automation|manual)\b',
+  '\bautomation\s+qa\b',
+  '\bmanual\s+qa\b',
+  '\bquality\s+assurance\b',
+  '\bsoftware\s+tester\b',
+  '\bтестировщик(?:\s+программного\s+обеспечения|\s+по)?\b',
+  '\bинженер\s+по\s+тестированию\b',
+  '\bспециалист\s+по\s+тестированию\b',
+]
+exclude_title_patterns = [
+  '\bqa\s+qc\b',
+  '\bquality\s+control\b',
+  '\bконтроль\s+качества\b',
+]
+priority = 50

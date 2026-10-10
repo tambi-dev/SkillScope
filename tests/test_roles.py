@@ -12,6 +12,15 @@ class RoleClassificationTests(unittest.TestCase):
             "BI-аналитик": "bi_analyst",
             "Senior Data Scientist": "data_scientist",
             "Machine Learning Engineer": "ml_engineer",
+            "Backend Python Developer": "backend_developer",
+            "Frontend React Developer": "frontend_developer",
+            "Full-stack Developer": "fullstack_developer",
+            "Backend / Frontend Developer": "fullstack_developer",
+            "DevOps Engineer": "devops_engineer",
+            "SOC Analyst": "information_security_specialist",
+            "Специалист ИБ": "information_security_specialist",
+            "QA Automation Engineer": "qa_engineer",
+            "Инженер по тестированию": "qa_engineer",
         }
 
         for title, expected_role in examples.items():
@@ -98,6 +107,11 @@ class RoleClassificationTests(unittest.TestCase):
 
     def test_strips_html_entities(self) -> None:
         self.assertEqual(strip_html("<p>SQL &amp; Python</p>"), " SQL & Python ")
+
+    def test_excludes_adjacent_security_sales_and_quality_control(self) -> None:
+        for title in ("Information Security Sales Specialist", "QA/QC Engineer"):
+            with self.subTest(title=title):
+                self.assertEqual(classify_role(title).decision, "excluded")
 
 
 if __name__ == "__main__":
