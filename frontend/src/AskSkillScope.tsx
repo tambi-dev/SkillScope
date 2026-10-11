@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { askSkillScope, getAskStatus, type AskAnswer } from "./api";
 
 const examples = [
-  "Which skills appear most for Data Analysts in Kazakhstan?",
-  "Which roles have more no-experience vacancies?",
-  "How do Backend and DevOps skill mentions differ?",
-  "How does salary disclosure differ between countries?",
+  "What do SkillScope's vacancies show about IT roles and skills in Kyrgyzstan?",
+  "Which roles have the most Junior vacancies across all markets?",
+  "Which skills are most mentioned for Backend Developers?",
+  "Which markets disclose salaries more often in this snapshot?",
 ];
 
 function displayDate(value: string | null) {
@@ -14,19 +14,64 @@ function displayDate(value: string | null) {
   return Number.isNaN(date.valueOf()) ? value.slice(0, 10) : date.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 }
 
-export default function AskSkillScope() {
+function ScopiMark() {
+  return <svg className="scopi-mark" viewBox="0 0 72 72" fill="none" aria-hidden="true">
+    <path className="scopi-wave scopi-wave-one" d="M51 18c4 2 7 5 9 9" />
+    <path className="scopi-wave scopi-wave-two" d="M54 10c7 3 12 8 15 15" />
+    <path className="scopi-antenna" d="M36 17V9" />
+    <circle className="scopi-tip" cx="36" cy="7" r="3" />
+    <path className="scopi-body" d="M36 17c-15 0-25 10-25 24 0 14 10 24 25 24s25-10 25-24c0-14-10-24-25-24Z" />
+    <path className="scopi-highlight" d="M19 34c2-5 5-8 9-10" />
+    <g className="scopi-eyes"><circle cx="28" cy="40" r="2.5" /><circle cx="44" cy="40" r="2.5" /></g>
+    <path className="scopi-smile" d="M31 49c3 3 7 3 10 0" />
+  </svg>;
+}
+
+interface AskSkillScopeProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export default function AskSkillScope({ open, onOpenChange }: AskSkillScopeProps) {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState<AskAnswer | null>(null);
   const [available, setAvailable] = useState<boolean | null>(null);
   const [working, setWorking] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showAllExamples, setShowAllExamples] = useState(false);
   const pending = useRef<AbortController | null>(null);
+  const launcher = useRef<HTMLButtonElement | null>(null);
+  const input = useRef<HTMLTextAreaElement | null>(null);
+
+  useEffect(() => () => pending.current?.abort(), []);
 
   useEffect(() => {
+    if (!open) return;
+    input.current?.focus();
     const controller = new AbortController();
-    getAskStatus(controller.signal).then((status) => setAvailable(status.available)).catch(() => setAvailable(false));
-    return () => { controller.abort(); pending.current?.abort(); };
-  }, []);
+    setAvailable(null);
+    getAskStatus(controller.signal)
+      .then((status) => setAvailable(status.available))
+      .catch(() => { if (!controller.signal.aborted) setAvailable(false); });
+    return () => controller.abort();
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onOpenChange(false);
+        requestAnimationFrame(() => launcher.current?.focus());
+      }
+    };
+    window.addEventListener("keydown", onEscape);
+    return () => window.removeEventListener("keydown", onEscape);
+  }, [open, onOpenChange]);
+
+  function close() {
+    onOpenChange(false);
+    requestAnimationFrame(() => launcher.current?.focus());
+  }
 
   async function submit(value = question) {
     const next = value.trim();
@@ -41,30 +86,40 @@ export default function AskSkillScope() {
     try {
       setAnswer(await askSkillScope(next, controller.signal));
     } catch (cause) {
-      if (!controller.signal.aborted) setError(cause instanceof Error ? cause.message : "Ask SkillScope is unavailable.");
+      if (!controller.signal.aborted) setError(cause instanceof Error ? cause.message : "Mr. Scope is unavailable right now.");
     } finally {
       if (pending.current === controller) { pending.current = null; setWorking(false); }
     }
   }
 
-  return <section className="ask-section" id="ask-skillscope" aria-labelledby="ask-heading">
-    <div className="ask-intro">
-      <div><h2 id="ask-heading">Ask the snapshot.</h2><p>Put a market question into words. SkillScope reads the same vacancy signals shown on this page and writes a short answer with its evidence.</p></div>
-      <span className="ask-signature" aria-hidden="true">S<span>.</span></span>
-    </div>
-    <div className="ask-workspace">
-      <form className="ask-form" onSubmit={(event) => { event.preventDefault(); void submit(); }}>
-        <label htmlFor="ask-question">Your question</label>
-        <textarea id="ask-question" value={question} maxLength={400} rows={3} placeholder="What can this snapshot tell me about…" onChange={(event) => setQuestion(event.target.value)} disabled={!available || working} />
-        <div className="ask-form-foot"><span>{available === null ? "Checking availability…" : available ? "Based on reviewed HeadHunter vacancies" : "AI answers are unavailable until the server key is configured."}</span><button type="submit" disabled={!available || working || question.trim().length < 3}>{working ? "Reading…" : "Read the signals"}<span aria-hidden="true">↗</span></button></div>
-      </form>
-      <div className="ask-prompts"><h3>Start with a question</h3>{examples.map((item) => <button type="button" key={item} disabled={!available || working} onClick={() => void submit(item)}>{item}<span aria-hidden="true">↗</span></button>)}</div>
-    </div>
-    <div className="ask-result" aria-live="polite" aria-atomic="true">
-      {working && <p className="ask-working">Reading the current snapshot…</p>}
-      {error && <p className="ask-error" role="alert">{error}</p>}
-      {answer && <div className="ask-answer"><div className="ask-answer-meta"><strong>From the snapshot</strong><span>{answer.sample_size} vacancies in scope · Observed {displayDate(answer.snapshot_date)}</span></div><p>{answer.answer}</p></div>}
-    </div>
-    <p className="ask-caution">Skill mentions are frequency signals, not a measure of your readiness. Questions are sent to an AI provider when submitted. <a href="/privacy">How questions are handled</a></p>
-  </section>;
+  return <div className="scopi-assistant">
+    <section className="scopi-panel" id="ask-skillscope" aria-labelledby="scopi-heading" hidden={!open}>
+      <header className="scopi-panel-head">
+        <div className="scopi-portrait"><ScopiMark /></div>
+        <div><h2 id="scopi-heading">Ask <span>Mr.</span> Scope</h2><p>Your guide to SkillScope and its market snapshot</p></div>
+        <button type="button" className="scopi-close" aria-label="Close Mr. Scope" onClick={close}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true"><path d="M4 4l12 12M16 4L4 16" /></svg></button>
+      </header>
+      <div className="scopi-panel-body">
+        {!answer && !working && !error && <p className="scopi-greeting">I can help you read the vacancies behind SkillScope. Ask about roles, skills, experience or published salaries.</p>}
+        {answer && <div className="scopi-answer" aria-live="polite"><div className="scopi-answer-source"><span>{answer.source === "project" ? "About SkillScope" : "From the snapshot"}</span>{answer.source === "market" && <span>{answer.sample_size} vacancies · Observed {displayDate(answer.snapshot_date)}</span>}</div><p>{answer.answer}</p></div>}
+        {working && <p className="scopi-working" role="status">Preparing an answer<span aria-hidden="true">…</span></p>}
+        {error && <p className="scopi-error" role="alert">{error}</p>}
+        {!answer && <div className="scopi-prompts"><h3>Try a question</h3>{examples.slice(0, showAllExamples ? examples.length : 2).map((item) => <button type="button" key={item} disabled={!available || working} onClick={() => void submit(item)}>{item}<span aria-hidden="true">↗</span></button>)}<button type="button" className="scopi-more" aria-expanded={showAllExamples} onClick={() => setShowAllExamples(!showAllExamples)}>{showAllExamples ? "Fewer ideas" : "More ideas"}<span aria-hidden="true">{showAllExamples ? "−" : "+"}</span></button></div>}
+      </div>
+      <div className="scopi-compose">
+        <form onSubmit={(event) => { event.preventDefault(); void submit(); }}>
+          <label className="sr-only" htmlFor="scopi-question">Your question</label>
+          <textarea ref={input} id="scopi-question" value={question} maxLength={400} rows={2} placeholder="Ask about SkillScope or this snapshot…" onChange={(event) => setQuestion(event.target.value)} disabled={working} />
+          <button type="submit" disabled={!available || working || question.trim().length < 3} aria-label={working ? "Reading the snapshot" : "Ask Mr. Scope"}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 16 16 4M6 4h10v10" /></svg></button>
+        </form>
+        <p className="scopi-status">{available === null ? "Checking availability…" : available ? "SkillScope facts and reviewed HeadHunter vacancies" : "Mr. Scope is unavailable right now. Try again later."}</p>
+        <p className="scopi-caution">Skill mentions are frequency signals, not a measure of your readiness. Questions are sent to an AI provider. <a href="/privacy">Privacy details</a></p>
+      </div>
+    </section>
+    <button type="button" className="scopi-launcher" ref={launcher} aria-controls="ask-skillscope" aria-expanded={open} aria-label={open ? "Close Mr. Scope assistant" : "Open Mr. Scope assistant"} onClick={() => open ? close() : onOpenChange(true)}>
+      <span className="scopi-launcher-mark"><ScopiMark /></span>
+      <span className="scopi-launcher-copy"><strong><span>Mr.</span> Scope</strong><small>Ask the snapshot</small></span>
+      <svg className="scopi-launcher-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={open ? "M5 12l5-5 5 5" : "M5 8l5 5 5-5"} /></svg>
+    </button>
+  </div>;
 }

@@ -4,7 +4,7 @@ import io
 import json
 from unittest.mock import patch
 
-from skillscope.ask import ask_groq
+from skillscope.ask import ask_groq, is_project_question
 
 
 def test_groq_request_uses_supported_reasoning_parameters() -> None:
@@ -21,3 +21,7 @@ def test_groq_request_uses_supported_reasoning_parameters() -> None:
     assert payload["reasoning_effort"] == "low"
     assert payload["include_reasoning"] is False
     assert "reasoning_format" not in payload
+
+
+def test_russian_owner_question_uses_project_facts() -> None:
+    assert is_project_question("Кто владелец сайта?")

@@ -96,12 +96,26 @@ class ApiTests(unittest.IsolatedAsyncioTestCase):
             })
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["sample_size"], 1)
+        self.assertEqual(response.json()["source"], "market")
         evidence = generate.call_args.args[1]
         self.assertEqual(evidence["selected_vacancies"], 1)
         self.assertEqual(evidence["roles"][0]["top_skills"][0]["out_of"], 1)
         self.assertEqual(evidence["roles"][0]["seniority"]["Junior"], 0)
         self.assertNotIn("vacancy_id", json.dumps(evidence))
         self.assertNotIn("title", json.dumps(evidence))
+
+    async def test_ask_project_question_has_no_vacancy_header_data(self) -> None:
+        with patch.dict("os.environ", {"GROQ_API_KEY": "test-only"}), patch(
+            "skillscope.api.ask_groq", return_value="Arsen created and operates SkillScope."
+        ) as generate:
+            response = await self._post("/api/ask", {
+                "question": "Who is the owner of the website?",
+            })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["source"], "project")
+        self.assertEqual(response.json()["sample_size"], 0)
+        self.assertIsNone(response.json()["snapshot_date"])
+        self.assertEqual(generate.call_args.args[1], {})
 
     async def test_ask_does_not_invent_untracked_role_data(self) -> None:
         with patch.dict("os.environ", {"GROQ_API_KEY": "test-only"}), patch(

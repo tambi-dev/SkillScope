@@ -80,6 +80,7 @@ function App() {
   const [theme, setTheme] = useState<"light" | "dark">(() => document.documentElement.dataset.theme === "dark" ? "dark" : "light");
   const [activeTab, setActiveTab] = useState<DashboardTab>(tabFromHash);
   const [showMethodology, setShowMethodology] = useState(window.location.hash === "#methodology");
+  const [askOpen, setAskOpen] = useState(window.location.hash === "#ask-skillscope");
   const [market, setMarket] = useState<MarketCode | "all">("all");
   const [role, setRole] = useState<RoleCode | "all">("all");
   const [category, setCategory] = useState<CategoryCode | "all">("all");
@@ -127,6 +128,7 @@ function App() {
     const previousRestoration = window.history.scrollRestoration;
     window.history.scrollRestoration = "manual";
     const onNavigation = () => {
+      if (window.location.hash === "#ask-skillscope") { setAskOpen(true); return; }
       if (window.location.hash === "#methodology") setShowMethodology(true);
       else if (window.location.hash !== "#explore") {
         rememberWorkspacePosition();
@@ -326,7 +328,7 @@ function App() {
           <h1>The IT market.<br /><span>On your radar.</span></h1>
           <div className="heading-intro">
             <p>Explore the skills, roles and salary signals across Central Asia. Find a direction worth learning for.</p>
-            <div className="heading-actions"><a href="#explore" className="text-link">Explore the market <span aria-hidden="true">↘</span></a><a href="#route" className="text-link">Build my route <span aria-hidden="true">↗</span></a><a href="#ask-skillscope" className="text-link">Ask SkillScope <span aria-hidden="true">↗</span></a></div>
+            <div className="heading-actions"><a href="#explore" className="text-link">Explore the market <span aria-hidden="true">↘</span></a><a href="#route" className="text-link">Build my route <span aria-hidden="true">↗</span></a><button type="button" className="text-link heading-ask" onClick={() => setAskOpen(true)}>Ask Mr. Scope <span aria-hidden="true">↗</span></button></div>
           </div>
           </> : <><h1>{dashboardTabs.find((tab) => tab.id === activeTab)?.label}</h1><p className="tab-intro">{activeTab === "route" ? "Turn vacancy evidence into a personal learning direction." : activeTab === "roles" ? "Find the roles and experience levels in your market." : activeTab === "skills" ? "Compare the skills connecting different IT fields." : "Explore advertised salary ranges and their coverage."}</p></>}
         </section>
@@ -406,8 +408,6 @@ function App() {
             <p>{topSkill ? `${topSkill.vacancies_with_skill} of ${sampleSize} vacancies mention ${leadingSkills.length === 1 ? "this skill" : "each leading skill"}.` : "Broaden the filters or explore the sample methodology."} {sampledCategories.length === 1 && unsampledCategories.length > 0 ? `Current field coverage: ${sampledCategories[0].category.label} only.` : `${sampledCategories.length} sampled ${sampledCategories.length === 1 ? "field" : "fields"}.`}</p>
           </div>
           <MarketRadar skills={data.skills} onOpenMethodology={openMethodology} onCompareSkill={(skill) => { setComparedSkill(skill); setComparedSource("Radar"); }} scope={`${marketOptions.find((item) => item.value === shownSelection.market)?.label} / ${shownSelection.category === "all" ? "All fields" : categories.find((item) => item.code === shownSelection.category)?.label} / ${shownSelection.role === "all" ? "All roles" : roleLabels.get(shownSelection.role)}`} />
-
-          <AskSkillScope />
 
           <section className="kpi-grid" aria-label="Snapshot summary">
             <article className="kpi-card kpi-primary"><h3>Observed vacancies</h3><div className="kpi-value">{data.skills.vacancy_denominator}<small> vacancies</small></div><p>In this view · {data.overview.included_vacancies} overall</p></article>
@@ -527,6 +527,7 @@ function App() {
         </div> : null}
         <footer className="page-footer"><a className="footer-brand" href="#overview">SkillScope.</a><span>Central Asia’s IT markets, in focus.</span><a className="footer-privacy" href="/privacy">Privacy & storage</a>{data && <span>Last observed {formatDate(data.overview.last_seen_at)}</span>}</footer>
       </main>
+      <AskSkillScope open={askOpen} onOpenChange={setAskOpen} />
     </div>
   );
 }

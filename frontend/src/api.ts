@@ -87,6 +87,7 @@ export interface AskAnswer {
   answer: string;
   snapshot_date: string | null;
   sample_size: number;
+  source: "market" | "project";
 }
 
 export function getAskStatus(signal?: AbortSignal) {
@@ -103,7 +104,7 @@ export async function askSkillScope(question: string, signal?: AbortSignal): Pro
   });
   if (!response.ok) {
     const body = await response.json().catch(() => null) as { detail?: string } | null;
-    throw new Error(body?.detail ?? "Ask SkillScope is unavailable. Try again later.");
+    throw new Error(body?.detail ?? "Mr. Scope is unavailable. Try again later.");
   }
   return await response.json() as AskAnswer;
 }
