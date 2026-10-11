@@ -207,6 +207,7 @@ def ask_groq(question: str, evidence: dict[str, Any], api_key: str) -> str:
         headers={
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
+            "User-Agent": "SkillScope/0.1.0",
         },
     )
     with urlopen(request, timeout=18) as response:

@@ -14,7 +14,9 @@ def test_groq_request_uses_supported_reasoning_parameters() -> None:
         answer = ask_groq("Which skills?", {"selected_vacancies": 1}, "test-only")
 
     payload = json.loads(open_url.call_args.args[0].data)
+    request = open_url.call_args.args[0]
     assert answer == "SQL: 1 of 1."
+    assert request.get_header("User-agent") == "SkillScope/0.1.0"
     assert payload["model"] == "openai/gpt-oss-20b"
     assert payload["reasoning_effort"] == "low"
     assert payload["include_reasoning"] is False
