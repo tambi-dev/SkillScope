@@ -5,6 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+from urllib.error import HTTPError
 
 import httpx
 
@@ -102,6 +103,17 @@ class ApiTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(evidence["roles"][0]["seniority"]["Junior"], 0)
         self.assertNotIn("vacancy_id", json.dumps(evidence))
         self.assertNotIn("title", json.dumps(evidence))
+
+    async def test_ask_exposes_only_upstream_status_for_diagnostics(self) -> None:
+        upstream_error = HTTPError("https://api.groq.com/", 400, "Bad Request", None, None)
+        with patch.dict("os.environ", {"GROQ_API_KEY": "test-only"}), patch(
+            "skillscope.api.ask_groq", side_effect=upstream_error
+        ):
+            response = await self._post("/api/ask", {"question": "Which skills?"})
+
+        self.assertEqual(response.status_code, 503)
+        self.assertEqual(response.headers["x-ask-error"], "upstream-400")
+        self.assertNotIn("api.groq.com", response.text)
 
     async def test_ask_does_not_invent_untracked_role_data(self) -> None:
         with patch.dict("os.environ", {"GROQ_API_KEY": "test-only"}), patch(

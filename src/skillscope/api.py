@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
 import time
 from collections import Counter, defaultdict, deque
@@ -19,6 +20,8 @@ from starlette.staticfiles import StaticFiles
 
 from skillscope.ask import ask_groq, build_evidence, snapshot_date
 from skillscope.config import load_role_categories, load_role_queries
+
+logger = logging.getLogger(__name__)
 
 Market = Literal["kg", "kz", "uz", "tj", "tm"]
 SENIORITY_LEVELS = ("Junior", "Middle", "Senior", "Unknown")
@@ -295,17 +298,23 @@ def create_app(data_path: Path | None = None) -> FastAPI:
         try:
             answer = ask_groq(question, evidence, api_key)
         except HTTPError as error:
+            logger.warning("Groq rejected Ask SkillScope request: HTTP %s", error.code)
             if error.code == 429:
                 raise HTTPException(
                     status_code=429,
                     detail="The AI service is at its free-tier limit. Try again later.",
                 ) from error
             raise HTTPException(
-                status_code=503, detail="The AI service is temporarily unavailable."
+                status_code=503,
+                detail="The AI service is temporarily unavailable.",
+                headers={"X-Ask-Error": f"upstream-{error.code}"},
             ) from error
         except (URLError, TimeoutError, KeyError, IndexError, ValueError) as error:
+            logger.warning("Ask SkillScope request failed: %s", type(error).__name__)
             raise HTTPException(
-                status_code=503, detail="The AI service is temporarily unavailable."
+                status_code=503,
+                detail="The AI service is temporarily unavailable.",
+                headers={"X-Ask-Error": type(error).__name__},
             ) from error
         if not answer:
             raise HTTPException(status_code=503, detail="The AI service returned no answer.")
