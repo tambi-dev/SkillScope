@@ -19,15 +19,15 @@ Complete the [privacy and data-use launch checks](privacy-launch-checklist.md) b
 
 The site is deployed on Render. Add the live URL to README when it is available in the project notes.
 
-## Ask SkillScope
+## Mr. Scope
 
 Create a Groq API key and set `GROQ_API_KEY` as a secret environment variable in the
 Render service settings. For local use, set the same variable in your shell or an
 ignored `.env` loaded by your shell. Do not put its value in `render.yaml`, frontend
-variables, or GitHub. Without the key, the dashboard still works and the Ask section
-reports that AI answers are unavailable. The server sends only the user's question
-and aggregate vacancy statistics to Groq; it does not send vacancy descriptions.
-The free tier has shared rate limits, so Ask may return a temporary limit message.
+variables, or GitHub. Without the key, the dashboard still works and Mr. Scope
+reports that AI answers are unavailable. The server sends the user's question to
+Groq and, for market questions, aggregate vacancy statistics. It does not send vacancy descriptions.
+The free tier has shared rate limits, so Mr. Scope may return a temporary limit message.
 
 ## What is deployed
 

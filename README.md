@@ -24,9 +24,9 @@ Open `http://127.0.0.1:8000`. The app uses `data/processed/vacancies_latest.json
 
 The header theme control switches between light and dark. A first visit follows the
 operating system preference; an explicit choice is saved in browser storage.
-Ask SkillScope turns the current vacancy aggregates into short answers. It needs a
-server-side `GROQ_API_KEY`; without one, the dashboard remains usable and the Ask
-section shows that answers are unavailable. See [deployment setup](docs/deployment.md).
+Mr. Scope turns the current vacancy aggregates into short answers from any dashboard tab.
+It needs a server-side `GROQ_API_KEY`; without one, the dashboard remains usable and
+Mr. Scope shows that answers are unavailable. See [deployment setup](docs/deployment.md).
 
 ## Configuration
 
@@ -46,7 +46,7 @@ Role categories, search phrases, title patterns and overlap priority live in
 | `HH_CLIENT_ID`, `HH_CLIENT_SECRET` | Credentials used by `python -m skillscope.auth` to obtain a token. |
 | `HH_REQUEST_TIMEOUT_SECONDS` | Request timeout; default `20`. |
 | `HH_MAX_RETRIES` | Maximum retries for temporary API failures; default `4`. |
-| `GROQ_API_KEY` | Server-side key for Ask SkillScope; never expose it as a frontend variable. |
+| `GROQ_API_KEY` | Server-side key for Mr. Scope; never expose it as a frontend variable. |
 | `HOST`, `PORT` | Web server bind address and port; defaults are `127.0.0.1` and `8000`. |
 
 Never commit `.env`, raw API responses, full processed records or the local history database.

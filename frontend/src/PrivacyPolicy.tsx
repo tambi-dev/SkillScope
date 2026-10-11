@@ -30,7 +30,7 @@ export default function PrivacyPolicy() {
         <section>
           <h2>What reaches the server</h2>
           <p>When you visit, your browser sends your IP address, browser details and requested URLs to the server. Market and role choices may appear in API request URLs. Render hosts SkillScope and may keep request logs. SkillScope has no accounts or sign-up forms.</p>
-          <p>When you submit an Ask SkillScope question, the question and a summary of vacancy statistics are sent to Groq to write an answer. SkillScope does not save questions or answers. Groq may retain request data in limited cases for service reliability or abuse monitoring. <a href="https://console.groq.com/docs/your-data">Groq's data information</a> explains its controls.</p>
+          <p>When you ask Mr. Scope a question, it is sent to Groq to write an answer. Market questions also send a summary of vacancy statistics. SkillScope does not save questions or answers. Groq may retain request data in limited cases for service reliability or abuse monitoring. <a href="https://console.groq.com/docs/your-data">Groq's data information</a> explains its controls.</p>
         </section>
         <section>
           <h2>What stays in your browser</h2>

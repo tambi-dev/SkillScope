@@ -18,7 +18,7 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 from starlette.staticfiles import StaticFiles
 
-from skillscope.ask import ask_groq, build_evidence, snapshot_date
+from skillscope.ask import ask_groq, build_evidence, is_project_question, snapshot_date
 from skillscope.config import load_role_categories, load_role_queries
 
 logger = logging.getLogger(__name__)
@@ -131,6 +131,7 @@ class AskResponse(BaseModel):
     answer: str
     snapshot_date: str | None
     sample_size: int
+    source: Literal["market", "project"] = "market"
 
 
 def _default_data_path() -> Path:
@@ -241,9 +242,10 @@ def create_app(data_path: Path | None = None) -> FastAPI:
             records, question, {code: role.label for code, role in roles_by_code.items()},
             snapshot_date(records),
         )
+        project_question = is_project_question(question)
         scope = evidence["scope"]
         russian = any("\u0400" <= char <= "\u04ff" for char in question)
-        if scope["untracked_role_requested"] and not scope["tracked_role_requested"]:
+        if not project_question and scope["untracked_role_requested"] and not scope["tracked_role_requested"]:
             return AskResponse(
                 answer=(
                     "Data Engineer не входит в десять ролей SkillScope. "
@@ -256,7 +258,7 @@ def create_app(data_path: Path | None = None) -> FastAPI:
                 sample_size=0,
             )
         junior_question = "junior" in question.casefold() or "джун" in question.casefold()
-        if (junior_question and isinstance(scope["markets"], list)
+        if (not project_question and junior_question and isinstance(scope["markets"], list)
                 and isinstance(scope["roles"], list)
                 and len(scope["markets"]) == len(scope["roles"]) == 1
                 and evidence["market_roles"]
@@ -274,7 +276,7 @@ def create_app(data_path: Path | None = None) -> FastAPI:
             return AskResponse(
                 answer=answer, snapshot_date=evidence["snapshot_date"], sample_size=0
             )
-        if sample_size == 0:
+        if not project_question and sample_size == 0:
             answer = (
                 "В текущей выборке SkillScope нет подходящих проверенных вакансий. "
                 "Это не означает, что найма нет."
@@ -285,6 +287,9 @@ def create_app(data_path: Path | None = None) -> FastAPI:
             return AskResponse(
                 answer=answer, snapshot_date=evidence["snapshot_date"], sample_size=0
             )
+
+        if project_question:
+            evidence, sample_size = {}, 0
 
         now = time.monotonic()
         with ask_lock:
@@ -315,7 +320,8 @@ def create_app(data_path: Path | None = None) -> FastAPI:
         if not answer:
             raise HTTPException(status_code=503, detail="The AI service returned no answer.")
         return AskResponse(
-            answer=answer, snapshot_date=evidence["snapshot_date"], sample_size=sample_size
+            answer=answer, snapshot_date=evidence.get("snapshot_date"),
+            sample_size=sample_size, source="project" if project_question else "market",
         )
 
     @app.get("/api/overview", response_model=OverviewResponse, tags=["overview"])
