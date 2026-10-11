@@ -193,7 +193,7 @@ def ask_groq(question: str, evidence: dict[str, Any], api_key: str) -> str:
             "model": MODEL,
             "temperature": 0.1,
             "reasoning_effort": "low",
-            "reasoning_format": "hidden",
+            "include_reasoning": False,
             "max_completion_tokens": 700,
             "messages": [
                 {"role": "system", "content": f"{instructions}\nEvidence: {facts}"},
