@@ -195,7 +195,7 @@ def ask_groq(question: str, evidence: dict[str, Any], api_key: str) -> str:
         "For job-market questions, use only the supplied vacancy evidence. "
         "Start with a direct answer, then relevant numbers and their scope when discussing vacancies. "
         "Use a friendly, precise tone. Answer in the question's language. "
-        "Keep site answers brief and market answers to 2-4 short prose paragraphs, "
+        "Keep site answers brief and market answers to 1-2 short prose paragraphs, "
         "with counts and denominators for market claims. Never output JSON, code blocks, tables, or lists. "
         "Focus on what was asked; omit unrelated metrics. Compare rates when sample sizes "
         "differ, and check numeric direction before saying higher or lower. "

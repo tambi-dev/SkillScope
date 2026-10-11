@@ -46,6 +46,17 @@ export default function AskSkillScope({ open, onOpenChange }: AskSkillScopeProps
   useEffect(() => () => pending.current?.abort(), []);
 
   useEffect(() => {
+    if (open) return;
+    pending.current?.abort();
+    pending.current = null;
+    setQuestion("");
+    setAnswer(null);
+    setError(null);
+    setWorking(false);
+    setShowAllExamples(false);
+  }, [open]);
+
+  useEffect(() => {
     if (!open) return;
     input.current?.focus();
     const controller = new AbortController();
@@ -79,7 +90,7 @@ export default function AskSkillScope({ open, onOpenChange }: AskSkillScopeProps
     pending.current?.abort();
     const controller = new AbortController();
     pending.current = controller;
-    setQuestion(next);
+    setQuestion("");
     setAnswer(null);
     setError(null);
     setWorking(true);
