@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { askSkillScope, getAskStatus, type AskAnswer } from "./api";
+import { useLanguage } from "./i18n";
 
 const examples = [
   "What do SkillScope's vacancies show about IT roles and skills in Kyrgyzstan?",
@@ -7,12 +8,6 @@ const examples = [
   "Which skills are most mentioned for Backend Developers?",
   "Which markets disclose salaries more often in this snapshot?",
 ];
-
-function displayDate(value: string | null) {
-  if (!value) return "Date unavailable";
-  const date = new Date(value);
-  return Number.isNaN(date.valueOf()) ? value.slice(0, 10) : date.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
-}
 
 function ScopiMark() {
   return <svg className="scopi-mark" viewBox="0 0 72 72" fill="none" aria-hidden="true">
@@ -33,6 +28,7 @@ interface AskSkillScopeProps {
 }
 
 export default function AskSkillScope({ open, onOpenChange }: AskSkillScopeProps) {
+  const { language, t, formatDate } = useLanguage();
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState<AskAnswer | null>(null);
   const [available, setAvailable] = useState<boolean | null>(null);
@@ -107,29 +103,29 @@ export default function AskSkillScope({ open, onOpenChange }: AskSkillScopeProps
     <section className="scopi-panel" id="ask-skillscope" aria-labelledby="scopi-heading" hidden={!open}>
       <header className="scopi-panel-head">
         <div className="scopi-portrait"><ScopiMark /></div>
-        <div><h2 id="scopi-heading">Ask <span>Mr.</span> Scope</h2><p>Your guide to SkillScope and its market snapshot</p></div>
-        <button type="button" className="scopi-close" aria-label="Close Mr. Scope" onClick={close}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true"><path d="M4 4l12 12M16 4L4 16" /></svg></button>
+        <div><h2 id="scopi-heading">{language === "ky" ? <><span>Mr.</span> Scope'тон суроо</> : <>Ask <span>Mr.</span> Scope</>}</h2><p>{t("Your guide to SkillScope and its market snapshot")}</p></div>
+        <button type="button" className="scopi-close" aria-label={t("Close Mr. Scope")} onClick={close}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true"><path d="M4 4l12 12M16 4L4 16" /></svg></button>
       </header>
       <div className="scopi-panel-body">
-        {!answer && !working && !error && <p className="scopi-greeting">I can help you read the vacancies behind SkillScope. Ask about roles, skills, experience or published salaries.</p>}
-        {answer && <div className="scopi-answer" aria-live="polite"><div className="scopi-answer-source"><span>{answer.source === "project" ? "About SkillScope" : "From the snapshot"}</span>{answer.source === "market" && <span>{answer.sample_size} vacancies · Observed {displayDate(answer.snapshot_date)}</span>}</div><p>{answer.answer}</p></div>}
-        {working && <p className="scopi-working" role="status">Preparing an answer<span aria-hidden="true">…</span></p>}
-        {error && <p className="scopi-error" role="alert">{error}</p>}
-        {!answer && <div className="scopi-prompts"><h3>Try a question</h3>{examples.slice(0, showAllExamples ? examples.length : 2).map((item) => <button type="button" key={item} disabled={!available || working} onClick={() => void submit(item)}>{item}<span aria-hidden="true">↗</span></button>)}<button type="button" className="scopi-more" aria-expanded={showAllExamples} onClick={() => setShowAllExamples(!showAllExamples)}>{showAllExamples ? "Fewer ideas" : "More ideas"}<span aria-hidden="true">{showAllExamples ? "−" : "+"}</span></button></div>}
+        {!answer && !working && !error && <p className="scopi-greeting">{t("I can help you read the vacancies behind SkillScope. Ask about roles, skills, experience or published salaries.")}</p>}
+        {answer && <div className="scopi-answer" aria-live="polite"><div className="scopi-answer-source"><span>{t(answer.source === "project" ? "About SkillScope" : "From the snapshot")}</span>{answer.source === "market" && <span>{t("{count} vacancies · Observed {date}", { count: answer.sample_size, date: formatDate(answer.snapshot_date) })}</span>}</div><p>{answer.answer}</p></div>}
+        {working && <p className="scopi-working" role="status">{t("Preparing an answer")}<span aria-hidden="true">…</span></p>}
+        {error && <p className="scopi-error" role="alert">{language === "ky" ? t("Mr. Scope is unavailable right now. Try again later.") : error}</p>}
+        {!answer && <div className="scopi-prompts"><h3>{t("Try a question")}</h3>{examples.slice(0, showAllExamples ? examples.length : 2).map((item) => <button type="button" key={item} disabled={!available || working} onClick={() => void submit(t(item))}>{t(item)}<span aria-hidden="true">↗</span></button>)}<button type="button" className="scopi-more" aria-expanded={showAllExamples} onClick={() => setShowAllExamples(!showAllExamples)}>{t(showAllExamples ? "Fewer ideas" : "More ideas")}<span aria-hidden="true">{showAllExamples ? "−" : "+"}</span></button></div>}
       </div>
       <div className="scopi-compose">
         <form onSubmit={(event) => { event.preventDefault(); void submit(); }}>
-          <label className="sr-only" htmlFor="scopi-question">Your question</label>
-          <textarea ref={input} id="scopi-question" value={question} maxLength={400} rows={2} placeholder="Ask about SkillScope or this snapshot…" onChange={(event) => setQuestion(event.target.value)} disabled={working} />
-          <button type="submit" disabled={!available || working || question.trim().length < 3} aria-label={working ? "Reading the snapshot" : "Ask Mr. Scope"}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 16 16 4M6 4h10v10" /></svg></button>
+          <label className="sr-only" htmlFor="scopi-question">{t("Your question")}</label>
+          <textarea ref={input} id="scopi-question" value={question} maxLength={400} rows={2} placeholder={t("Ask about SkillScope or this snapshot…")} onChange={(event) => setQuestion(event.target.value)} disabled={working} />
+          <button type="submit" disabled={!available || working || question.trim().length < 3} aria-label={t(working ? "Reading the snapshot" : "Ask Mr. Scope")}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 16 16 4M6 4h10v10" /></svg></button>
         </form>
-        <p className="scopi-status">{available === null ? "Checking availability…" : available ? "SkillScope facts and reviewed HeadHunter vacancies" : "Mr. Scope is unavailable right now. Try again later."}</p>
-        <p className="scopi-caution">Skill mentions are frequency signals, not a measure of your readiness. Questions are sent to an AI provider. <a href="/privacy">Privacy details</a></p>
+        <p className="scopi-status">{t(available === null ? "Checking availability…" : available ? "SkillScope facts and reviewed HeadHunter vacancies" : "Mr. Scope is unavailable right now. Try again later.")}</p>
+        <p className="scopi-caution">{t("Skill mentions are frequency signals, not a measure of your readiness. Questions are sent to an AI provider.")} <a href="/privacy">{t("Privacy details")}</a></p>
       </div>
     </section>
-    <button type="button" className="scopi-launcher" ref={launcher} aria-controls="ask-skillscope" aria-expanded={open} aria-label={open ? "Close Mr. Scope assistant" : "Open Mr. Scope assistant"} onClick={() => open ? close() : onOpenChange(true)}>
+    <button type="button" className="scopi-launcher" ref={launcher} aria-controls="ask-skillscope" aria-expanded={open} aria-label={t(open ? "Close Mr. Scope assistant" : "Open Mr. Scope assistant")} onClick={() => open ? close() : onOpenChange(true)}>
       <span className="scopi-launcher-mark"><ScopiMark /></span>
-      <span className="scopi-launcher-copy"><strong><span>Mr.</span> Scope</strong><small>Ask the snapshot</small></span>
+      <span className="scopi-launcher-copy"><strong><span>Mr.</span> Scope</strong><small>{t("Ask the snapshot")}</small></span>
       <svg className="scopi-launcher-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={open ? "M5 12l5-5 5 5" : "M5 8l5 5 5-5"} /></svg>
     </button>
   </div>;

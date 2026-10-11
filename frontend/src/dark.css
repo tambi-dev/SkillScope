@@ -28,6 +28,8 @@
 :root[data-theme="dark"] h1 > span { color: #c9e397; }
 :root[data-theme="dark"] .header-region { border-color: #647f6d; }
 :root[data-theme="dark"] .theme-toggle { border-color: #728d79; }
+:root[data-theme="dark"] .language-switch { border-color: #728d79; }
+:root[data-theme="dark"] .language-switch:hover { background: var(--lime); border-color: var(--lime); color: var(--forest); }
 :root[data-theme="dark"] .theme-toggle:hover,
 :root[data-theme="dark"] .dashboard-tabs button:hover,
 :root[data-theme="dark"] .country-mix button:hover,

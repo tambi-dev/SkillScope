@@ -1,5 +1,6 @@
 .footer-privacy { color: var(--ink); font-size: 11px; font-weight: 700; text-decoration: underline; }
 .legal-back { font-size: 12px; font-weight: 700; text-decoration: underline; }
+.legal-header .header-actions { gap: 22px; }
 .legal-page { padding-top: 60px; }
 .legal-kicker { color: var(--muted); font-family: var(--mono); font-size: 11px; letter-spacing: .09em; text-transform: uppercase; }
 .legal-page h1 { margin: 15px 0 18px; }
@@ -15,6 +16,9 @@
 .legal-content .legal-feedback { min-height: 22px; margin: 8px 0 0; }
 
 @media (max-width: 767px) {
+  .legal-header .header-actions { display: contents; }
+  .legal-header .language-switch { grid-column: 2; grid-row: 1; justify-self: end; }
+  .legal-header .legal-back { grid-column: 1 / -1; grid-row: 2; }
   .legal-page { padding-top: 38px; }
   .legal-lead { font-size: 15px; }
   .legal-content { margin: 38px 0 52px; }

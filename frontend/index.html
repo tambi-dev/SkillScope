@@ -12,6 +12,7 @@
       (() => {
         let savedTheme;
         try { savedTheme = localStorage.getItem("skillscope-theme"); } catch { /* Storage can be unavailable. */ }
+        try { document.documentElement.lang = localStorage.getItem("skillscope-language") === "ky" ? "ky" : "en"; } catch { /* Storage can be unavailable. */ }
         const theme = savedTheme === "light" || savedTheme === "dark"
           ? savedTheme
           : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";

@@ -12,6 +12,7 @@
       (() => {
         let savedTheme;
         try { savedTheme = localStorage.getItem("skillscope-theme"); } catch { /* Storage can be unavailable. */ }
+        try { document.documentElement.lang = localStorage.getItem("skillscope-language") === "ky" ? "ky" : "en"; } catch { /* Storage can be unavailable. */ }
         const theme = savedTheme === "light" || savedTheme === "dark"
           ? savedTheme
           : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -21,9 +22,9 @@
     </script>
     <link rel="icon" type="image/svg+xml" href="/assets/favicon-Ctv6eLW9.svg" />
     <title>SkillScope — IT market intelligence</title>
-    <script type="module" crossorigin src="/assets/index-CANBpmhS.js"></script>
+    <script type="module" crossorigin src="/assets/index-BAkn6ev4.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/react-vendor-CJpOSA4X.js">
-    <link rel="stylesheet" crossorigin href="/assets/index-4qmBXqzC.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-G15Tcp5I.css">
   </head>
   <body>
     <div id="root"></div>
