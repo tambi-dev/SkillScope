@@ -175,8 +175,9 @@ def build_evidence(
 
 def ask_groq(question: str, evidence: dict[str, Any], api_key: str) -> str:
     instructions = (
-        "You are Ask SkillScope. Answer using ONLY the JSON evidence. "
-        "Reply in the question's language, in 2-4 short paragraphs, with counts and denominators. "
+        "You are Ask SkillScope. Use only the supplied vacancy evidence. "
+        "Answer in the question's language as 2-4 short prose paragraphs, "
+        "with counts and denominators. Never output JSON, code blocks, tables, or lists. "
         "Skills are mention frequencies, not proof of importance or candidate readiness. "
         "Junior is an inferred label; no_experience_required is a separate explicit signal. "
         "Never infer trends, hiring absence, or salary effects. Compare salary numbers only "
@@ -196,8 +197,11 @@ def ask_groq(question: str, evidence: dict[str, Any], api_key: str) -> str:
             "include_reasoning": False,
             "max_completion_tokens": 700,
             "messages": [
-                {"role": "system", "content": f"{instructions}\nEvidence: {facts}"},
-                {"role": "user", "content": question},
+                {"role": "system", "content": instructions},
+                {"role": "user", "content": (
+                    f"Evidence:\n{facts}\n\nQuestion:\n{question}\n\n"
+                    "Write the answer in plain prose."
+                )},
             ],
         }
     ).encode("utf-8")
