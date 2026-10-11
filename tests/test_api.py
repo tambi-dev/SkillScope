@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-import io
 import json
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
-from urllib.error import HTTPError
 
 import httpx
 
@@ -104,35 +102,6 @@ class ApiTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(evidence["roles"][0]["seniority"]["Junior"], 0)
         self.assertNotIn("vacancy_id", json.dumps(evidence))
         self.assertNotIn("title", json.dumps(evidence))
-
-    async def test_ask_exposes_only_upstream_status_for_diagnostics(self) -> None:
-        provider_response = io.BytesIO(b'{"error":{"code":"model_permission_blocked_project"}}')
-        upstream_error = HTTPError(
-            "https://api.groq.com/", 403, "Forbidden", None, provider_response
-        )
-        with patch.dict("os.environ", {"GROQ_API_KEY": "test-only"}), patch(
-            "skillscope.api.ask_groq", side_effect=upstream_error
-        ):
-            response = await self._post("/api/ask", {"question": "Which skills?"})
-
-        self.assertEqual(response.status_code, 503)
-        self.assertEqual(
-            response.headers["x-ask-error"], "upstream-403-model_permission_blocked_project"
-        )
-        self.assertNotIn("api.groq.com", response.text)
-
-    async def test_ask_identifies_html_upstream_rejection(self) -> None:
-        upstream_error = HTTPError(
-            "https://api.groq.com/", 403, "Forbidden", None,
-            io.BytesIO(b"<!DOCTYPE html><html><body>Access denied</body></html>"),
-        )
-        with patch.dict("os.environ", {"GROQ_API_KEY": "test-only"}), patch(
-            "skillscope.api.ask_groq", side_effect=upstream_error
-        ):
-            response = await self._post("/api/ask", {"question": "Which skills?"})
-
-        self.assertEqual(response.headers["x-ask-error"], "upstream-403-html")
-        self.assertNotIn("Access denied", response.text)
 
     async def test_ask_does_not_invent_untracked_role_data(self) -> None:
         with patch.dict("os.environ", {"GROQ_API_KEY": "test-only"}), patch(

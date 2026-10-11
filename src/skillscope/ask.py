@@ -178,6 +178,8 @@ def ask_groq(question: str, evidence: dict[str, Any], api_key: str) -> str:
         "You are Ask SkillScope. Use only the supplied vacancy evidence. "
         "Answer in the question's language as 2-4 short prose paragraphs, "
         "with counts and denominators. Never output JSON, code blocks, tables, or lists. "
+        "Focus on what was asked; omit unrelated metrics. Compare rates when sample sizes "
+        "differ, and check numeric direction before saying higher or lower. "
         "Skills are mention frequencies, not proof of importance or candidate readiness. "
         "Junior is an inferred label; no_experience_required is a separate explicit signal. "
         "Never infer trends, hiring absence, or salary effects. Compare salary numbers only "

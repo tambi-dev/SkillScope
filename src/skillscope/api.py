@@ -298,39 +298,19 @@ def create_app(data_path: Path | None = None) -> FastAPI:
         try:
             answer = ask_groq(question, evidence, api_key)
         except HTTPError as error:
-            provider_body = error.read(4096)
-            try:
-                provider_code = json.loads(provider_body)["error"].get("code")
-            except (AttributeError, KeyError, TypeError, ValueError):
-                provider_code = None
-            if not (isinstance(provider_code, str) and provider_code.isascii()
-                    and provider_code.isidentifier() and len(provider_code) <= 64):
-                provider_code = None
-            provider_format = "html" if provider_body.lstrip().lower().startswith(
-                (b"<!doctype html", b"<html")
-            ) else "other"
-            logger.warning(
-                "Groq rejected Ask SkillScope request: HTTP %s, code %s, format %s",
-                error.code, provider_code, provider_format,
-            )
+            logger.warning("Groq rejected Ask SkillScope request: HTTP %s", error.code)
             if error.code == 429:
                 raise HTTPException(
                     status_code=429,
                     detail="The AI service is at its free-tier limit. Try again later.",
                 ) from error
             raise HTTPException(
-                status_code=503,
-                detail="The AI service is temporarily unavailable.",
-                headers={"X-Ask-Error": f"upstream-{error.code}" + (
-                    f"-{provider_code}" if provider_code else f"-{provider_format}"
-                )},
+                status_code=503, detail="The AI service is temporarily unavailable."
             ) from error
         except (URLError, TimeoutError, KeyError, IndexError, ValueError) as error:
             logger.warning("Ask SkillScope request failed: %s", type(error).__name__)
             raise HTTPException(
-                status_code=503,
-                detail="The AI service is temporarily unavailable.",
-                headers={"X-Ask-Error": type(error).__name__},
+                status_code=503, detail="The AI service is temporarily unavailable."
             ) from error
         if not answer:
             raise HTTPException(status_code=503, detail="The AI service returned no answer.")
