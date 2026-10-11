@@ -298,7 +298,17 @@ def create_app(data_path: Path | None = None) -> FastAPI:
         try:
             answer = ask_groq(question, evidence, api_key)
         except HTTPError as error:
-            logger.warning("Groq rejected Ask SkillScope request: HTTP %s", error.code)
+            try:
+                provider_code = json.load(error)["error"].get("code")
+            except (AttributeError, KeyError, TypeError, ValueError):
+                provider_code = None
+            if not (isinstance(provider_code, str) and provider_code.isascii()
+                    and provider_code.isidentifier() and len(provider_code) <= 64):
+                provider_code = None
+            logger.warning(
+                "Groq rejected Ask SkillScope request: HTTP %s, code %s",
+                error.code, provider_code,
+            )
             if error.code == 429:
                 raise HTTPException(
                     status_code=429,
@@ -307,7 +317,9 @@ def create_app(data_path: Path | None = None) -> FastAPI:
             raise HTTPException(
                 status_code=503,
                 detail="The AI service is temporarily unavailable.",
-                headers={"X-Ask-Error": f"upstream-{error.code}"},
+                headers={"X-Ask-Error": f"upstream-{error.code}" + (
+                    f"-{provider_code}" if provider_code else ""
+                )},
             ) from error
         except (URLError, TimeoutError, KeyError, IndexError, ValueError) as error:
             logger.warning("Ask SkillScope request failed: %s", type(error).__name__)
