@@ -30,12 +30,15 @@ class RoleClassificationTests(unittest.TestCase):
                 self.assertEqual(result.role_family, expected_role)
 
     def test_excludes_education_false_positive(self) -> None:
-        result = classify_role(
-            "Методолог образовательных программ (Data Analytics / Data Science)"
-        )
-
-        self.assertEqual(result.decision, "excluded")
-        self.assertIn("education_role", result.reason_codes)
+        for title in (
+            "Методолог образовательных программ (Data Analytics / Data Science)",
+            "Python Backend developer (Ментор)",
+            "Fullstack developer (mentor)",
+        ):
+            with self.subTest(title=title):
+                result = classify_role(title)
+                self.assertEqual(result.decision, "excluded")
+                self.assertIn("education_role", result.reason_codes)
 
     def test_excludes_data_analyst_title_when_description_is_teaching(self) -> None:
         result = classify_role(
@@ -92,6 +95,11 @@ class RoleClassificationTests(unittest.TestCase):
         examples = {
             "Senior ML/AI Engineer": "ml_engineer",
             "BI Developer / Analyst": "bi_analyst",
+            "AI/ML Senior Engineer": "ml_engineer",
+            "Senior Full-Stack JavaScript Developer": "fullstack_developer",
+            "Программист Bitrix Framework / Fullstack веб-разработчик": "fullstack_developer",
+            "Инженер по Нагрузочному тестированию": "qa_engineer",
+            "QA FullStack Engineer (Manual + Auto)": "qa_engineer",
         }
 
         for title, expected_role in examples.items():
@@ -112,6 +120,22 @@ class RoleClassificationTests(unittest.TestCase):
         for title in ("Information Security Sales Specialist", "QA/QC Engineer"):
             with self.subTest(title=title):
                 self.assertEqual(classify_role(title).decision, "excluded")
+
+    def test_excludes_design_only_frontend_hybrid(self) -> None:
+        result = classify_role(
+            "Frontend-разработчик / UI UX",
+            "Разработка UI в Figma, создание прототипов и подготовка макетов "
+            "для передачи frontend-разработчикам.",
+        )
+        self.assertEqual(result.decision, "excluded")
+        self.assertIn("design_role_in_description", result.reason_codes)
+
+    def test_keeps_frontend_hybrid_with_code_work(self) -> None:
+        result = classify_role(
+            "Frontend-разработчик / UI UX",
+            "Проектировать макеты в Figma и разрабатывать интерфейсы на TypeScript и React.",
+        )
+        self.assertEqual(result.role_family, "frontend_developer")
 
 
 if __name__ == "__main__":

@@ -1,12 +1,14 @@
 # SkillScope
 
 SkillScope summarizes HeadHunter vacancies across selected IT roles in Kyrgyzstan,
-Kazakhstan and Uzbekistan. Its initial scope covers Data & AI, Software Engineering,
-DevOps & Cloud, Cybersecurity and QA. The dashboard reports observed vacancy counts,
-skill mentions, inferred seniority and published salary ranges.
+Kazakhstan, Uzbekistan, Tajikistan and Turkmenistan. Its initial scope covers Data & AI,
+Software Engineering, DevOps & Cloud, Cybersecurity and QA. The dashboard reports
+observed vacancy counts, skill mentions, inferred seniority and published salary ranges.
 
-The packaged demo snapshot still contains the previous four-role Data sample. Refresh
-and review the collected dataset before treating expanded-role charts as market evidence.
+The packaged 2026-10-10 demo covers all ten configured roles: 338 included vacancies
+in Kyrgyzstan, Kazakhstan and Uzbekistan. The same audit found no matching roles in
+Tajikistan or Turkmenistan on HeadHunter. Counts describe this source and these
+search terms, not total IT hiring in any country.
 
 ## Run the dashboard
 
@@ -19,6 +21,12 @@ python -m venv .venv
 ```
 
 Open `http://127.0.0.1:8000`. The app uses `data/processed/vacancies_latest.jsonl` when present; otherwise it serves the sanitized snapshot packaged with the project. The demo snapshot omits vacancy IDs, titles, employers, links and descriptions.
+
+The header theme control switches between light and dark. A first visit follows the
+operating system preference; an explicit choice is saved in browser storage.
+Ask SkillScope turns the current vacancy aggregates into short answers. It needs a
+server-side `GROQ_API_KEY`; without one, the dashboard remains usable and the Ask
+section shows that answers are unavailable. See [deployment setup](docs/deployment.md).
 
 ## Configuration
 
@@ -38,6 +46,7 @@ Role categories, search phrases, title patterns and overlap priority live in
 | `HH_CLIENT_ID`, `HH_CLIENT_SECRET` | Credentials used by `python -m skillscope.auth` to obtain a token. |
 | `HH_REQUEST_TIMEOUT_SECONDS` | Request timeout; default `20`. |
 | `HH_MAX_RETRIES` | Maximum retries for temporary API failures; default `4`. |
+| `GROQ_API_KEY` | Server-side key for Ask SkillScope; never expose it as a frontend variable. |
 | `HOST`, `PORT` | Web server bind address and port; defaults are `127.0.0.1` and `8000`. |
 
 Never commit `.env`, raw API responses, full processed records or the local history database.
@@ -48,12 +57,45 @@ After setting a valid `HH_USER_AGENT` and HeadHunter credentials in `.env`:
 
 ```powershell
 .\.venv\Scripts\python.exe -m skillscope.auth
+.\.venv\Scripts\python.exe -m skillscope.audit
 .\.venv\Scripts\python.exe -m skillscope.collect
 .\.venv\Scripts\python.exe -m skillscope.eda
 .\.venv\Scripts\python.exe -m skillscope.demo_data
 ```
 
 Collection writes raw and processed files locally. Review the generated demo snapshot before committing it. The generator uses an explicit field allowlist.
+
+## Historical storage
+
+Each strict collection updates `data/processed/vacancy_history.sqlite3`. The database
+deduplicates vacancies by market and HeadHunter ID, and observations by collection ID,
+market and vacancy ID. It retains publication and collection timestamps, role, category,
+seniority, experience, normalized skills and advertised salary fields for each observed
+vacancy. Reprocessing the same collection updates its observation instead of adding a
+duplicate. Earlier observations remain in place when later collections run.
+
+Each processed run also writes a separate local JSONL snapshot under
+`data/processed/snapshots/`; `vacancies_latest.jsonl` remains the dashboard input.
+Collect all five markets in one audit when you want a comparable five-country view;
+a selected-market run updates the dashboard's latest snapshot with only that selection.
+Keep the SQLite database and snapshot directory in persistent storage and back them up.
+They are gitignored and are not included in the packaged demo or an ephemeral deployment.
+Run `python -m skillscope.audit` before `python -m skillscope.collect` for each new
+collection. Collection defaults to the markets present in its audit report, so older
+three-market reports remain reprocessable. The demo shows the 2026-10-10 snapshot,
+not a trend estimate.
+
+For a weekly Windows Task Scheduler run with a local recovery copy, follow
+[`docs/weekly-collection.md`](docs/weekly-collection.md). The scheduled task uses the
+HeadHunter API token from `.env` and requires the computer to be on with the configured
+Windows user logged in.
+
+The first full-scope audit is in `artifacts/reports/feasibility_five_markets_20261010.json`;
+its classification summary is `artifacts/reports/classification_latest.json`. The
+private review worksheet is `data/processed/manual_review_latest.csv`. The bundled demo
+retains only the twelve allowlisted analytical fields, without vacancy identity or text.
+The [2026-10-10 validation note](docs/validation-2026-10-10.md) records the stratified
+manual review, corrected role classification and skill-dictionary additions.
 
 ## Frontend development
 
@@ -72,9 +114,14 @@ pnpm --dir frontend build
 
 Commit the regenerated files in `src/skillscope/static` with the frontend changes.
 
-The dashboard has four tabs: Overview, Roles & experience, Skills and Salaries. Shared
-filters persist across tabs. Market Radar previews and pins skill frequencies and offers
-keyboard navigation, a List view and reduced-motion support.
+The dashboard has five tabs: Overview, My route, Roles & experience, Skills and Salaries.
+My route compares two sampled roles across all markets or within one country, then uses
+the current snapshot to list up to five frequently mentioned skills the visitor has not
+marked as known for that scope and role. The combined view mixes countries unevenly.
+Counts, observation date
+and small-sample warnings stay visible; known skills are saved only in the browser.
+Shared filters persist across tabs. Market Radar previews and pins skill frequencies and
+offers keyboard navigation, a List view and reduced-motion support.
 
 ## Checks
 
@@ -108,6 +155,9 @@ Interactive API documentation is available at `/docs`.
 ## Scope and limitations
 
 - Search results are a HeadHunter snapshot, not a census of the regional labour market.
+- The 2026-10-10 strict search found no matching configured roles in Tajikistan or
+  Turkmenistan on HeadHunter. This does not establish zero IT hiring there. Their
+  zero counts in the demo mean no matching vacancy in this snapshot.
 - Role counts describe vacancies returned by configured searches; they are not total
   market demand. Categories with few records should not be ranked as if samples were equal.
 - Role and skill assignments use explicit rules and dictionaries.

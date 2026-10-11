@@ -37,7 +37,7 @@ def main() -> None:
     parser.add_argument(
         "--market",
         action="append",
-        help="Configured market code; repeat to select markets (default: all enabled)",
+        help="Configured market code; repeat to select markets (default: markets in source report)",
     )
     parser.add_argument(
         "--source-report",
@@ -54,9 +54,24 @@ def main() -> None:
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     settings = Settings.from_environment()
+    audit_report_path = (
+        args.source_report
+        if args.source_report.is_absolute()
+        else settings.project_root / args.source_report
+    )
+    try:
+        audit_report = _read_json(audit_report_path)
+    except ValueError as error:
+        parser.error(str(error))
     markets_path = settings.project_root / "config" / "markets.toml"
     markets = {market.code: market for market in load_markets(markets_path)}
-    selected_codes = set(args.market or markets)
+    audited_codes = {
+        str(item.get("code")) for item in audit_report.get("markets", [])
+        if isinstance(item, dict)
+    }
+    selected_codes = set(args.market) if args.market else audited_codes
+    if not selected_codes:
+        parser.error(f"No markets found in {audit_report_path}")
     missing_codes = selected_codes - markets.keys()
     if missing_codes:
         parser.error(f"Unknown or disabled market codes: {', '.join(sorted(missing_codes))}")
@@ -75,11 +90,7 @@ def main() -> None:
             client=client,
             markets=selected_markets,
             refresh_details=args.refresh_details,
-            audit_report_path=(
-                args.source_report
-                if args.source_report.is_absolute()
-                else settings.project_root / args.source_report
-            ),
+            audit_report_path=audit_report_path,
         )
     except (HHApiError, OSError, ValueError) as error:
         LOGGER.error("Collection failed: %s", error)
@@ -106,6 +117,16 @@ def run_collection(
     collection_id = str(audit_report.get("collection_id", ""))
     if not collection_id:
         raise ValueError("The feasibility report has no collection_id; run the audit first")
+    audited_markets = {
+        str(item.get("code")) for item in audit_report.get("markets", [])
+        if isinstance(item, dict)
+    }
+    missing_markets = {market.code for market in markets} - audited_markets
+    if missing_markets:
+        raise ValueError(
+            f"Markets absent from {audit_report_path}: {', '.join(sorted(missing_markets))}"
+        )
+    observed_at = str(audit_report.get("finished_at") or datetime.now(UTC).isoformat())
 
     source_dir = settings.project_root / "data" / "raw" / collection_id
     details_dir = source_dir / "vacancies"
@@ -146,22 +167,25 @@ def run_collection(
                     role_definitions,
                 )
             )
-    if not records:
-        selected = ", ".join(market.code for market in markets)
-        raise ValueError(f"No candidates for markets {selected} found in {source_dir}")
-
     history_update: HistoryUpdate | None = None
     history_path = settings.project_root / "data" / "processed" / "vacancy_history.sqlite3"
     if search_mode == "strict":
         included_for_history = [
             record for record in records if record["review_decision"] == "included"
         ]
-        observed_at = str(audit_report.get("finished_at") or datetime.now(UTC).isoformat())
+        history_market_counts = {
+            market.code: (
+                sum(record["market"] == market.code for record in records),
+                sum(record["market"] == market.code for record in included_for_history),
+            )
+            for market in markets
+        }
         history_update, lifecycle = update_history(
             database_path=history_path,
             collection_id=collection_id,
             observed_at=observed_at,
             records=included_for_history,
+            market_counts=history_market_counts,
         )
         for record in records:
             key = (str(record["market"]), str(record["vacancy_id"]))
@@ -176,17 +200,32 @@ def run_collection(
                 )
             )
 
+    for record in records:
+        record["collection_id"] = collection_id
+        record["collected_at"] = observed_at
+
     processed_path = (
         settings.project_root / "data" / "processed" / f"vacancies{output_suffix}_latest.jsonl"
     )
-    _write_jsonl(processed_path, records)
+    market_suffix = "-".join(sorted(market.code for market in markets))
+    snapshot_path = (
+        settings.project_root
+        / "data"
+        / "processed"
+        / "snapshots"
+        / f"{collection_id}_{search_mode}_{market_suffix}.jsonl"
+    )
+    _write_jsonl(snapshot_path, records)
+    if records:
+        _write_jsonl(processed_path, records)
     review_path = (
         settings.project_root
         / "data"
         / "processed"
         / f"manual_review{output_suffix}_latest.csv"
     )
-    _write_review_csv(review_path, records)
+    if records:
+        _write_review_csv(review_path, records)
 
     decision_counts = Counter(str(record["review_decision"]) for record in records)
     role_counts = Counter(
@@ -233,8 +272,13 @@ def run_collection(
         ),
         "salary_coverage_included": _salary_coverage(records),
         "outputs": {
-            "processed_jsonl": str(processed_path.relative_to(settings.project_root)),
-            "manual_review_csv": str(review_path.relative_to(settings.project_root)),
+            "processed_jsonl": (
+                str(processed_path.relative_to(settings.project_root)) if records else None
+            ),
+            "snapshot_jsonl": str(snapshot_path.relative_to(settings.project_root)),
+            "manual_review_csv": (
+                str(review_path.relative_to(settings.project_root)) if records else None
+            ),
             "history_database": (
                 str(history_path.relative_to(settings.project_root))
                 if history_update is not None

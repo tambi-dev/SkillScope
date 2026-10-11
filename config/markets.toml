@@ -18,3 +18,17 @@ host = "hh.uz"
 area_id = "97"
 currency = "UZS"
 enabled = true
+
+[markets.tj]
+name = "Tajikistan"
+host = "hh.ru"
+area_id = "86"
+currency = "TJS"
+enabled = true
+
+[markets.tm]
+name = "Turkmenistan"
+host = "hh.ru"
+area_id = "93"
+currency = "TMT"
+enabled = true

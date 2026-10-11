@@ -82,3 +82,28 @@ export function getSeniority(
 export function getModelInsights(signal?: AbortSignal) {
   return getJson<ModelInsights>("/model-insights", signal);
 }
+
+export interface AskAnswer {
+  answer: string;
+  snapshot_date: string | null;
+  sample_size: number;
+}
+
+export function getAskStatus(signal?: AbortSignal) {
+  return getJson<{ available: boolean }>("/ask/status", signal);
+}
+
+export async function askSkillScope(question: string, signal?: AbortSignal): Promise<AskAnswer> {
+  const timeout = AbortSignal.timeout(25_000);
+  const response = await fetch(`${apiBase}/ask`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ question }),
+    signal: signal ? AbortSignal.any([signal, timeout]) : timeout,
+  });
+  if (!response.ok) {
+    const body = await response.json().catch(() => null) as { detail?: string } | null;
+    throw new Error(body?.detail ?? "Ask SkillScope is unavailable. Try again later.");
+  }
+  return await response.json() as AskAnswer;
+}

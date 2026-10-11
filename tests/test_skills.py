@@ -46,6 +46,19 @@ class SkillExtractionTests(unittest.TestCase):
 
         self.assertEqual(evidence, {})
 
+    def test_detects_technologies_found_in_role_review(self) -> None:
+        definitions = load_skill_definitions(
+            Path(__file__).resolve().parents[1] / "config" / "skills.toml"
+        )
+        evidence = extract_skills(
+            title="Frontend developer",
+            description="Angular and Vue interfaces; Redis and Kafka services; Grafana dashboards.",
+            key_skills=["Ansible"],
+            definitions=definitions,
+        )
+        for skill in ("Angular", "Vue", "Redis", "Kafka", "Grafana", "Ansible"):
+            self.assertIn(skill, evidence)
+
 
 if __name__ == "__main__":
     unittest.main()

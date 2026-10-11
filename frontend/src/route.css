@@ -1,0 +1,89 @@
+.heading-actions { display: flex; flex-wrap: wrap; gap: 8px 26px; }
+.tab-label-mobile { display: none; }
+.dashboard-tabs { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+
+.my-route { padding: 12px 0 32px; }
+.route-heading { display: flex; justify-content: space-between; align-items: end; gap: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--line); }
+.route-heading h2 { font-size: 31px; font-weight: 600; letter-spacing: -.03em; }
+.route-heading p { max-width: 61ch; margin-top: 9px; color: var(--muted); font-size: 13px; line-height: 1.7; }
+.route-heading > span { flex: none; color: var(--muted); font-size: 11px; }
+.route-layout { display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); gap: 42px; margin-top: 28px; }
+.route-inputs { min-width: 0; }
+.route-inputs h3 { font-size: 19px; font-weight: 650; letter-spacing: -.02em; }
+.route-selects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin-top: 22px; }
+.route-selects label { min-width: 0; }
+.route-selects label > span { display: block; margin-bottom: 8px; color: var(--muted); font-size: 11px; font-weight: 650; }
+.route-selects select { width: 100%; min-height: 44px; padding: 8px 24px 8px 0; border: 0; border-bottom: 1px solid #9aaa96; border-radius: 0; background: transparent; font-size: 13px; font-weight: 650; }
+.route-selects select:hover { border-color: var(--ink); }
+.route-selects option, .route-selects optgroup { color: var(--ink); background: var(--paper); }
+.route-known { margin-top: 40px; }
+.route-known-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.route-known-heading p { color: var(--muted); font-size: 11px; line-height: 1.6; margin-top: 5px; }
+.route-known-heading > span { color: var(--muted); font-size: 11px; white-space: nowrap; }
+.route-skill-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.route-skill-list button { min-height: 38px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 6px; background: transparent; font-size: 12px; font-weight: 600; }
+.route-skill-list button:hover { border-color: var(--meter-fill); background: #ebf0e4; }
+.route-skill-list button[aria-pressed="true"] { border-color: var(--forest); background: var(--forest); color: #f2f6e9; }
+.route-skill-list button[aria-pressed="true"]::before { content: ""; display: inline-block; width: 5px; height: 5px; margin-right: 8px; vertical-align: 2px; border-radius: 50%; background: var(--lime); }
+.route-skill-actions { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 14px; }
+.route-skill-actions button { min-height: 32px; padding: 3px 0; background: transparent; color: var(--ink); font-size: 11px; text-decoration: underline; text-underline-offset: 4px; }
+.route-skill-actions button:hover { color: var(--meter-highlight); }
+.route-privacy { margin-top: 16px; color: var(--muted); font-size: 10px; }
+
+.route-output { min-width: 0; min-height: 345px; padding: 29px 32px; border-radius: 12px; background: #e7ede3; }
+.route-result-heading h3, .route-empty h3 { font-size: 25px; font-weight: 600; letter-spacing: -.025em; line-height: 1.3; }
+.route-result-heading p, .route-empty p { margin-top: 7px; color: var(--muted); font-size: 12px; line-height: 1.7; }
+.route-empty { display: flex; min-height: 285px; flex-direction: column; justify-content: center; max-width: 47ch; }
+.route-caution { margin-top: 19px; padding: 13px 16px; border-radius: 6px; background: #eee9d3; color: #514c30; font-size: 11px; line-height: 1.65; }
+.route-caution strong { font-weight: 750; }
+.route-recommendations { list-style: none; padding: 0; margin: 22px 0 0; }
+.route-recommendations li { padding: 16px 0; border-top: 1px solid #c5d5c4; }
+.route-skill-main { display: flex; align-items: baseline; justify-content: space-between; gap: 15px; }
+.route-skill-main strong { font-size: 18px; font-weight: 700; }
+.route-skill-main > span { font-size: 20px; font-weight: 750; font-variant-numeric: tabular-nums; }
+.route-recommendations p { margin-top: 3px; color: var(--muted); font-size: 11px; }
+.route-meter { display: block; width: 100%; height: 3px; margin-top: 12px; background: #c6d6c7; }
+.route-meter > span { display: block; height: 100%; background: #315f49; }
+.route-recommendations a { display: inline-flex; align-items: center; gap: 8px; min-height: 30px; margin-top: 8px; font-size: 11px; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+.route-recommendations a:hover { color: #315f49; }
+.route-method { margin-top: 19px; padding-top: 16px; border-top: 1px solid #c5d5c4; color: var(--muted); font-size: 11px; line-height: 1.7; }
+.route-back-to-compare, .route-compare-action { min-height: 38px; padding: 8px 0; background: transparent; color: var(--ink); font-size: 11px; font-weight: 700; text-align: left; text-decoration: underline; text-underline-offset: 4px; }
+.route-back-to-compare { margin-top: 7px; }
+.route-back-to-compare:hover, .route-compare-action:hover { color: #315f49; }
+.role-compare-heading h3 { font-size: 25px; font-weight: 600; letter-spacing: -.025em; }
+.role-compare-heading p { margin-top: 7px; color: var(--muted); font-size: 12px; line-height: 1.7; }
+.role-compare-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; margin-top: 21px; }
+.role-compare-card { display: flex; min-width: 0; flex-direction: column; padding: 17px; border: 1px solid #c5d5c4; border-radius: 8px; background: var(--paper); }
+.role-compare-card label span { display: block; margin-bottom: 6px; color: var(--muted); font-size: 10px; font-weight: 700; }
+.role-compare-card select { width: 100%; min-height: 38px; border: 0; border-bottom: 1px solid #9aaa96; border-radius: 0; background: transparent; font-size: 12px; font-weight: 700; }
+.role-compare-card option { color: var(--ink); background: var(--paper); }
+.role-compare-count { display: flex; align-items: baseline; gap: 7px; margin-top: 18px; font-size: 11px; color: var(--muted); }
+.role-compare-count strong { font-size: 26px; color: var(--ink); font-variant-numeric: tabular-nums; }
+.role-compare-caution { margin-top: 7px; color: #6d6035; font-size: 10px; line-height: 1.5; }
+.role-compare-card h4 { margin-top: 19px; font-size: 11px; font-weight: 700; }
+.role-compare-skills { list-style: none; padding: 0; margin: 8px 0 11px; }
+.role-compare-skills li { display: grid; grid-template-columns: 1fr auto; gap: 1px 7px; padding: 8px 0; border-top: 1px solid var(--line); font-size: 11px; }
+.role-compare-skills strong { font-variant-numeric: tabular-nums; }
+.role-compare-skills small { grid-column: 1 / -1; color: var(--muted); font-size: 10px; }
+.role-compare-loading { flex: 1; margin-top: 12px; color: var(--muted); font-size: 11px; }
+.role-compare-card .route-compare-action { margin-top: auto; }
+
+@media (max-width: 900px) {
+  .route-layout { grid-template-columns: 1fr; gap: 30px; }
+  .route-output { min-height: 0; }
+}
+@media (max-width: 600px) {
+  .dashboard-tabs button { font-size: 10px; padding: 11px 2px; }
+  .tab-label-full { display: none; }
+  .tab-label-mobile { display: inline; }
+  .route-heading { display: block; }
+  .route-heading h2 { font-size: 27px; }
+  .route-heading > span { display: block; margin-top: 12px; }
+  .route-selects { grid-template-columns: 1fr; gap: 17px; }
+  .route-known { margin-top: 32px; }
+  .route-output { padding: 23px 20px; }
+  .route-empty { min-height: 220px; }
+  .route-result-heading h3, .route-empty h3 { font-size: 22px; }
+  .role-compare-grid { grid-template-columns: 1fr; }
+  .role-compare-heading h3 { font-size: 22px; }
+}

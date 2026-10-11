@@ -14,7 +14,7 @@ async function main() {
     page.on("pageerror", (error) => errors.push(error.message));
     const ready = () => page.locator('.snapshot-content[aria-busy="false"] .tab-panel:not([hidden])').waitFor();
     const tabs = [
-      { id: "overview", label: "Overview" }, { id: "roles", label: "Roles & experience" },
+      { id: "overview", label: "Overview" }, { id: "route", label: "My route" }, { id: "roles", label: "Roles & experience" },
       { id: "skills", label: "Skills" }, { id: "salary", label: "Salaries" },
     ];
     const selectTab = async (label) => {
@@ -51,6 +51,13 @@ async function main() {
     assert.equal(await page.getByRole("combobox", { name: "Market", exact: true }).inputValue(), "kz");
     await page.getByRole("button", { name: "Reset filters" }).click();
     await assertCount(await expectedCount("all"));
+    for (const market of ["tj", "tm"]) {
+      await page.getByRole("combobox", { name: "Market", exact: true }).selectOption(market);
+      await assertCount(0);
+      assert.match(await page.locator(".sample-notice").innerText(), /No reviewed vacancies/);
+    }
+    await page.getByRole("button", { name: "Reset filters" }).click();
+    await assertCount(await expectedCount("all"));
     await page.getByRole("button", { name: "List", exact: true }).click();
     assert.equal(await page.locator(".radar-list").count(), 1);
     await page.getByRole("button", { name: /^SQL:/ }).click();
@@ -60,9 +67,53 @@ async function main() {
     await page.getByRole("link", { name: "Compare across fields" }).click();
     await page.getByRole("tab", { name: "Skills", selected: true }).waitFor();
     assert.equal(new URL(page.url()).hash, "#skills");
+    const comparedRow = page.locator('.skill-matrix tr[data-skill="SQL"]');
+    await comparedRow.waitFor();
+    assert.equal(await comparedRow.getAttribute("data-spotlight"), "true", "Radar comparison must point to the selected matrix row");
+    assert.match(await comparedRow.locator(".matrix-row-context").innerText(), /From Radar.*Observed/);
+    assert.equal(await comparedRow.evaluate((row) => document.activeElement === row), true, "Keyboard focus must follow the selected skill");
     await page.goBack();
     await page.getByRole("tab", { name: "Overview", selected: true }).waitFor();
     assert.equal(await page.locator(".radar-inspector h3").innerText(), "SQL");
+    await selectTab("My route");
+    assert.equal(await page.getByRole("combobox", { name: "Route market" }).inputValue(), "all");
+    await page.getByRole("heading", { name: "Compare two roles" }).waitFor();
+    const globalRole = await page.getByRole("combobox", { name: "Compare role 1" }).inputValue();
+    await page.getByRole("button", { name: "Build this route" }).first().click();
+    await page.getByRole("heading", { name: "A starting point for this role" }).waitFor();
+    assert.match(await page.locator(".route-result-heading").innerText(), new RegExp(`${await expectedCount("all", globalRole)} observed vacancies`));
+    assert.match(await page.locator(".route-result-heading").innerText(), /across all markets/);
+    await page.getByRole("combobox", { name: "Route role" }).selectOption("all");
+    await page.getByRole("combobox", { name: "Route market" }).selectOption("kz");
+    await page.getByRole("combobox", { name: "Route role" }).selectOption("data_analyst");
+    await page.getByRole("heading", { name: "A starting point for this role" }).waitFor();
+    const routeCount = await expectedCount("kz", "data_analyst", "data_ai");
+    assert.match(await page.locator(".route-result-heading").innerText(), new RegExp(`${routeCount} observed vacancies`));
+    await page.getByRole("button", { name: "SQL", exact: true, pressed: false }).click();
+    assert.equal(await page.locator(".route-recommendations li").count(), 5);
+    assert.equal(await page.locator(".route-recommendations li").filter({ hasText: "SQL" }).count(), 0, "Known skills must not be proposed");
+    await page.getByRole("link", { name: "Compare Python across fields" }).click();
+    await page.getByRole("tab", { name: "Skills", selected: true }).waitFor();
+    await page.locator('.snapshot-content[aria-busy="false"] .skill-matrix tr[data-skill="Python"]').waitFor();
+    assert.match(await page.locator('.skill-matrix tr[data-skill="Python"] .matrix-row-context').innerText(), /From My route/);
+    assert.equal(await page.getByRole("combobox", { name: "Market", exact: true }).inputValue(), "kz");
+    assert.equal(await page.getByRole("combobox", { name: "Field" }).inputValue(), "all");
+    assert.equal(await page.getByRole("combobox", { name: "Role family" }).inputValue(), "all");
+    assert.ok(await page.locator(".skill-matrix thead th").count() > 2, "Route comparison must show multiple fields");
+    await page.goBack();
+    await page.getByRole("tab", { name: "My route", selected: true }).waitFor();
+    await page.getByRole("combobox", { name: "Route role" }).waitFor();
+    assert.equal(await page.getByRole("combobox", { name: "Route role" }).inputValue(), "data_analyst");
+    await page.getByRole("combobox", { name: "Route market" }).selectOption("kg");
+    await page.locator(".route-caution").waitFor();
+    await page.getByRole("combobox", { name: "Route market" }).selectOption("tj");
+    await page.getByRole("heading", { name: "No route from this sample yet." }).waitFor();
+    assert.equal(await page.locator(".route-recommendations li").count(), 0);
+    await page.getByRole("combobox", { name: "Route market" }).selectOption("kz");
+    await page.getByRole("button", { name: "SQL", exact: true, pressed: true }).waitFor();
+    await selectTab("Overview");
+    await page.getByRole("button", { name: "Reset filters" }).click();
+    await assertCount(await expectedCount("all"));
     await selectTab("Roles & experience");
     const rolesResponse = await (await page.request.get(`${base}/api/roles`)).json();
     const leadingRole = [...rolesResponse.items].sort((a, b) => b.vacancies - a.vacancies)[0];
@@ -132,6 +183,8 @@ async function main() {
     await assertCount(await expectedCount("all", "all", "software_engineering"));
     await page.getByRole("combobox", { name: "Role family" }).selectOption("backend_developer");
     await assertCount(await expectedCount("all", "backend_developer", "software_engineering"));
+    await page.getByRole("combobox", { name: "Market", exact: true }).selectOption("tj");
+    await assertCount(0);
     await selectTab("Roles & experience");
     assert.equal(await page.locator(".role-not-sampled").innerText(), "Not sampled");
     await selectTab("Overview");
@@ -154,6 +207,7 @@ async function main() {
     await page.route("**/api/skills?**", (route) => {
       const field = new URL(route.request().url()).searchParams.get("category");
       if (field === "software_engineering") return route.fulfill({ json: { vacancy_denominator: 4, items: [{ skill: "Python", vacancies_with_skill: 2, share: 0.5 }, { skill: "JavaScript", vacancies_with_skill: 3, share: 0.75 }] } });
+      if (field && field !== "data_ai") return route.fulfill({ json: { vacancy_denominator: 0, items: [] } });
       return route.continue();
     });
     await page.getByRole("combobox", { name: "Market", exact: true }).selectOption("kz");
@@ -215,8 +269,25 @@ async function main() {
         assert.equal(escapedLabels, 0, `Radar labels must remain inside the instrument at ${width}px`);
       }
       await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-      const controls = await page.locator(".workspace-controls").boundingBox();
-      assert.ok(controls.y >= -1 && controls.y < 900, "Tabs and filters must stay reachable while scrolling");
+      if (width <= 767) {
+        const tabs = await page.locator(".dashboard-tabs").boundingBox();
+        if (tab.id === "overview") {
+          assert.ok(tabs.y + tabs.height <= 0, "Overview tabs must scroll out of view on phones");
+        } else {
+          assert.ok(tabs.y >= -1 && tabs.y < 900, "Tabs must stay reachable while scrolling on phones");
+        }
+        if (tab.id !== "route") {
+          const filters = await page.locator(".explore-section").boundingBox();
+          assert.ok(filters.y + filters.height <= 0, "Mobile filters must scroll out of view");
+        }
+      } else {
+        const controls = await page.locator(".workspace-controls").boundingBox();
+        if (tab.id === "overview") {
+          assert.ok(controls.y + controls.height <= 0, "Overview controls must scroll out of view");
+        } else {
+          assert.ok(controls.y >= -1 && controls.y < 900, "Tabs and filters must stay reachable while scrolling");
+        }
+      }
       }
     }
     await selectTab("Overview");
@@ -224,8 +295,31 @@ async function main() {
     await page.getByText("Scope & coverage", { exact: true }).click();
     await page.locator(".methodology-details details[open] p").waitFor();
     assert.equal(await page.locator(".radar-sweep").evaluate((element) => getComputedStyle(element).display), "none");
+    await page.getByRole("button", { name: "Switch to dark theme" }).click();
+    await page.waitForFunction(() => getComputedStyle(document.documentElement).backgroundColor === "rgb(17, 28, 25)");
+    assert.equal(await page.evaluate(() => localStorage.getItem("skillscope-theme")), "dark");
+    assert.equal(await page.locator('meta[name="theme-color"]').getAttribute("content"), "#111c19");
+    await page.reload();
+    await ready();
+    assert.equal(await page.locator("html").getAttribute("data-theme"), "dark", "Saved theme must survive reload");
+    await page.getByRole("button", { name: "Switch to light theme" }).click();
+    assert.equal(await page.evaluate(() => localStorage.getItem("skillscope-theme")), "light");
+    const preferredDark = await browser.newContext({ colorScheme: "dark" });
+    const freshPage = await preferredDark.newPage();
+    await freshPage.goto(base);
+    assert.equal(await freshPage.locator("html").getAttribute("data-theme"), "dark", "Fresh visits should use the system theme");
+    await preferredDark.close();
+    await page.getByRole("link", { name: "Privacy & storage" }).click();
+    await page.getByRole("heading", { name: "Privacy & storage" }).waitFor();
+    assert.equal(await page.getByRole("link", { name: "arsenbektemirov01@gmail.com" }).getAttribute("href"), "mailto:arsenbektemirov01@gmail.com");
+    assert.equal(new URL(page.url()).pathname, "/privacy");
+    await page.getByRole("button", { name: "Clear saved preferences" }).click();
+    assert.equal(await page.evaluate(() => localStorage.getItem("skillscope-theme")), null);
+    assert.equal(await page.evaluate(() => localStorage.getItem("skillscope-known-skills")), null);
+    await page.reload();
+    await page.getByRole("heading", { name: "Privacy & storage" }).waitFor();
     assert.deepEqual(errors, []);
-    console.log("PASS: four tabs, keyboard navigation, URL/back, preserved filters/radar selection, reused data, sticky controls, loading/error/empty states, methodology, 1366/1024/390/320px layouts; no browser exceptions.");
+    console.log("PASS: five tabs, personal route with counts/empty/small samples, keyboard navigation, URL/back, preserved filters/radar selection, theme persistence, desktop and mobile layouts; no browser exceptions.");
   } finally {
     await browser.close();
   }

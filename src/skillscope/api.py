@@ -3,21 +3,26 @@
 from __future__ import annotations
 
 import json
-from collections import Counter, defaultdict
+import os
+import time
+from collections import Counter, defaultdict, deque
 from pathlib import Path
 from statistics import mean, median
+from threading import Lock
 from typing import Any, Literal
+from urllib.error import HTTPError, URLError
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import FileResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from starlette.staticfiles import StaticFiles
 
+from skillscope.ask import ask_groq, build_evidence, snapshot_date
 from skillscope.config import load_role_categories, load_role_queries
 
-Market = Literal["kg", "kz", "uz"]
+Market = Literal["kg", "kz", "uz", "tj", "tm"]
 SENIORITY_LEVELS = ("Junior", "Middle", "Senior", "Unknown")
-MARKET_CURRENCIES = {"kg": "KGS", "kz": "KZT", "uz": "UZS"}
+MARKET_CURRENCIES = {"kg": "KGS", "kz": "KZT", "uz": "UZS", "tj": "TJS", "tm": "TMT"}
 
 
 class SkillItem(BaseModel):
@@ -115,6 +120,16 @@ class ModelInsightsResponse(BaseModel):
     explanation: str
 
 
+class AskRequest(BaseModel):
+    question: str = Field(min_length=3, max_length=400)
+
+
+class AskResponse(BaseModel):
+    answer: str
+    snapshot_date: str | None
+    sample_size: int
+
+
 def _default_data_path() -> Path:
     project_root = Path(__file__).resolve().parents[2]
     processed_path = project_root / "data" / "processed" / "vacancies_latest.jsonl"
@@ -200,6 +215,103 @@ def create_app(data_path: Path | None = None) -> FastAPI:
         version="0.1.0",
         description="Descriptive statistics for IT vacancies in Central Asia.",
     )
+    ask_times: deque[float] = deque()
+    ask_lock = Lock()
+
+    @app.get("/api/ask/status", tags=["ask"])
+    def ask_status() -> dict[str, bool]:
+        return {"available": bool(os.environ.get("GROQ_API_KEY"))}
+
+    @app.post("/api/ask", response_model=AskResponse, tags=["ask"])
+    def ask(request: AskRequest) -> AskResponse:
+        question = request.question.strip()
+        if len(question) < 3:
+            raise HTTPException(
+                status_code=422, detail="Enter a question of at least 3 characters."
+            )
+        api_key = os.environ.get("GROQ_API_KEY")
+        if not api_key:
+            raise HTTPException(status_code=503, detail="Ask SkillScope is not configured yet.")
+
+        records = _read_records(source_path)
+        evidence, sample_size = build_evidence(
+            records, question, {code: role.label for code, role in roles_by_code.items()},
+            snapshot_date(records),
+        )
+        scope = evidence["scope"]
+        russian = any("\u0400" <= char <= "\u04ff" for char in question)
+        if scope["untracked_role_requested"] and not scope["tracked_role_requested"]:
+            return AskResponse(
+                answer=(
+                    "Data Engineer не входит в десять ролей SkillScope. "
+                    "По этой выборке нельзя ответить на вопрос об этой роли."
+                    if russian else
+                    "Data Engineer is outside SkillScope's ten tracked roles, "
+                    "so this snapshot cannot answer that role-specific question."
+                ),
+                snapshot_date=evidence["snapshot_date"],
+                sample_size=0,
+            )
+        junior_question = "junior" in question.casefold() or "джун" in question.casefold()
+        if (junior_question and isinstance(scope["markets"], list)
+                and isinstance(scope["roles"], list)
+                and len(scope["markets"]) == len(scope["roles"]) == 1
+                and evidence["market_roles"]
+                and evidence["market_roles"][0]["seniority"]["Junior"] == 0):
+            role_name, market_name = scope["roles"][0], scope["markets"][0]
+            answer = (
+                f"В текущей выборке нет проверенных вакансий Junior {role_name} "
+                f"в {market_name}. По ней нельзя ранжировать навыки для этой группы. "
+                "Это не означает, что найма нет."
+                if russian else
+                f"There are no reviewed Junior {role_name} vacancies in {market_name} "
+                "in this snapshot. It cannot rank skills for that group. "
+                "This does not mean there is no hiring."
+            )
+            return AskResponse(
+                answer=answer, snapshot_date=evidence["snapshot_date"], sample_size=0
+            )
+        if sample_size == 0:
+            answer = (
+                "В текущей выборке SkillScope нет подходящих проверенных вакансий. "
+                "Это не означает, что найма нет."
+                if russian else
+                "No reviewed vacancies match this question in the current SkillScope snapshot. "
+                "This does not mean there is no hiring in that market."
+            )
+            return AskResponse(
+                answer=answer, snapshot_date=evidence["snapshot_date"], sample_size=0
+            )
+
+        now = time.monotonic()
+        with ask_lock:
+            while ask_times and now - ask_times[0] > 86_400:
+                ask_times.popleft()
+            if len(ask_times) >= 200 or sum(now - item < 60 for item in ask_times) >= 3:
+                raise HTTPException(
+                    status_code=429, detail="Ask SkillScope is busy. Try again shortly."
+                )
+            ask_times.append(now)
+        try:
+            answer = ask_groq(question, evidence, api_key)
+        except HTTPError as error:
+            if error.code == 429:
+                raise HTTPException(
+                    status_code=429,
+                    detail="The AI service is at its free-tier limit. Try again later.",
+                ) from error
+            raise HTTPException(
+                status_code=503, detail="The AI service is temporarily unavailable."
+            ) from error
+        except (URLError, TimeoutError, KeyError, IndexError, ValueError) as error:
+            raise HTTPException(
+                status_code=503, detail="The AI service is temporarily unavailable."
+            ) from error
+        if not answer:
+            raise HTTPException(status_code=503, detail="The AI service returned no answer.")
+        return AskResponse(
+            answer=answer, snapshot_date=evidence["snapshot_date"], sample_size=sample_size
+        )
 
     @app.get("/api/overview", response_model=OverviewResponse, tags=["overview"])
     def overview() -> OverviewResponse:
@@ -225,7 +337,11 @@ def create_app(data_path: Path | None = None) -> FastAPI:
             )
 
         last_seen = max(
-            (str(record.get("last_seen_at")) for record in records if record.get("last_seen_at")),
+            (
+                str(record.get("collected_at") or record.get("last_seen_at"))
+                for record in records
+                if record.get("collected_at") or record.get("last_seen_at")
+            ),
             default=None,
         )
         return OverviewResponse(
@@ -456,6 +572,10 @@ def create_app(data_path: Path | None = None) -> FastAPI:
 
         @app.get("/", include_in_schema=False)
         def dashboard() -> FileResponse:
+            return FileResponse(index_path)
+
+        @app.get("/privacy", include_in_schema=False)
+        def privacy() -> FileResponse:
             return FileResponse(index_path)
 
     return app

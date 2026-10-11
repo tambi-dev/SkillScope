@@ -102,7 +102,7 @@ def run_audit(
         raise ValueError("search_mode must be 'strict' or 'broad'")
 
     started_at = datetime.now(UTC)
-    collection_id = started_at.strftime("%Y%m%dT%H%M%SZ")
+    collection_id = started_at.strftime("%Y%m%dT%H%M%S%fZ")
     run_dir = settings.project_root / "data" / "raw" / collection_id
     all_records: list[dict[str, Any]] = []
     query_results: list[dict[str, Any]] = []

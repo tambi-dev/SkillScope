@@ -7,6 +7,8 @@ Render supplies `PORT`. `.python-version` selects Python 3.12.
 
 ## First deployment
 
+Complete the [privacy and data-use launch checks](privacy-launch-checklist.md) before publishing the URL.
+
 1. Put the project in your own GitHub repository, including
    `src/skillscope/static` and `src/skillscope/demo_vacancies.jsonl`.
 2. In Render, select **New → Blueprint**, connect that repository and use the root
@@ -15,7 +17,17 @@ Render supplies `PORT`. `.python-version` selects Python 3.12.
    filter, and `/api/overview`. The overview should report `data_mode: demo`.
 4. Add the actual working URL to the top of README and the application portfolio.
 
-Deployment has not been performed yet. No URL or account connection is assumed.
+The site is deployed on Render. Add the live URL to README when it is available in the project notes.
+
+## Ask SkillScope
+
+Create a Groq API key and set `GROQ_API_KEY` as a secret environment variable in the
+Render service settings. For local use, set the same variable in your shell or an
+ignored `.env` loaded by your shell. Do not put its value in `render.yaml`, frontend
+variables, or GitHub. Without the key, the dashboard still works and the Ask section
+reports that AI answers are unavailable. The server sends only the user's question
+and aggregate vacancy statistics to Groq; it does not send vacancy descriptions.
+The free tier has shared rate limits, so Ask may return a temporary limit message.
 
 ## What is deployed
 

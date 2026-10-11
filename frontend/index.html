@@ -5,9 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Evidence-led job market intelligence for IT roles across Kyrgyzstan, Kazakhstan and Uzbekistan."
+      content="Evidence-led job market intelligence for IT roles across Central Asia."
     />
     <meta name="theme-color" content="#f6f6ee" />
+    <script>
+      (() => {
+        let savedTheme;
+        try { savedTheme = localStorage.getItem("skillscope-theme"); } catch { /* Storage can be unavailable. */ }
+        const theme = savedTheme === "light" || savedTheme === "dark"
+          ? savedTheme
+          : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]').content = theme === "dark" ? "#111c19" : "#f6f6ee";
+      })();
+    </script>
     <link rel="icon" type="image/svg+xml" href="/src/assets/favicon.svg" />
     <title>SkillScope — IT market intelligence</title>
   </head>

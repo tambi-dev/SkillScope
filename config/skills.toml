@@ -86,9 +86,45 @@ aliases = ["c++", "cpp"]
 label = "React"
 aliases = ["react", "react.js", "reactjs"]
 
+[skills.angular]
+label = "Angular"
+aliases = ["angular"]
+
+[skills.vue]
+label = "Vue"
+aliases = ["vue", "vue.js", "vuejs"]
+
 [skills.node_js]
 label = "Node.js"
 aliases = ["node.js", "nodejs"]
+
+[skills.nestjs]
+label = "NestJS"
+aliases = ["nestjs", "nest.js"]
+
+[skills.fastapi]
+label = "FastAPI"
+aliases = ["fastapi"]
+
+[skills.django]
+label = "Django"
+aliases = ["django"]
+
+[skills.laravel]
+label = "Laravel"
+aliases = ["laravel"]
+
+[skills.redis]
+label = "Redis"
+aliases = ["redis"]
+
+[skills.kafka]
+label = "Kafka"
+aliases = ["kafka"]
+
+[skills.rabbitmq]
+label = "RabbitMQ"
+aliases = ["rabbitmq"]
 
 [skills.dotnet]
 label = ".NET"
@@ -121,6 +157,22 @@ aliases = ["google cloud", "gcp"]
 [skills.terraform]
 label = "Terraform"
 aliases = ["terraform"]
+
+[skills.ansible]
+label = "Ansible"
+aliases = ["ansible"]
+
+[skills.helm]
+label = "Helm"
+aliases = ["helm"]
+
+[skills.grafana]
+label = "Grafana"
+aliases = ["grafana"]
+
+[skills.prometheus]
+label = "Prometheus"
+aliases = ["prometheus"]
 
 [skills.ci_cd]
 label = "CI/CD"

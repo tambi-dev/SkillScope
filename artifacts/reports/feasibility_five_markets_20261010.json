@@ -1,0 +1,2424 @@
+{
+  "authenticated": true,
+  "collection_id": "20261010T102043037364Z",
+  "finished_at": "2026-10-10T10:21:59.804224+00:00",
+  "markets": [
+    {
+      "area_id": "48",
+      "code": "kg",
+      "currency": "KGS",
+      "host": "headhunter.kg",
+      "name": "Kyrgyzstan"
+    },
+    {
+      "area_id": "40",
+      "code": "kz",
+      "currency": "KZT",
+      "host": "hh.kz",
+      "name": "Kazakhstan"
+    },
+    {
+      "area_id": "97",
+      "code": "uz",
+      "currency": "UZS",
+      "host": "hh.uz",
+      "name": "Uzbekistan"
+    },
+    {
+      "area_id": "86",
+      "code": "tj",
+      "currency": "TJS",
+      "host": "hh.ru",
+      "name": "Tajikistan"
+    },
+    {
+      "area_id": "93",
+      "code": "tm",
+      "currency": "TMT",
+      "host": "hh.ru",
+      "name": "Turkmenistan"
+    }
+  ],
+  "overall": {
+    "salary_coverage": 0.2235,
+    "unique_candidates": 358,
+    "with_salary": 80
+  },
+  "queries": [
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data analyst",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 3,
+      "candidates_fetched": 3,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "аналитик данных",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "дата-аналитик",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "BI analyst",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 2,
+      "candidates_fetched": 2,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "BI-аналитик",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 2,
+      "candidates_fetched": 2,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "аналитик BI",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data scientist",
+      "role": "data_scientist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data science",
+      "role": "data_scientist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "специалист по data science",
+      "role": "data_scientist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "machine learning engineer",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "ML engineer",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер машинного обучения",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 3,
+      "candidates_fetched": 3,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "backend developer",
+      "role": "backend_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 2,
+      "candidates_fetched": 2,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "backend разработчик",
+      "role": "backend_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "frontend developer",
+      "role": "frontend_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "frontend разработчик",
+      "role": "frontend_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "full stack developer",
+      "role": "fullstack_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "fullstack developer",
+      "role": "fullstack_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "fullstack разработчик",
+      "role": "fullstack_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "DevOps engineer",
+      "role": "devops_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер DevOps",
+      "role": "devops_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "information security",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "security analyst",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "security engineer",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "SOC analyst",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "информационная безопасность",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "кибербезопасность",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 2,
+      "candidates_fetched": 2,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "специалист ИБ",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер ИБ",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "QA engineer",
+      "role": "qa_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер по тестированию",
+      "role": "qa_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kg",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "тестировщик ПО",
+      "role": "qa_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 13,
+      "candidates_fetched": 13,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data analyst",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 11,
+      "candidates_fetched": 11,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "аналитик данных",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "дата-аналитик",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 2,
+      "candidates_fetched": 2,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "BI analyst",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "BI-аналитик",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "аналитик BI",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 12,
+      "candidates_fetched": 12,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data scientist",
+      "role": "data_scientist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data science",
+      "role": "data_scientist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "специалист по data science",
+      "role": "data_scientist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "machine learning engineer",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 12,
+      "candidates_fetched": 12,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "ML engineer",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер машинного обучения",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 16,
+      "candidates_fetched": 16,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "backend developer",
+      "role": "backend_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 21,
+      "candidates_fetched": 21,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "backend разработчик",
+      "role": "backend_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 2,
+      "candidates_fetched": 2,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "frontend developer",
+      "role": "frontend_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 9,
+      "candidates_fetched": 9,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "frontend разработчик",
+      "role": "frontend_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 2,
+      "candidates_fetched": 2,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "full stack developer",
+      "role": "fullstack_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 8,
+      "candidates_fetched": 8,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "fullstack developer",
+      "role": "fullstack_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 12,
+      "candidates_fetched": 12,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "fullstack разработчик",
+      "role": "fullstack_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 12,
+      "candidates_fetched": 12,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "DevOps engineer",
+      "role": "devops_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 16,
+      "candidates_fetched": 16,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер DevOps",
+      "role": "devops_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 3,
+      "candidates_fetched": 3,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "information security",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "security analyst",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 5,
+      "candidates_fetched": 5,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "security engineer",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "SOC analyst",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "информационная безопасность",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "кибербезопасность",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 4,
+      "candidates_fetched": 4,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "специалист ИБ",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер ИБ",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 43,
+      "candidates_fetched": 43,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "QA engineer",
+      "role": "qa_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 4,
+      "candidates_fetched": 4,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер по тестированию",
+      "role": "qa_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "kz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "тестировщик ПО",
+      "role": "qa_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 16,
+      "candidates_fetched": 16,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data analyst",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 13,
+      "candidates_fetched": 13,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "аналитик данных",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "дата-аналитик",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 2,
+      "candidates_fetched": 2,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "BI analyst",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "BI-аналитик",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "аналитик BI",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 6,
+      "candidates_fetched": 6,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data scientist",
+      "role": "data_scientist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data science",
+      "role": "data_scientist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "специалист по data science",
+      "role": "data_scientist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "machine learning engineer",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 12,
+      "candidates_fetched": 12,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "ML engineer",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер машинного обучения",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 8,
+      "candidates_fetched": 8,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "backend developer",
+      "role": "backend_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 6,
+      "candidates_fetched": 6,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "backend разработчик",
+      "role": "backend_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 2,
+      "candidates_fetched": 2,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "frontend developer",
+      "role": "frontend_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 5,
+      "candidates_fetched": 5,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "frontend разработчик",
+      "role": "frontend_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 3,
+      "candidates_fetched": 3,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "full stack developer",
+      "role": "fullstack_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 2,
+      "candidates_fetched": 2,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "fullstack developer",
+      "role": "fullstack_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 7,
+      "candidates_fetched": 7,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "fullstack разработчик",
+      "role": "fullstack_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 9,
+      "candidates_fetched": 9,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "DevOps engineer",
+      "role": "devops_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 5,
+      "candidates_fetched": 5,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер DevOps",
+      "role": "devops_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 5,
+      "candidates_fetched": 5,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "information security",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "security analyst",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 6,
+      "candidates_fetched": 6,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "security engineer",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 3,
+      "candidates_fetched": 3,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "SOC analyst",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "информационная безопасность",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 1,
+      "candidates_fetched": 1,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "кибербезопасность",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 2,
+      "candidates_fetched": 2,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "специалист ИБ",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер ИБ",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 27,
+      "candidates_fetched": 27,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "QA engineer",
+      "role": "qa_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 2,
+      "candidates_fetched": 2,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер по тестированию",
+      "role": "qa_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "uz",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "тестировщик ПО",
+      "role": "qa_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data analyst",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "аналитик данных",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "дата-аналитик",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "BI analyst",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "BI-аналитик",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "аналитик BI",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data scientist",
+      "role": "data_scientist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data science",
+      "role": "data_scientist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "специалист по data science",
+      "role": "data_scientist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "machine learning engineer",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "ML engineer",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер машинного обучения",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "backend developer",
+      "role": "backend_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "backend разработчик",
+      "role": "backend_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "frontend developer",
+      "role": "frontend_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "frontend разработчик",
+      "role": "frontend_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "full stack developer",
+      "role": "fullstack_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "fullstack developer",
+      "role": "fullstack_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "fullstack разработчик",
+      "role": "fullstack_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "DevOps engineer",
+      "role": "devops_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер DevOps",
+      "role": "devops_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "information security",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "security analyst",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "security engineer",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "SOC analyst",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "информационная безопасность",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "кибербезопасность",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "специалист ИБ",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер ИБ",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "QA engineer",
+      "role": "qa_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер по тестированию",
+      "role": "qa_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tj",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "тестировщик ПО",
+      "role": "qa_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data analyst",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "аналитик данных",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "дата-аналитик",
+      "role": "data_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "BI analyst",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "BI-аналитик",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "аналитик BI",
+      "role": "bi_analyst",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data scientist",
+      "role": "data_scientist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "data science",
+      "role": "data_scientist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "специалист по data science",
+      "role": "data_scientist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "machine learning engineer",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "ML engineer",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер машинного обучения",
+      "role": "ml_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "backend developer",
+      "role": "backend_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "backend разработчик",
+      "role": "backend_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "frontend developer",
+      "role": "frontend_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "frontend разработчик",
+      "role": "frontend_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "full stack developer",
+      "role": "fullstack_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "fullstack developer",
+      "role": "fullstack_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "fullstack разработчик",
+      "role": "fullstack_developer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "DevOps engineer",
+      "role": "devops_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер DevOps",
+      "role": "devops_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "information security",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "security analyst",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "security engineer",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "SOC analyst",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "информационная безопасность",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "кибербезопасность",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "специалист ИБ",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер ИБ",
+      "role": "information_security_specialist",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "QA engineer",
+      "role": "qa_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "инженер по тестированию",
+      "role": "qa_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    },
+    {
+      "api_found": 0,
+      "candidates_fetched": 0,
+      "market": "tm",
+      "pages_available": 1,
+      "pages_fetched": 1,
+      "query": "тестировщик ПО",
+      "role": "qa_engineer",
+      "search_mode": "strict",
+      "truncated": false
+    }
+  ],
+  "role_summary": [
+    {
+      "label": "Data Analyst",
+      "market": "kg",
+      "role": "data_analyst",
+      "salary_coverage": 0.5,
+      "unique_candidates": 4,
+      "with_salary": 2
+    },
+    {
+      "label": "BI Analyst",
+      "market": "kg",
+      "role": "bi_analyst",
+      "salary_coverage": 0.0,
+      "unique_candidates": 2,
+      "with_salary": 0
+    },
+    {
+      "label": "Data Scientist",
+      "market": "kg",
+      "role": "data_scientist",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "ML Engineer",
+      "market": "kg",
+      "role": "ml_engineer",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "Backend Developer",
+      "market": "kg",
+      "role": "backend_developer",
+      "salary_coverage": 0.6,
+      "unique_candidates": 5,
+      "with_salary": 3
+    },
+    {
+      "label": "Frontend Developer",
+      "market": "kg",
+      "role": "frontend_developer",
+      "salary_coverage": 1.0,
+      "unique_candidates": 1,
+      "with_salary": 1
+    },
+    {
+      "label": "Full-stack Developer",
+      "market": "kg",
+      "role": "fullstack_developer",
+      "salary_coverage": 0.5,
+      "unique_candidates": 2,
+      "with_salary": 1
+    },
+    {
+      "label": "DevOps Engineer",
+      "market": "kg",
+      "role": "devops_engineer",
+      "salary_coverage": 1.0,
+      "unique_candidates": 1,
+      "with_salary": 1
+    },
+    {
+      "label": "Information Security Specialist",
+      "market": "kg",
+      "role": "information_security_specialist",
+      "salary_coverage": 0.0,
+      "unique_candidates": 3,
+      "with_salary": 0
+    },
+    {
+      "label": "QA Engineer",
+      "market": "kg",
+      "role": "qa_engineer",
+      "salary_coverage": 1.0,
+      "unique_candidates": 1,
+      "with_salary": 1
+    },
+    {
+      "label": "Data Analyst",
+      "market": "kz",
+      "role": "data_analyst",
+      "salary_coverage": 0.2273,
+      "unique_candidates": 22,
+      "with_salary": 5
+    },
+    {
+      "label": "BI Analyst",
+      "market": "kz",
+      "role": "bi_analyst",
+      "salary_coverage": 0.0,
+      "unique_candidates": 3,
+      "with_salary": 0
+    },
+    {
+      "label": "Data Scientist",
+      "market": "kz",
+      "role": "data_scientist",
+      "salary_coverage": 0.0,
+      "unique_candidates": 12,
+      "with_salary": 0
+    },
+    {
+      "label": "ML Engineer",
+      "market": "kz",
+      "role": "ml_engineer",
+      "salary_coverage": 0.2308,
+      "unique_candidates": 13,
+      "with_salary": 3
+    },
+    {
+      "label": "Backend Developer",
+      "market": "kz",
+      "role": "backend_developer",
+      "salary_coverage": 0.4054,
+      "unique_candidates": 37,
+      "with_salary": 15
+    },
+    {
+      "label": "Frontend Developer",
+      "market": "kz",
+      "role": "frontend_developer",
+      "salary_coverage": 0.2727,
+      "unique_candidates": 11,
+      "with_salary": 3
+    },
+    {
+      "label": "Full-stack Developer",
+      "market": "kz",
+      "role": "fullstack_developer",
+      "salary_coverage": 0.3182,
+      "unique_candidates": 22,
+      "with_salary": 7
+    },
+    {
+      "label": "DevOps Engineer",
+      "market": "kz",
+      "role": "devops_engineer",
+      "salary_coverage": 0.2593,
+      "unique_candidates": 27,
+      "with_salary": 7
+    },
+    {
+      "label": "Information Security Specialist",
+      "market": "kz",
+      "role": "information_security_specialist",
+      "salary_coverage": 0.0714,
+      "unique_candidates": 14,
+      "with_salary": 1
+    },
+    {
+      "label": "QA Engineer",
+      "market": "kz",
+      "role": "qa_engineer",
+      "salary_coverage": 0.1591,
+      "unique_candidates": 44,
+      "with_salary": 7
+    },
+    {
+      "label": "Data Analyst",
+      "market": "uz",
+      "role": "data_analyst",
+      "salary_coverage": 0.1923,
+      "unique_candidates": 26,
+      "with_salary": 5
+    },
+    {
+      "label": "BI Analyst",
+      "market": "uz",
+      "role": "bi_analyst",
+      "salary_coverage": 0.0,
+      "unique_candidates": 2,
+      "with_salary": 0
+    },
+    {
+      "label": "Data Scientist",
+      "market": "uz",
+      "role": "data_scientist",
+      "salary_coverage": 0.1667,
+      "unique_candidates": 6,
+      "with_salary": 1
+    },
+    {
+      "label": "ML Engineer",
+      "market": "uz",
+      "role": "ml_engineer",
+      "salary_coverage": 0.0769,
+      "unique_candidates": 13,
+      "with_salary": 1
+    },
+    {
+      "label": "Backend Developer",
+      "market": "uz",
+      "role": "backend_developer",
+      "salary_coverage": 0.2143,
+      "unique_candidates": 14,
+      "with_salary": 3
+    },
+    {
+      "label": "Frontend Developer",
+      "market": "uz",
+      "role": "frontend_developer",
+      "salary_coverage": 0.2857,
+      "unique_candidates": 7,
+      "with_salary": 2
+    },
+    {
+      "label": "Full-stack Developer",
+      "market": "uz",
+      "role": "fullstack_developer",
+      "salary_coverage": 0.6667,
+      "unique_candidates": 12,
+      "with_salary": 8
+    },
+    {
+      "label": "DevOps Engineer",
+      "market": "uz",
+      "role": "devops_engineer",
+      "salary_coverage": 0.0714,
+      "unique_candidates": 14,
+      "with_salary": 1
+    },
+    {
+      "label": "Information Security Specialist",
+      "market": "uz",
+      "role": "information_security_specialist",
+      "salary_coverage": 0.0667,
+      "unique_candidates": 15,
+      "with_salary": 1
+    },
+    {
+      "label": "QA Engineer",
+      "market": "uz",
+      "role": "qa_engineer",
+      "salary_coverage": 0.1034,
+      "unique_candidates": 29,
+      "with_salary": 3
+    },
+    {
+      "label": "Data Analyst",
+      "market": "tj",
+      "role": "data_analyst",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "BI Analyst",
+      "market": "tj",
+      "role": "bi_analyst",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "Data Scientist",
+      "market": "tj",
+      "role": "data_scientist",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "ML Engineer",
+      "market": "tj",
+      "role": "ml_engineer",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "Backend Developer",
+      "market": "tj",
+      "role": "backend_developer",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "Frontend Developer",
+      "market": "tj",
+      "role": "frontend_developer",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "Full-stack Developer",
+      "market": "tj",
+      "role": "fullstack_developer",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "DevOps Engineer",
+      "market": "tj",
+      "role": "devops_engineer",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "Information Security Specialist",
+      "market": "tj",
+      "role": "information_security_specialist",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "QA Engineer",
+      "market": "tj",
+      "role": "qa_engineer",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "Data Analyst",
+      "market": "tm",
+      "role": "data_analyst",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "BI Analyst",
+      "market": "tm",
+      "role": "bi_analyst",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "Data Scientist",
+      "market": "tm",
+      "role": "data_scientist",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "ML Engineer",
+      "market": "tm",
+      "role": "ml_engineer",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "Backend Developer",
+      "market": "tm",
+      "role": "backend_developer",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "Frontend Developer",
+      "market": "tm",
+      "role": "frontend_developer",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "Full-stack Developer",
+      "market": "tm",
+      "role": "fullstack_developer",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "DevOps Engineer",
+      "market": "tm",
+      "role": "devops_engineer",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "Information Security Specialist",
+      "market": "tm",
+      "role": "information_security_specialist",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    },
+    {
+      "label": "QA Engineer",
+      "market": "tm",
+      "role": "qa_engineer",
+      "salary_coverage": null,
+      "unique_candidates": 0,
+      "with_salary": 0
+    }
+  ],
+  "roles": [
+    {
+      "category": "data_ai",
+      "code": "data_analyst",
+      "exclude_title_patterns": [],
+      "label": "Data Analyst",
+      "priority": 60,
+      "queries": [
+        "data analyst",
+        "аналитик данных",
+        "дата-аналитик"
+      ],
+      "title_patterns": [
+        "\\bdata\\s+analyst\\b",
+        "\\bаналитик\\s+данных\\b",
+        "\\bдата\\s+аналитик\\b"
+      ]
+    },
+    {
+      "category": "data_ai",
+      "code": "bi_analyst",
+      "exclude_title_patterns": [],
+      "label": "BI Analyst",
+      "priority": 70,
+      "queries": [
+        "BI analyst",
+        "BI-аналитик",
+        "аналитик BI"
+      ],
+      "title_patterns": [
+        "\\bbi\\s+analyst\\b",
+        "\\bbi\\s+developer\\s+analyst\\b",
+        "\\bbi\\s+аналитик\\b",
+        "\\bаналитик\\s+bi\\b",
+        "\\bbusiness\\s+intelligence\\s+analyst\\b"
+      ]
+    },
+    {
+      "category": "data_ai",
+      "code": "data_scientist",
+      "exclude_title_patterns": [],
+      "label": "Data Scientist",
+      "priority": 80,
+      "queries": [
+        "data scientist",
+        "data science",
+        "специалист по data science"
+      ],
+      "title_patterns": [
+        "\\bdata\\s+scientist\\b",
+        "\\bспециалист\\s+по\\s+data\\s+science\\b"
+      ]
+    },
+    {
+      "category": "data_ai",
+      "code": "ml_engineer",
+      "exclude_title_patterns": [],
+      "label": "ML Engineer",
+      "priority": 100,
+      "queries": [
+        "machine learning engineer",
+        "ML engineer",
+        "инженер машинного обучения"
+      ],
+      "title_patterns": [
+        "\\bml\\s+engineer\\b",
+        "\\bml\\s+ai\\s+engineer\\b",
+        "\\bmachine\\s+learning\\s+engineer\\b",
+        "\\bинженер\\s+машинного\\s+обучения\\b"
+      ]
+    },
+    {
+      "category": "software_engineering",
+      "code": "backend_developer",
+      "exclude_title_patterns": [],
+      "label": "Backend Developer",
+      "priority": 50,
+      "queries": [
+        "backend developer",
+        "backend разработчик"
+      ],
+      "title_patterns": [
+        "\\bbackend\\s+(?:developer|engineer)\\b",
+        "\\bback\\s+end\\s+(?:developer|engineer)\\b",
+        "\\b(?:backend|бэкенд|бекенд)\\s+(?:разработчик|инженер)\\b",
+        "\\b(?:разработчик|инженер)\\s+(?:backend|бэкенд|бекенд)\\b",
+        "\\b(?:backend|back\\s+end)\\b.{0,48}\\b(?:developer|engineer|разработчик|инженер)\\b",
+        "\\b(?:developer|engineer|разработчик|инженер)\\b.{0,48}\\b(?:backend|back\\s+end|бэкенд|бекенд)\\b"
+      ]
+    },
+    {
+      "category": "software_engineering",
+      "code": "frontend_developer",
+      "exclude_title_patterns": [],
+      "label": "Frontend Developer",
+      "priority": 50,
+      "queries": [
+        "frontend developer",
+        "frontend разработчик"
+      ],
+      "title_patterns": [
+        "\\bfrontend\\s+(?:developer|engineer)\\b",
+        "\\bfront\\s+end\\s+(?:developer|engineer)\\b",
+        "\\b(?:frontend|фронтенд)\\s+(?:разработчик|инженер)\\b",
+        "\\b(?:разработчик|инженер)\\s+(?:frontend|фронтенд)\\b",
+        "\\b(?:frontend|front\\s+end)\\b.{0,48}\\b(?:developer|engineer|разработчик|инженер)\\b",
+        "\\b(?:developer|engineer|разработчик|инженер)\\b.{0,48}\\b(?:frontend|front\\s+end|фронтенд)\\b"
+      ]
+    },
+    {
+      "category": "software_engineering",
+      "code": "fullstack_developer",
+      "exclude_title_patterns": [],
+      "label": "Full-stack Developer",
+      "priority": 90,
+      "queries": [
+        "full stack developer",
+        "fullstack developer",
+        "fullstack разработчик"
+      ],
+      "title_patterns": [
+        "\\bfull\\s*stack\\s+(?:developer|engineer)\\b",
+        "\\b(?:fullstack|фулстек)\\s+(?:разработчик|инженер)\\b",
+        "\\b(?:разработчик|инженер)\\s+(?:fullstack|фулстек)\\b",
+        "\\b(?:backend|back\\s+end|бэкенд|бекенд)\\b.{0,48}\\b(?:frontend|front\\s+end|фронтенд)\\b",
+        "\\b(?:frontend|front\\s+end|фронтенд)\\b.{0,48}\\b(?:backend|back\\s+end|бэкенд|бекенд)\\b"
+      ]
+    },
+    {
+      "category": "devops_cloud",
+      "code": "devops_engineer",
+      "exclude_title_patterns": [],
+      "label": "DevOps Engineer",
+      "priority": 50,
+      "queries": [
+        "DevOps engineer",
+        "инженер DevOps"
+      ],
+      "title_patterns": [
+        "\\bdevops\\b",
+        "\\bдевопс\\b"
+      ]
+    },
+    {
+      "category": "cybersecurity",
+      "code": "information_security_specialist",
+      "exclude_title_patterns": [
+        "\\bsales\\b",
+        "\\bbusiness\\s+development\\b",
+        "\\bbdm\\b",
+        "\\bменеджер\\s+по\\s+продажам\\b",
+        "\\bменеджер\\s+по\\s+развитию\\s+бизнеса\\b"
+      ],
+      "label": "Information Security Specialist",
+      "priority": 50,
+      "queries": [
+        "information security",
+        "security analyst",
+        "security engineer",
+        "SOC analyst",
+        "информационная безопасность",
+        "кибербезопасность",
+        "специалист ИБ",
+        "инженер ИБ"
+      ],
+      "title_patterns": [
+        "\\binformation\\s+security\\b",
+        "\\bcyber\\s*security\\b",
+        "\\bsecurity\\s+(?:analyst|engineer|specialist)\\b",
+        "\\bsecurity\\b.{0,24}\\b(?:analyst|engineer|specialist)\\b",
+        "\\b(?:application|app)\\s+security\\b",
+        "\\bappsec\\b",
+        "\\bsoc\\s+analyst\\b",
+        "\\b(?:специалист|инженер|аналитик)\\s+(?:по\\s+)?(?:информационной\\s+)?безопасности\\b",
+        "\\b(?:специалист|инженер|аналитик)\\s+иб\\b",
+        "\\bкибербезопасност\\w*\\b",
+        "\\bбезопасност\\w*\\s+приложени\\w*\\b"
+      ]
+    },
+    {
+      "category": "qa",
+      "code": "qa_engineer",
+      "exclude_title_patterns": [
+        "\\bqa\\s+qc\\b",
+        "\\bquality\\s+control\\b",
+        "\\bконтроль\\s+качества\\b"
+      ],
+      "label": "QA Engineer",
+      "priority": 50,
+      "queries": [
+        "QA engineer",
+        "инженер по тестированию",
+        "тестировщик ПО"
+      ],
+      "title_patterns": [
+        "\\bqa\\b.{0,40}\\b(?:engineer|specialist|tester|automation|manual)\\b",
+        "\\bautomation\\s+qa\\b",
+        "\\bmanual\\s+qa\\b",
+        "\\bquality\\s+assurance\\b",
+        "\\bsoftware\\s+tester\\b",
+        "\\bтестировщик(?:\\s+программного\\s+обеспечения|\\s+по)?\\b",
+        "\\bинженер\\s+по\\s+тестированию\\b",
+        "\\bспециалист\\s+по\\s+тестированию\\b"
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "search_mode": "strict",
+  "started_at": "2026-10-10T10:20:43.037364+00:00",
+  "warnings": [
+    "Search candidates have not yet passed relevance classification or manual review.",
+    "API result counts can overlap across queries and role families."
+  ]
+}

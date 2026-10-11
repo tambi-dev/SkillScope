@@ -6,8 +6,9 @@ HeadHunter vacancy search and vacancy detail API.
 
 ## Population represented
 
-Public vacancies returned by HeadHunter for Kazakhstan, Kyrgyzstan and Uzbekistan and
-the configured search terms. This is not a census of any national labour market.
+Public vacancies returned by HeadHunter for the configured search terms in Kazakhstan,
+Kyrgyzstan, Uzbekistan, Tajikistan and Turkmenistan. This is not a census of any
+national labour market.
 
 ## Initial role families
 
@@ -17,12 +18,17 @@ the configured search terms. This is not a census of any national labour market.
 - Cybersecurity: Information Security Specialist
 - QA: QA Engineer
 
-The expanded roles are provisional until their HeadHunter search results pass manual
-review. The packaged demo snapshot currently contains only the previous Data-role sample.
+The 2026-10-10 strict audit covered all five countries and ten roles. It found 358
+candidates; role review retained 338 in Kyrgyzstan, Kazakhstan and Uzbekistan.
+No configured role matched in Tajikistan or Turkmenistan. The expanded sample still
+has rule-based classification uncertainty. The packaged demo contains this expanded
+sample after title review and excludes vacancy identity and full text.
+The [stratified validation note](validation-2026-10-10.md) documents a 40-vacancy
+manual role review and skill-dictionary coverage check.
 
 ## Known limitations
 
-- HeadHunter does not cover every hiring channel in the three countries.
+- HeadHunter does not cover every hiring channel in the five countries.
 - Search results may contain semantically unrelated vacancies.
 - Configured title searches do not capture every relevant vacancy, and search depth may
   cap high-volume roles.
@@ -33,12 +39,18 @@ review. The packaged demo snapshot currently contains only the previous Data-rol
 - Country and role samples remain uneven.
 - Search coverage and API behaviour can change over time.
 - Salary coverage is low and currently insufficient for a defensible salary model.
-- Platform coverage can differ substantially between the three countries.
+- Platform coverage differs substantially between countries: the 2026-10-10 audit
+  found 19 total HeadHunter listings in Tajikistan and 2 in Turkmenistan, but none
+  matched the configured IT roles. This is a source-coverage limitation, not evidence
+  of zero IT hiring.
 - Seniority is often inferred from broad experience bands rather than explicitly stated.
 
 ## Transformation policy
 
 - Raw API payloads, processed vacancy text and manual-review files remain local.
+- Strict runs retain deduplicated vacancy observations in local SQLite and a separate
+  processed JSONL snapshot for each collection. Earlier SQLite observations do not gain
+  newly added analytical fields until their source runs are reprocessed.
 - Role inclusion uses deterministic title-first rules with explicit reason codes.
 - Role inclusion uses configured title patterns and explicit priority for overlapping
   titles; search-query provenance alone does not determine a role.

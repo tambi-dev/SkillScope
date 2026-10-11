@@ -1,5 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import MarketRadar from "./MarketRadar";
+import MyRoute from "./MyRoute";
+import AskSkillScope from "./AskSkillScope";
 import {
   getModelInsights,
   getOverview,
@@ -29,10 +31,13 @@ const marketOptions: Array<{ value: MarketCode | "all"; label: string }> = [
   { value: "kg", label: "Kyrgyzstan" },
   { value: "kz", label: "Kazakhstan" },
   { value: "uz", label: "Uzbekistan" },
+  { value: "tj", label: "Tajikistan" },
+  { value: "tm", label: "Turkmenistan" },
 ];
 
 const dashboardTabs = [
   { id: "overview", label: "Overview" },
+  { id: "route", label: "My route" },
   { id: "roles", label: "Roles & experience" },
   { id: "skills", label: "Skills" },
   { id: "salary", label: "Salaries" },
@@ -53,10 +58,10 @@ function scrollToWorkspace() {
 }
 
 const levelColors: Record<SeniorityLevel, string> = {
-  Junior: "#829744",
-  Middle: "#456b3e",
-  Senior: "#9eae72",
-  Unknown: "#c2c9b4",
+  Junior: "var(--level-junior)",
+  Middle: "var(--level-middle)",
+  Senior: "var(--level-senior)",
+  Unknown: "var(--level-unknown)",
 };
 
 interface DashboardData {
@@ -72,6 +77,7 @@ interface DashboardData {
 }
 
 function App() {
+  const [theme, setTheme] = useState<"light" | "dark">(() => document.documentElement.dataset.theme === "dark" ? "dark" : "light");
   const [activeTab, setActiveTab] = useState<DashboardTab>(tabFromHash);
   const [showMethodology, setShowMethodology] = useState(window.location.hash === "#methodology");
   const [market, setMarket] = useState<MarketCode | "all">("all");
@@ -82,7 +88,19 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retry, setRetry] = useState(0);
+  const [comparedSkill, setComparedSkill] = useState<string | null>(null);
+  const [comparedSource, setComparedSource] = useState<"Radar" | "My route">("Radar");
   const previousWorkspaceTop = useRef<number | null>(null);
+  const routeReturnSelection = useRef<{ market: MarketCode | "all"; category: CategoryCode | "all"; role: RoleCode | "all" } | null>(null);
+  const preserveComparison = useRef(false);
+
+  function toggleTheme() {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = nextTheme;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", nextTheme === "dark" ? "#111c19" : "#f6f6ee");
+    try { window.localStorage.setItem("skillscope-theme", nextTheme); } catch { /* The toggle still works without storage. */ }
+    setTheme(nextTheme);
+  }
 
   function rememberWorkspacePosition() {
     previousWorkspaceTop.current = document.getElementById("workspace-start")?.getBoundingClientRect().top ?? null;
@@ -94,6 +112,15 @@ function App() {
       window.scrollTo({ top: window.scrollY + anchor.getBoundingClientRect().top - previousWorkspaceTop.current, behavior: "instant" });
     }
     previousWorkspaceTop.current = null;
+  }, [activeTab]);
+
+  useLayoutEffect(() => {
+    if (activeTab !== "route" || !routeReturnSelection.current) return;
+    const selection = routeReturnSelection.current;
+    routeReturnSelection.current = null;
+    setMarket(selection.market);
+    setCategory(selection.category);
+    setRole(selection.role);
   }, [activeTab]);
 
   useEffect(() => {
@@ -116,17 +143,43 @@ function App() {
     };
   }, []);
 
-  function selectTab(tab: DashboardTab) {
+  function selectTab(tab: DashboardTab, scroll = true) {
     if (tab === activeTab) return;
     rememberWorkspacePosition();
     window.history.pushState(null, "", `#${tab}`);
     setActiveTab(tab);
-    scrollToWorkspace();
+    if (scroll) scrollToWorkspace();
   }
+
+  useEffect(() => {
+    if (preserveComparison.current) {
+      preserveComparison.current = false;
+      return;
+    }
+    setComparedSkill(null);
+  }, [market, role, category]);
+
+  useLayoutEffect(() => {
+    if (activeTab !== "skills" || !comparedSkill || loading || data?.selection.market !== market || data.selection.role !== role || data.selection.category !== category) return;
+    const row = [...document.querySelectorAll<HTMLTableRowElement>(".skill-matrix tbody tr")]
+      .find((item) => item.dataset.skill === comparedSkill);
+    if (!row) return;
+    row.dataset.spotlight = "true";
+    row.focus({ preventScroll: true });
+    row.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "center" });
+    const timeout = window.setTimeout(() => { delete row.dataset.spotlight; }, 2200);
+    return () => { window.clearTimeout(timeout); delete row.dataset.spotlight; };
+  }, [activeTab, comparedSkill, loading, data, market, role, category]);
 
   function openMethodology() {
     setShowMethodology(true);
     scrollToWorkspace();
+  }
+
+  function chooseRouteRole(nextRole: RoleCode | "all") {
+    const selectedRole = taxonomy.flatMap((item) => item.roles).find((item) => item.code === nextRole);
+    setCategory(selectedRole?.category ?? "all");
+    setRole(nextRole);
   }
 
   useEffect(() => {
@@ -199,7 +252,10 @@ function App() {
     .sort((first, second) => second.vacancies - first.vacancies) ?? [];
   const experienceKnown = roleDemandItems.reduce((sum, item) => sum + item.experience_observed_vacancies, 0);
   const noExperienceRequired = roleDemandItems.reduce((sum, item) => sum + item.no_experience_required, 0);
-  const matrixSkills = buildSkillMatrix(data?.categorySkills ?? []);
+  const matrixSkills = buildSkillMatrix(data?.categorySkills ?? [], comparedSkill);
+  const routeSkills = data?.selection.market === market && data.selection.role === role
+    ? data.categorySkills.find(({ category: item }) => item.roles.some((entry) => entry.code === role))?.response ?? null
+    : null;
   const sampleSize = data?.skills.vacancy_denominator ?? 0;
   const sampledCategories = data?.categorySkills.filter(({ response }) => response.vacancy_denominator > 0) ?? [];
   const unsampledCategories = data?.categorySkills.filter(({ response }) => response.vacancy_denominator === 0) ?? [];
@@ -222,7 +278,7 @@ function App() {
   function renderRoleRow(item: RoleDemandItem) {
     const sampled = sampledRoleItems.includes(item);
     const share = sampleSize ? Math.round(item.vacancies / sampleSize * 100) : 0;
-    return <button type="button" className={`role-demand-row${item.vacancies > 0 && item.vacancies === leadingRole?.vacancies ? " leading-role" : ""}`} key={item.code} onClick={() => { setCategory(item.category); setRole(item.code); }} aria-label={`Explore ${item.label}`} aria-describedby={`role-evidence-${item.code}`} aria-pressed={role === item.code}>
+    return <button type="button" className="role-demand-row" key={item.code} onClick={() => { setCategory(item.category); setRole(item.code); }} aria-label={`Explore ${item.label}`} aria-describedby={`role-evidence-${item.code}`} aria-pressed={role === item.code}>
       <span className="role-demand-name">{item.label}<svg className="row-explore" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13L13 3M4 3H13V12" /></svg></span>
       {sampled ? <>
         <span className="role-demand-track" data-empty={!item.vacancies} aria-hidden="true"><span style={{ width: `${sampleSize ? item.vacancies / sampleSize * 100 : 0}%` }} /></span>
@@ -244,15 +300,24 @@ function App() {
       } else if (destination === "methodology") openMethodology();
       else {
         const tab = destination === "seniority" ? "roles" : destination as DashboardTab;
+        const fromComparison = tab === "skills" && link.hasAttribute("data-compare-skill");
         if (tab === activeTab) scrollToWorkspace();
-        else selectTab(tab);
-        requestAnimationFrame(() => document.getElementById(`tab-${tab}`)?.focus({ preventScroll: true }));
+        else selectTab(tab, !fromComparison);
+        if (!fromComparison) requestAnimationFrame(() => document.getElementById(`tab-${tab}`)?.focus({ preventScroll: true }));
       }
     }}>
       <a className="skip-link" href="#explore">Skip to market filters</a>
       <header className="site-header">
         <a className="brand" href="#overview" aria-label="SkillScope home"><span className="brand-mark">S</span><span>SkillScope<span className="brand-period">.</span></span></a>
-        <span className="header-region">Central Asia</span>
+        <div className="header-actions">
+          <span className="header-region">Central Asia</span>
+          <button type="button" className="theme-toggle" onClick={toggleTheme} aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}>
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+              {theme === "dark" ? <><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" /></> : <path d="M20.4 15.2A8.5 8.5 0 0 1 8.8 3.6 8.5 8.5 0 1 0 20.4 15.2Z" />}
+            </svg>
+            <span>{theme === "dark" ? "Light theme" : "Dark theme"}</span>
+          </button>
+        </div>
       </header>
 
       <main id="overview" className="page-wrap">
@@ -261,13 +326,13 @@ function App() {
           <h1>The IT market.<br /><span>On your radar.</span></h1>
           <div className="heading-intro">
             <p>Explore the skills, roles and salary signals across Central Asia. Find a direction worth learning for.</p>
-            <a href="#explore" className="text-link">Explore the market <span aria-hidden="true">↘</span></a>
+            <div className="heading-actions"><a href="#explore" className="text-link">Explore the market <span aria-hidden="true">↘</span></a><a href="#route" className="text-link">Build my route <span aria-hidden="true">↗</span></a><a href="#ask-skillscope" className="text-link">Ask SkillScope <span aria-hidden="true">↗</span></a></div>
           </div>
-          </> : <><h1>{dashboardTabs.find((tab) => tab.id === activeTab)?.label}</h1><p className="tab-intro">{activeTab === "roles" ? "Find the roles and experience levels in your market." : activeTab === "skills" ? "Compare the skills connecting different IT fields." : "Explore advertised salary ranges and their coverage."}</p></>}
+          </> : <><h1>{dashboardTabs.find((tab) => tab.id === activeTab)?.label}</h1><p className="tab-intro">{activeTab === "route" ? "Turn vacancy evidence into a personal learning direction." : activeTab === "roles" ? "Find the roles and experience levels in your market." : activeTab === "skills" ? "Compare the skills connecting different IT fields." : "Explore advertised salary ranges and their coverage."}</p></>}
         </section>
 
         <div id="workspace-start" />
-        <div className="workspace-controls">
+        <div className="workspace-controls" data-sticky={activeTab !== "overview"}>
           <div className="dashboard-tabs" role="tablist" aria-label="Market analysis">
             {dashboardTabs.map((tab, index) => <button
               type="button" role="tab" id={`tab-${tab.id}`} key={tab.id}
@@ -283,9 +348,10 @@ function App() {
                 selectTab(dashboardTabs[next].id);
                 document.getElementById(`tab-${dashboardTabs[next].id}`)?.focus({ preventScroll: true });
               }}
-            >{tab.label}</button>)}
+              aria-label={tab.label}
+            ><span className="tab-label-full">{tab.label}</span><span className="tab-label-mobile" aria-hidden="true">{tab.id === "roles" ? "Roles" : tab.label}</span></button>)}
           </div>
-        <section className="explore-section" id="explore" aria-label="Dashboard filters">
+        <section className="explore-section" id="explore" aria-label="Dashboard filters" hidden={activeTab === "route"}>
           <div className="filter-row">
             <label className="filter-control"><span>Market</span>
               <select aria-label="Market" value={market} onChange={(event) => setMarket(event.target.value as MarketCode | "all")}>
@@ -317,7 +383,7 @@ function App() {
             <button className="methodology-close" onClick={() => { setShowMethodology(false); document.querySelector<HTMLButtonElement>(".methodology-button")?.focus({ preventScroll: true }); }}>Close methodology</button>
             <div className="methodology-intro"><h2 id="methodology-heading">A snapshot.<br />With perspective.</h2><p>Good decisions start with knowing what the data can tell you, and where it stops.</p><span>Source: HeadHunter public API</span></div>
             <div className="methodology-details">
-              <details><summary>Scope & coverage</summary><p>Ten roles across Data & AI, Software Engineering, DevOps & Cloud, Cybersecurity and QA in Kyrgyzstan, Kazakhstan and Uzbekistan. HeadHunter search results are filtered by title and description. This sample does not cover every hiring channel; fields without reviewed vacancies are marked as not sampled.</p></details>
+              <details><summary>Scope & coverage</summary><p>Ten roles across Data & AI, Software Engineering, DevOps & Cloud, Cybersecurity and QA in Kyrgyzstan, Kazakhstan, Uzbekistan, Tajikistan and Turkmenistan. HeadHunter search results are filtered by title and description. This sample does not cover every hiring channel; markets and fields without reviewed vacancies are marked as not sampled.</p></details>
               <details><summary>Skills & seniority</summary><p>Dictionary rules normalize skill aliases. Seniority is inferred from explicit title markers, then description markers, then HeadHunter experience bands. Vacancies requiring no experience are also tracked as an access signal; they are not treated as a confirmed Junior label.</p></details>
               <details><summary>Salary uncertainty</summary><p>Missing salaries stay unknown. A midpoint summarizes an advertised two-sided range; it is not an observed employee salary. Currencies stay separate, no exchange-rate conversion is applied, and gross/net amounts are not harmonized. Small groups and undisclosed salaries limit comparisons.</p></details>
               <details><summary>Reading the signals</summary><p>Skill frequencies reflect explicit mentions in this HeadHunter snapshot, not the full labour market. Group counts expose small samples. Country mix and salary disclosure create selection bias. Skill associations cannot establish salary effects. No salary model has been trained.</p></details>
@@ -339,7 +405,9 @@ function App() {
             <h2>{topSkill ? <>{leadingSkillNames} {leadingSkills.length === 1 ? "appears" : "each appear"} in <strong>{Math.round(topSkill.share * 100)}%</strong> of this snapshot.</> : sampleSize ? "No skill mentions were classified." : "No skill signals are available yet."}</h2>
             <p>{topSkill ? `${topSkill.vacancies_with_skill} of ${sampleSize} vacancies mention ${leadingSkills.length === 1 ? "this skill" : "each leading skill"}.` : "Broaden the filters or explore the sample methodology."} {sampledCategories.length === 1 && unsampledCategories.length > 0 ? `Current field coverage: ${sampledCategories[0].category.label} only.` : `${sampledCategories.length} sampled ${sampledCategories.length === 1 ? "field" : "fields"}.`}</p>
           </div>
-          <MarketRadar skills={data.skills} onOpenMethodology={openMethodology} scope={`${marketOptions.find((item) => item.value === shownSelection.market)?.label} / ${shownSelection.category === "all" ? "All fields" : categories.find((item) => item.code === shownSelection.category)?.label} / ${shownSelection.role === "all" ? "All roles" : roleLabels.get(shownSelection.role)}`} />
+          <MarketRadar skills={data.skills} onOpenMethodology={openMethodology} onCompareSkill={(skill) => { setComparedSkill(skill); setComparedSource("Radar"); }} scope={`${marketOptions.find((item) => item.value === shownSelection.market)?.label} / ${shownSelection.category === "all" ? "All fields" : categories.find((item) => item.code === shownSelection.category)?.label} / ${shownSelection.role === "all" ? "All roles" : roleLabels.get(shownSelection.role)}`} />
+
+          <AskSkillScope />
 
           <section className="kpi-grid" aria-label="Snapshot summary">
             <article className="kpi-card kpi-primary"><h3>Observed vacancies</h3><div className="kpi-value">{data.skills.vacancy_denominator}<small> vacancies</small></div><p>In this view · {data.overview.included_vacancies} overall</p></article>
@@ -349,13 +417,24 @@ function App() {
           </section>
 
           {shownSelection.market === "all" && <section className="market-composition" aria-labelledby="composition-heading">
-            <div className="composition-heading"><h3 id="composition-heading">Three markets. One snapshot.</h3><p>Country mix shapes the combined results. Select a market to explore.</p></div>
+            <div className="composition-heading"><h3 id="composition-heading">Five markets. One snapshot.</h3><p>Country mix shapes the combined results. Select a market to explore.</p></div>
             <div className="country-mix">{countryMix.map((item) => <button key={item.value} onClick={() => setMarket(item.value)} aria-label={`Explore ${item.label}: ${item.vacancies} vacancies`}>
               <span className="country-identity"><span>{item.value.toUpperCase()}</span>{item.label}</span><strong>{item.vacancies}<small>vacancies</small></strong>
               <span className="country-meter" aria-hidden="true"><span style={{ width: `${sampleSize ? item.vacancies / sampleSize * 100 : 0}%` }} /></span>
-              <span className="country-share">{sampleSize ? `${Math.round(item.vacancies / sampleSize * 100)}% of this view` : "No reviewed sample"}<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8H13M8 3L13 8L8 13" /></svg></span>
+              <span className="country-share">{item.vacancies === 0 ? "No reviewed sample" : item.vacancies < 20 ? "Small sample" : `${Math.round(item.vacancies / sampleSize * 100)}% of this view`}<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8H13M8 3L13 8L8 13" /></svg></span>
             </button>)}</div>
           </section>}
+          </div>
+
+          <div className="tab-panel" role="tabpanel" id="panel-route" aria-labelledby="tab-route" hidden={activeTab !== "route"} tabIndex={0}>
+            <MyRoute markets={marketOptions.filter((item): item is { value: MarketCode; label: string } => item.value !== "all")} taxonomy={taxonomy} market={market} role={role} skills={routeSkills} observedDate={formatDate(data.overview.last_seen_at)} loading={loading} onMarketChange={setMarket} onRoleChange={chooseRouteRole} onCompareSkill={(skill) => {
+              routeReturnSelection.current = { market, category, role };
+              preserveComparison.current = true;
+              setCategory("all");
+              setRole("all");
+              setComparedSkill(skill);
+              setComparedSource("My route");
+            }} />
           </div>
 
           <div className="tab-panel analysis-grid" role="tabpanel" id="panel-roles" aria-labelledby="tab-roles" hidden={activeTab !== "roles"} tabIndex={0}>
@@ -398,12 +477,12 @@ function App() {
               {!!matrixSkills.length && <table className={`skill-matrix${sampledCategories.length === 1 ? " single-field" : ""}`}>
                 <caption className="sr-only">Skill frequency by IT field</caption>
                 <thead><tr><th scope="col">Skill</th>{sampledCategories.map(({ category: item, response }) => <th scope="col" key={item.code}>{item.label}<small>{response.vacancy_denominator} vacancies · 0–100% scale</small></th>)}</tr></thead>
-                <tbody>{matrixSkills.map((skill) => <tr key={skill} data-leading={leadingSkills.some((item) => item.skill === skill)}>
-                  <th scope="row">{skill}</th>
+                <tbody>{matrixSkills.map((skill) => <tr key={skill} data-skill={skill} tabIndex={skill === comparedSkill ? -1 : undefined}>
+                  <th scope="row">{skill}{skill === comparedSkill && <span className="matrix-row-context">From {comparedSource} · Observed {formatDate(data.overview.last_seen_at)}</span>}</th>
                   {sampledCategories.map(({ category: item, response }) => {
                     const signal = response.items.find((entry) => entry.skill === skill);
                     const share = signal?.share ?? 0;
-                    return <td key={item.code} data-label={item.label} className="matrix-value" aria-label={`${item.label}: ${Math.round(share * 100)}%, ${signal?.vacancies_with_skill ?? 0} of ${response.vacancy_denominator} vacancies`} style={sampledCategories.length > 1 ? { backgroundColor: `rgba(57, 100, 70, ${0.04 + share * 0.22})` } : undefined}>
+                    return <td key={item.code} data-label={item.label} className="matrix-value" aria-label={`${item.label}: ${Math.round(share * 100)}%, ${signal?.vacancies_with_skill ?? 0} of ${response.vacancy_denominator} vacancies`}>
                       <span className="matrix-stat"><strong>{Math.round(share * 100)}%</strong><small>{signal?.vacancies_with_skill ?? 0} / {response.vacancy_denominator}</small></span>
                       <span className="matrix-meter" data-empty={!share} aria-hidden="true"><span style={{ width: `${share * 100}%` }} /></span>
                     </td>;
@@ -445,8 +524,8 @@ function App() {
           </div>
 
 
-          <footer className="page-footer"><a className="footer-brand" href="#overview">SkillScope.</a><span>Central Asia’s IT markets, in focus.</span><span>Last observed {formatDate(data.overview.last_seen_at)}</span></footer>
         </div> : null}
+        <footer className="page-footer"><a className="footer-brand" href="#overview">SkillScope.</a><span>Central Asia’s IT markets, in focus.</span><a className="footer-privacy" href="/privacy">Privacy & storage</a>{data && <span>Last observed {formatDate(data.overview.last_seen_at)}</span>}</footer>
       </main>
     </div>
   );
@@ -462,6 +541,7 @@ function formatCurrency(value: number, currency: string) {
 
 function buildSkillMatrix(
   categories: Array<{ category: TaxonomyCategory; response: SkillsResponse }>,
+  comparedSkill: string | null = null,
 ) {
   const totals = new Map<string, { fields: number; share: number }>();
   for (const { response } of categories) {
@@ -472,10 +552,12 @@ function buildSkillMatrix(
       totals.set(item.skill, total);
     }
   }
-  return [...totals]
+  const leading = [...totals]
     .sort((first, second) => second[1].fields - first[1].fields || second[1].share - first[1].share)
     .slice(0, 8)
     .map(([skill]) => skill);
+  if (comparedSkill && totals.has(comparedSkill) && !leading.includes(comparedSkill)) leading.push(comparedSkill);
+  return leading;
 }
 
 function formatDate(value: string | null) {

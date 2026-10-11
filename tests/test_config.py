@@ -8,6 +8,13 @@ from skillscope.config import load_markets, load_role_queries
 
 
 class ConfigTests(unittest.TestCase):
+    def test_project_config_covers_five_central_asian_markets(self) -> None:
+        path = Path(__file__).resolve().parents[1] / "config" / "markets.toml"
+        markets = {market.code: market for market in load_markets(path)}
+        self.assertEqual(set(markets), {"kg", "kz", "uz", "tj", "tm"})
+        self.assertEqual((markets["tj"].area_id, markets["tj"].host), ("86", "hh.ru"))
+        self.assertEqual((markets["tm"].area_id, markets["tm"].host), ("93", "hh.ru"))
+
     def test_loads_enabled_markets_only(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "markets.toml"

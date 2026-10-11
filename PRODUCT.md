@@ -6,7 +6,7 @@ web
 
 ## Users
 
-Students and early-career Data/IT specialists exploring the labour market in Kyrgyzstan, Kazakhstan and Uzbekistan.
+Students and early-career Data/IT specialists exploring the labour market across Kyrgyzstan, Kazakhstan, Uzbekistan, Tajikistan and Turkmenistan.
 
 ## Product Purpose
 
@@ -14,19 +14,20 @@ SkillScope turns HeadHunter vacancy snapshots into a clear view of skill demand,
 
 ## Positioning
 
-SkillScope compares observed vacancy signals across three Central Asian markets and ten IT roles in five fields. Its analysis is based on explicit classification rules and reported local-currency salary ranges, so users can inspect how the results relate to vacancy evidence.
+SkillScope is scoped to five Central Asian markets and ten IT roles in five fields. It compares observed vacancy signals where reviewed data exists, using explicit classification rules and reported local-currency salary ranges so users can inspect how results relate to vacancy evidence.
 
 ## Operating Context
 
-Users choose a market, field and role, then explore Overview, Roles & experience, Skills and Salaries. The interactive Market Radar previews and pins skill signals; its circle areas show frequency and its positions are illustrative. Users consult the methodology and snapshot date when interpreting results.
+Users choose a market, field and role, then explore Overview, My route, Roles & experience, Skills and Salaries. My route compares two observed roles across all markets or within one country, then lets visitors mark familiar skills and see up to five frequently mentioned skills they have not marked for a chosen role. The interactive Market Radar previews and pins skill signals; its circle areas show frequency and its positions are illustrative. Users consult the methodology and snapshot date when interpreting results.
 
 ## Capabilities and Constraints
 
-- The scope covers Data & AI, Software Engineering, DevOps & Cloud, Cybersecurity and QA. The packaged snapshot still contains only the four original Data roles; other fields remain unsampled until reviewed data is available.
+- The scope covers Data & AI, Software Engineering, DevOps & Cloud, Cybersecurity and QA across five countries. The packaged 2026-10-10 snapshot contains all ten roles, with matching vacancies in Kyrgyzstan, Kazakhstan and Uzbekistan. No configured role matched in Tajikistan or Turkmenistan on HeadHunter in this collection.
 - HeadHunter search and vacancy detail APIs provide the source records. Results represent configured searches, not every hiring channel.
 - Role and skill classification uses explicit rules and dictionaries. Seniority is inferred from titles, descriptions and broad experience bands.
+- My route ranks explicit skill mentions in the current snapshot. It shows counts and warns about small samples; it does not assess a visitor's ability or predict job fit. Marked skills are stored only in the visitor's browser.
 - Salary summaries use complete advertised ranges in local currency. Currencies are kept separate, missing values are not imputed, and current coverage is too small for a salary prediction model.
-- Historical comparisons depend on the available snapshots. The project currently records two snapshots; claims about growth should reflect that limited time series.
+- Historical comparisons depend on available snapshots. Strict collection runs retain deduplicated observations with publication and collection dates, skills, roles, seniority and salary fields. The existing time series is still too limited for growth claims.
 - Raw vacancy payloads and full text remain local. Published demo data omits identifying vacancy details.
 
 ## Brand Commitments
@@ -38,7 +39,9 @@ The product name is SkillScope.
 - Project scope, source and transformation policy: `docs/data-card.md`.
 - Dashboard and API source: `frontend/src/` and `src/skillscope/`.
 - Processed snapshot and aggregate reports: `data/processed/` and `artifacts/reports/`.
-- As of the 2026-10-01 snapshot, 84 of 95 candidates were included. Five complete salary ranges were available.
+- The 2026-10-10 five-country audit found 358 candidates; 338 passed the revised
+  title rules and are included in the packaged identity-stripped demo. None matched
+  the configured roles in Tajikistan or Turkmenistan.
 
 ## Product Principles
 

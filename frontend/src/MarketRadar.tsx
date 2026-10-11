@@ -14,9 +14,10 @@ interface MarketRadarProps {
   skills: SkillsResponse;
   scope: string;
   onOpenMethodology: () => void;
+  onCompareSkill: (skill: string) => void;
 }
 
-export default function MarketRadar({ skills, scope, onOpenMethodology }: MarketRadarProps) {
+export default function MarketRadar({ skills, scope, onOpenMethodology, onCompareSkill }: MarketRadarProps) {
   const [view, setView] = useState<"radar" | "list">("radar");
   const [selected, setSelected] = useState(skills.items[0]?.skill ?? "");
   const [preview, setPreview] = useState<string | null>(null);
@@ -35,6 +36,10 @@ export default function MarketRadar({ skills, scope, onOpenMethodology }: Market
   const scanning = scanEnabled && visible && pageVisible && !reducedMotion && view === "radar" && !!active;
   const activePoint = positions[Math.max(0, skills.items.findIndex((item) => item.skill === active?.skill)) % positions.length];
   const pinnedPoint = positions[Math.max(0, skills.items.findIndex((item) => item.skill === pinned?.skill)) % positions.length];
+  const focusStyle = {
+    "--focus-x": `${activePoint[0]}%`, "--focus-y": `${activePoint[1]}%`,
+    "--mobile-focus-x": `${activePoint[2]}%`, "--mobile-focus-y": `${activePoint[3]}%`,
+  } as CSSProperties;
 
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: 0 });
@@ -79,7 +84,7 @@ export default function MarketRadar({ skills, scope, onOpenMethodology }: Market
 
       <p className="radar-guidance" id="radar-guidance"><span className="pointer-guidance">Hover to inspect · Click to pin · Arrow keys to explore</span><span className="touch-guidance">Tap a signal to explore its frequency</span></p>
       <div className="radar-body">
-        <div ref={signalsRef} className={view === "radar" ? "radar-plot" : "radar-list"} onPointerLeave={() => setPreview(null)} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setPreview(null); }}>
+        <div ref={signalsRef} className={view === "radar" ? "radar-plot" : "radar-list"} style={view === "radar" ? focusStyle : undefined} onPointerLeave={() => setPreview(null)} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setPreview(null); }}>
           {view === "radar" && <div className="radar-grid" aria-hidden="true">
             <svg viewBox="0 0 100 100">
               <circle className="radar-rim" cx="50" cy="50" r="47" />
@@ -90,6 +95,7 @@ export default function MarketRadar({ skills, scope, onOpenMethodology }: Market
             </svg>
             {active && <span className="radar-sweep" key={scope} />}
           </div>}
+          {view === "radar" && active && <><span className="radar-focus" aria-hidden="true" /><div className="radar-core" aria-hidden="true"><strong>{skills.vacancy_denominator}</strong><span>vacancies<br />in this view</span></div></>}
           {view === "radar" && active && <svg className="radar-bearings" viewBox="0 0 100 100" aria-hidden="true">
             <g className="bearings-desktop"><line x1="50" y1="50" x2={pinnedPoint[0]} y2={pinnedPoint[1]} />{comparing && <line className="bearing-preview" x1="50" y1="50" x2={activePoint[0]} y2={activePoint[1]} />}</g>
             <g className="bearings-mobile"><line x1="50" y1="50" x2={pinnedPoint[2]} y2={pinnedPoint[3]} />{comparing && <line className="bearing-preview" x1="50" y1="50" x2={activePoint[2]} y2={activePoint[3]} />}</g>
@@ -137,7 +143,7 @@ export default function MarketRadar({ skills, scope, onOpenMethodology }: Market
             <p className="inspector-evidence"><strong>{active.vacancies_with_skill}</strong> of <strong>{skills.vacancy_denominator}</strong> vacancies</p>
             <div className="inspector-meter" aria-hidden="true"><span style={{ transform: `scaleX(${active.share})` }} />{comparing && <i style={{ left: `${pinned.share * 100}%` }} />}</div>
             <p className="inspector-description inspector-comparison" id="radar-comparison" key={`${active.skill}-${scope}`}><strong>{comparing ? difference === 0 ? `Same frequency as ${pinned.skill}` : `${Math.abs(difference)} percentage points ${difference > 0 ? "more" : "less"} frequent than ${pinned.skill}` : `${tied ? "Joint " : ""}#${rank} by frequency in this view`}</strong><span className="pointer-guidance">{comparing ? "Click or press Enter to pin this skill." : "Preview another skill to compare mention rates."}</span><span className="touch-guidance">Tap another signal to explore its frequency.</span></p>
-            <a href="#skills" className="radar-link">Compare across fields <span aria-hidden="true">↗</span></a>
+            <a href="#skills" className="radar-link" data-compare-skill onClick={() => onCompareSkill(pinned.skill)}>Compare across fields <span aria-hidden="true">↗</span></a>
           </> : <>
             <h3>{hasSample ? "Skills still unknown" : "Room to explore"}</h3>
             <p className="inspector-description">{hasSample ? "A missing skill match does not mean the role needs no skills." : "Try another field or a broader selection. New fields will appear as reviewed samples become available."}</p>

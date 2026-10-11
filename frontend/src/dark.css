@@ -1,0 +1,174 @@
+:root[data-theme="dark"] {
+  color: #eaf1e8;
+  background: #111c19;
+  color-scheme: dark;
+  --paper: #111c19;
+  --ink: #eaf1e8;
+  --muted: #b2c3b7;
+  --line: #3c5549;
+  --lime: #d6ed82;
+  --forest: #1d4938;
+  --meter-track: #416049;
+  --meter-fill: #a9d3a3;
+  --meter-highlight: #d6ed82;
+  --scrollbar-thumb: #91b89a;
+  --scrollbar-track: #1c3028;
+  --level-junior: #b8d7bd;
+  --level-middle: #7fbd9d;
+  --level-senior: #4d9279;
+  --level-unknown: #a1b2a6;
+}
+
+:root[data-theme="dark"] ::selection { background: #d6ed82; color: #163527; }
+:root[data-theme="dark"] :focus-visible { outline-color: var(--lime); }
+:root[data-theme="dark"] .skip-link { color: #163527; }
+
+/* The surrounding UI is charcoal green; the radar stays the brightest instrument. */
+:root[data-theme="dark"] .brand-period,
+:root[data-theme="dark"] h1 > span { color: #c9e397; }
+:root[data-theme="dark"] .header-region { border-color: #647f6d; }
+:root[data-theme="dark"] .theme-toggle { border-color: #728d79; }
+:root[data-theme="dark"] .theme-toggle:hover,
+:root[data-theme="dark"] .dashboard-tabs button:hover,
+:root[data-theme="dark"] .country-mix button:hover,
+:root[data-theme="dark"] .country-mix button:focus-visible { background: #294236; }
+:root[data-theme="dark"] .text-link { border-color: #8eae83; }
+:root[data-theme="dark"] .text-link:hover,
+:root[data-theme="dark"] .reset-button:hover:enabled,
+:root[data-theme="dark"] .methodology-button:hover,
+:root[data-theme="dark"] .methodology-close:hover,
+:root[data-theme="dark"] .methodology-details summary:hover { color: var(--lime); }
+:root[data-theme="dark"] .filter-control select { border-color: #91a998; }
+:root[data-theme="dark"] .filter-control select:hover { border-color: var(--lime); }
+:root[data-theme="dark"] .reset-button:disabled { color: #93a89a; }
+:root[data-theme="dark"] .status-dot { background: var(--lime); }
+:root[data-theme="dark"] .dashboard-tabs button[aria-selected="true"] { border-bottom-color: var(--lime); }
+:root[data-theme="dark"] .snapshot-content[aria-busy="true"] { opacity: .72; }
+
+:root[data-theme="dark"] .market-radar {
+  background: radial-gradient(ellipse at 38% 47%, #2e6447 0%, #1c4935 48%, #133b2e 100%);
+  border-top: 1px solid #638e68;
+  border-bottom: 1px solid #507a58;
+}
+:root[data-theme="dark"] .radar-core { background: #1a4737e8; }
+:root[data-theme="dark"] .radar-grid svg { stroke: #a5cf9d; stroke-opacity: .42; }
+:root[data-theme="dark"] .radar-heading p,
+:root[data-theme="dark"] .radar-guidance,
+:root[data-theme="dark"] .inspector-caption,
+:root[data-theme="dark"] .inspector-description,
+:root[data-theme="dark"] .radar-footer { color: #c5d8c0; }
+:root[data-theme="dark"] .radar-view-toggle { border-color: #779a79; }
+:root[data-theme="dark"] .radar-view-toggle button { color: #d2e2cb; }
+:root[data-theme="dark"] .radar-view-toggle button[aria-pressed="true"] { color: #173c31; background: #eaf0d9; }
+:root[data-theme="dark"] .radar-view-toggle button:hover:not([aria-pressed="true"]),
+:root[data-theme="dark"] .radar-list-item:hover { background: #35634a; }
+:root[data-theme="dark"] .signal-name { background: #183b2fe8; }
+:root[data-theme="dark"] .radar-inspector { border-color: #779a79; }
+:root[data-theme="dark"] .radar-footer,
+:root[data-theme="dark"] .radar-list-item { border-color: #517356; }
+
+:root[data-theme="dark"] .kpi-grid,
+:root[data-theme="dark"] .experience-profile,
+:root[data-theme="dark"] .field-coverage,
+:root[data-theme="dark"] .salary-context,
+:root[data-theme="dark"] .methodology-panel,
+:root[data-theme="dark"] .empty-state { background: #1c2e27; }
+:root[data-theme="dark"] .country-mix { border-top-color: #66866a; }
+:root[data-theme="dark"] .role-chart,
+:root[data-theme="dark"] .salary-evidence { color: #eaf1e8; background: #1d4938; }
+:root[data-theme="dark"] .role-chart { --meter-track: #416049; --meter-fill: #a9d3a3; }
+:root[data-theme="dark"] .role-chart :focus-visible { outline-color: var(--lime); }
+:root[data-theme="dark"] .role-chart .role-axis { color: #b8cbb0; }
+:root[data-theme="dark"] .role-chart .role-demand-list { border-color: #4a6655; }
+:root[data-theme="dark"] .role-chart .role-demand-row { border-color: #395746; }
+:root[data-theme="dark"] .role-chart .role-demand-row:hover,
+:root[data-theme="dark"] .role-chart .role-demand-row[aria-pressed="true"] { background: #345740; }
+:root[data-theme="dark"] .role-chart .role-demand-count small { color: #bed0b4; }
+:root[data-theme="dark"] .unsampled-roles .role-demand-row { border-color: var(--line); }
+:root[data-theme="dark"] .unsampled-roles .role-demand-row:hover,
+:root[data-theme="dark"] .unsampled-roles .role-demand-row[aria-pressed="true"] { background: #294236; }
+:root[data-theme="dark"] .entry-signal p,
+:root[data-theme="dark"] .entry-signal strong small,
+:root[data-theme="dark"] .experience-axis,
+:root[data-theme="dark"] .experience-profile .section-foot,
+:root[data-theme="dark"] .salary-context p { color: var(--muted); }
+:root[data-theme="dark"] .experience-profile .list-heading strong,
+:root[data-theme="dark"] .level-row[data-dominant="true"] .level-count strong,
+:root[data-theme="dark"] .experience-profile .section-foot strong { color: var(--ink); }
+:root[data-theme="dark"] .level-row { border-color: var(--line); }
+:root[data-theme="dark"] .experience-composition [data-level="Unknown"],
+:root[data-theme="dark"] .level-row[data-level="Unknown"] .level-dot { border-color: #b8cabb; }
+:root[data-theme="dark"] .field-coverage li { border-color: #66866a; }
+
+:root[data-theme="dark"] .skill-matrix thead { color: #eaf1e8; background: #28523c; }
+:root[data-theme="dark"] .skill-matrix thead th small { color: #c2d2b9; }
+:root[data-theme="dark"] .skill-matrix { --matrix-spotlight: #2d4938; }
+:root[data-theme="dark"] .skill-matrix tbody tr:hover { background: #283f32; }
+:root[data-theme="dark"] .skill-matrix td small,
+:root[data-theme="dark"] .skill-matrix td::before { color: #c4d4c5; }
+:root[data-theme="dark"] .skill-matrix .matrix-missing { color: var(--muted); background: #21352b; }
+:root[data-theme="dark"] .skill-matrix .matrix-missing > span::after { color: var(--muted); }
+:root[data-theme="dark"] .single-field td,
+:root[data-theme="dark"] .single-field tbody th { border-color: var(--line); }
+
+:root[data-theme="dark"] .route-selects select { border-color: #91a998; }
+:root[data-theme="dark"] .route-skill-list button:hover { background: #294236; }
+:root[data-theme="dark"] .route-skill-list button[aria-pressed="true"] { border-color: var(--lime); background: var(--lime); color: #173c31; }
+:root[data-theme="dark"] .route-skill-list button[aria-pressed="true"]::before { background: #315f49; }
+:root[data-theme="dark"] .route-output { background: #1c3028; }
+:root[data-theme="dark"] .role-compare-card { border-color: var(--line); }
+:root[data-theme="dark"] .role-compare-card select { border-color: #91a998; }
+:root[data-theme="dark"] .role-compare-caution { color: #e7d399; }
+:root[data-theme="dark"] .route-back-to-compare:hover,
+:root[data-theme="dark"] .route-compare-action:hover { color: var(--lime); }
+:root[data-theme="dark"] .route-recommendations li,
+:root[data-theme="dark"] .route-method { border-color: var(--line); }
+:root[data-theme="dark"] .route-caution { background: #3b3424; color: #f2e3b9; }
+:root[data-theme="dark"] .route-meter { background: #416049; }
+:root[data-theme="dark"] .route-meter > span { background: #a9d3a3; }
+:root[data-theme="dark"] .route-recommendations a:hover { color: var(--lime); }
+
+:root[data-theme="dark"] .salary-context { border-color: var(--line); }
+:root[data-theme="dark"] .salary-evidence { --meter-track: #416049; --meter-fill: #b8d7bd; --meter-partial: #7fbd9d; }
+:root[data-theme="dark"] .coverage-total { color: var(--lime); }
+:root[data-theme="dark"] .coverage-total small { color: #c2d2b9; }
+:root[data-theme="dark"] .salary-evidence > p,
+:root[data-theme="dark"] .coverage-labels { color: #c9dbc4; }
+:root[data-theme="dark"] .coverage-labels strong { color: #f0f5e9; }
+:root[data-theme="dark"] .salary-table thead { background: #284334; }
+:root[data-theme="dark"] .salary-table thead th { color: #eaf1e8; border-color: var(--line); }
+:root[data-theme="dark"] .salary-table td,
+:root[data-theme="dark"] .salary-table tbody th,
+:root[data-theme="dark"] .salary-table tbody tr[data-market-start="true"] > * { border-color: var(--line); }
+:root[data-theme="dark"] .salary-table .salary-observed { background: #20372c; }
+:root[data-theme="dark"] .salary-table .salary-value { background: #2a4835; }
+:root[data-theme="dark"] .salary-table .salary-value strong { color: #e2f2bd; }
+:root[data-theme="dark"] .salary-table tbody tr:hover { background: #294236; }
+:root[data-theme="dark"] .salary-table tbody tr:hover .salary-value { background: #355840; }
+:root[data-theme="dark"] .market-code { color: #d9ebcc; background: #31543a; }
+:root[data-theme="dark"] .market-code.market-kz { color: #d6e7f5; background: #304758; }
+:root[data-theme="dark"] .market-code.market-uz { color: #f0dfb8; background: #514331; }
+:root[data-theme="dark"] .range-confidence { color: #ead39d; }
+
+:root[data-theme="dark"] .sample-notice { color: #f4e3bd; background: #3b3223; }
+:root[data-theme="dark"] .sample-notice button { color: #f2db9e; }
+:root[data-theme="dark"] .empty-state { border-top-color: #63816a; }
+:root[data-theme="dark"] .error-banner { background: #3b2c27; border-color: #8d6351; }
+:root[data-theme="dark"] .error-banner h2 { color: #f5ddca; }
+:root[data-theme="dark"] .error-banner p { color: #e8cdb9; }
+:root[data-theme="dark"] .action-button { color: #183527; background: var(--lime); }
+:root[data-theme="dark"] .action-button:hover { background: #e6f5ab; }
+
+@media (max-width: 600px) {
+  :root[data-theme="dark"] .salary-table tbody tr { border-color: var(--line); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root, .app-shell, .site-header, .workspace-controls, .dashboard-tabs,
+  .kpi-grid, .experience-profile, .field-coverage, .salary-context,
+  .salary-evidence, .salary-table thead, .salary-table td,
+  .skill-matrix thead, .skill-matrix td, .methodology-panel,
+  .sample-notice, .error-banner, .market-radar, .role-chart {
+    transition: background-color 220ms ease, color 220ms ease, border-color 220ms ease;
+  }
+}

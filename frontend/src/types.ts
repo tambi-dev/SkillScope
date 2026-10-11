@@ -1,4 +1,4 @@
-export type MarketCode = "kg" | "kz" | "uz";
+export type MarketCode = "kg" | "kz" | "uz" | "tj" | "tm";
 export type RoleCode = string;
 export type CategoryCode = string;
 

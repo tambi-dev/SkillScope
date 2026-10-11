@@ -54,6 +54,7 @@ queries = ["machine learning engineer", "ML engineer", "инженер маши�
 title_patterns = [
   '\bml\s+engineer\b',
   '\bml\s+ai\s+engineer\b',
+  '\b(?:ai\s+)?ml\b.{0,24}\bengineer\b',
   '\bmachine\s+learning\s+engineer\b',
   '\bинженер\s+машинного\s+обучения\b',
 ]
@@ -93,11 +94,13 @@ label = "Full-stack Developer"
 queries = ["full stack developer", "fullstack developer", "fullstack разработчик"]
 title_patterns = [
   '\bfull\s*stack\s+(?:developer|engineer)\b',
+  '\bfull\s*stack\b.{0,40}\b(?:developer|engineer|разработчик|инженер)\b',
   '\b(?:fullstack|фулстек)\s+(?:разработчик|инженер)\b',
   '\b(?:разработчик|инженер)\s+(?:fullstack|фулстек)\b',
   '\b(?:backend|back\s+end|бэкенд|бекенд)\b.{0,48}\b(?:frontend|front\s+end|фронтенд)\b',
   '\b(?:frontend|front\s+end|фронтенд)\b.{0,48}\b(?:backend|back\s+end|бэкенд|бекенд)\b',
 ]
+exclude_title_patterns = ['\bqa\b', '\bquality\s+assurance\b', '\bтестировщик\b']
 priority = 90
 
 [roles.devops_engineer]
@@ -154,6 +157,7 @@ title_patterns = [
   '\bsoftware\s+tester\b',
   '\bтестировщик(?:\s+программного\s+обеспечения|\s+по)?\b',
   '\bинженер\s+по\s+тестированию\b',
+  '\bинженер\s+по\s+нагрузочному\s+тестированию\b',
   '\bспециалист\s+по\s+тестированию\b',
 ]
 exclude_title_patterns = [

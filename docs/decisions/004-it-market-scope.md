@@ -35,8 +35,8 @@ Search provenance is retained, but only configured title patterns determine role
 
 ## Consequences
 
-The current demo snapshot and the 2026-10-01 baseline cover only the four Data roles.
-Expanded-role charts require a new reviewed collection. Trends require repeated snapshots
+The 2026-10-01 baseline covered only the four Data roles. The demo was refreshed from
+the 2026-10-10 expanded collection; see ADR 005. Trends require repeated snapshots
 with stable search definitions. Cross-country salary comparisons remain descriptive in
 local currencies until a separately documented conversion method is adopted.
 

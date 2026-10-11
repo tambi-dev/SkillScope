@@ -26,8 +26,8 @@ EXCLUSION_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     (
         "education_role",
         re.compile(
-            r"\b(методолог|преподаватель|учитель|лектор|наставник|курсов|"
-            r"educational|teacher|lecturer)\b"
+            r"\b(методолог|преподаватель|учитель|лектор|наставник|ментор|курсов|"
+            r"educational|teacher|lecturer|mentor)\b"
         ),
     ),
     (
@@ -49,6 +49,11 @@ ADJACENT_ROLE_DESCRIPTION_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
             r"(?:сильного\s+)?бизнес\s+аналитик\w*\b"
         ),
     ),
+)
+FRONTEND_DESIGN_TITLE_PATTERN = re.compile(r"\b(?:ui\s+ux|ux\s+ui)\b")
+DESIGN_WORK_PATTERN = re.compile(r"\b(?:figma|прототип\w*|макет\w*)\b")
+FRONTEND_CODE_PATTERN = re.compile(
+    r"\b(?:javascript|typescript|react|angular|vue|html|css|верстк\w*|программир\w*)\b"
 )
 
 
@@ -77,6 +82,13 @@ def classify_role(
         if any(pattern.search(normalized_title) for pattern in patterns)
         and not any(pattern.search(normalized_title) for pattern in exclusions)
     )
+    if "frontend_developer" in matches and FRONTEND_DESIGN_TITLE_PATTERN.search(normalized_title):
+        normalized_description = normalize_text(description)
+        if (
+            len(DESIGN_WORK_PATTERN.findall(normalized_description)) >= 2
+            and not FRONTEND_CODE_PATTERN.search(normalized_description)
+        ):
+            return RoleDecision("excluded", None, "high", ("design_role_in_description",))
     if set(matches) & LEGACY_DATA_ROLES:
         normalized_description = normalize_text(description)
         adjacent_role_codes = tuple(

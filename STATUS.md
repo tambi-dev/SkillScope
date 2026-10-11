@@ -4,7 +4,7 @@ Last updated: 2026-10-10
 
 ## Current milestone
 
-IT role taxonomy, Market Radar and responsive frontend redesign.
+Five-country IT role coverage and durable collection history.
 
 ## Scope
 
@@ -14,6 +14,7 @@ IT role taxonomy, Market Radar and responsive frontend redesign.
 - Cybersecurity: Information Security Specialist
 - QA: QA Engineer
 - Geography: Kazakhstan (`area=40`), Kyrgyzstan (`area=48`), Uzbekistan (`area=97`)
+- Added geography: Tajikistan (`area=86`), Turkmenistan (`area=93`)
 - Role/category definitions and title patterns are config-driven. Expanded roles need a
   new HeadHunter sample and manual review before their charts can support market claims.
 
@@ -80,7 +81,8 @@ IT role taxonomy, Market Radar and responsive frontend redesign.
   still be irrelevant, and title matching may miss valid roles. Security coverage in KG
   is too small for reliable comparisons. Salary figures in search cards are not used as
   salary evidence.
-- Processed and demo snapshots remain Data-only until an expanded collection is reviewed.
+- At that stage, processed and demo snapshots remained Data-only; the 2026-10-10
+  collection and demo refresh below supersede that limit.
 - Expanded the React dashboard with taxonomy-driven market, field and role filters, role
   demand, a cross-field skill matrix, local-currency salary summaries, seniority and a
   separate no-experience-required access signal. Unsampled fields are labeled explicitly.
@@ -94,7 +96,9 @@ IT role taxonomy, Market Radar and responsive frontend redesign.
   the frontend shows which source is active.
 - Built React assets are packaged with the Python app and served by FastAPI. Local
   review now needs one server command rather than separate API and Vite processes.
-- Four analysis tabs share sticky filters: Overview, Roles & experience, Skills and Salaries.
+- Five analysis tabs cover Overview, My route, Roles & experience, Skills and Salaries.
+  My route uses role-specific skill frequencies, browser-local known skills and clear
+  count, date, empty-sample and small-sample labels; its results link to the skill matrix.
 - Market Radar supports hover previews, pinned skills, frequency comparisons, keyboard
   exploration and touch input. Scanning can be paused and respects reduced motion.
 - Charts, ranked lists and salary tables expose sample counts, proportional scales and
@@ -104,36 +108,40 @@ IT role taxonomy, Market Radar and responsive frontend redesign.
 - Browser checks cover filters, history, keyboard navigation, loading, retry, empty states,
   radar motion and 1366/1024/390/320px layouts. Returning to Overview preserves the
   workspace position without a jump.
-- Render Blueprint configured for one Free Python service using the packaged frontend
-  and demo data. No hosting account has been connected and nothing is published yet.
+- Render Blueprint configured for one Python service using the packaged frontend
+  and demo data. The user has launched the site on Render.
 - Built wheel checked in a temporary directory: demo API, HTML and linked static assets
   work without the repository's private data or editable source installation.
+- Added Tajikistan and Turkmenistan to collection configuration, API market filters and
+  the dashboard. Both currently appear without reviewed observations.
+- SQLite observations now retain publication and collection dates, category, experience,
+  normalized skills and salary midpoint. Existing v1 databases migrate in place.
+- Processed JSONL snapshots are retained by collection and market selection in local,
+  gitignored storage while the dashboard continues to read the latest snapshot.
 
-## Current snapshot
+## Current local snapshot
 
-The figures below are the pre-expansion baseline. They describe the four Data roles only;
-no observation is available yet for the six newly added role families.
-
-- First snapshot had 90 strict-search candidates; second snapshot has 95.
-- The current processed snapshot includes 84 vacancies and excludes 11.
-- Data Analyst: 43.
-- BI Analyst: 5.
-- Data Scientist: 14.
-- ML Engineer: 22.
-- By country: Kyrgyzstan 4, Kazakhstan 38, Uzbekistan 42 included vacancies.
-- Five complete salary ranges remain after
-  normalization. This is far too small for a defensible salary model.
-- Current seniority counts: Junior 4, Middle 36, Senior 15, Unknown 29. Many are
-  Unknown because the 3–6-year experience band does not determine one level.
-- Skill extraction remains dictionary-based and not independently validated.
+- The authenticated 2026-10-10 strict audit covered five countries and ten roles:
+  358 unique candidates, with no truncated queries. Reviewed rules included 338.
+- Included by country: Kyrgyzstan 16, Kazakhstan 193, Uzbekistan 129,
+  Tajikistan 0, Turkmenistan 0. The API returned 19 total listings for Tajikistan
+  and 2 for Turkmenistan, but none matched the configured roles.
+- By category: Data & AI 95, Software Engineering 107, DevOps & Cloud 42,
+  Cybersecurity 24, QA 70. There are 34 complete local-currency salary ranges.
+- The local history has 369 distinct tracked vacancies and 504 observations across
+  three collections; the two older runs retain their original 166 observations.
+- The packaged demo now contains the 2026-10-10 identity-stripped snapshot: 338
+  included vacancies across all ten roles and five configured markets.
+- A stratified 40-vacancy role review corrected one design-only Frontend match;
+  13 missing technologies were added to the dictionary. Skill extraction remains
+  dictionary-based and has no measured precision or recall estimate.
 
 ## Next actions
 
-1. Collect full vacancy details for the six new roles and review title-classifier decisions.
-2. Refresh and review the sanitized demo snapshot after the role coverage is validated.
-3. Collect later snapshots to distinguish persistent trends from one-day changes.
+1. Reprocess the two older raw collections to backfill analytical history fields.
+2. Schedule comparable full-market collections with durable storage and backups.
+3. Add trend views after enough comparable collections exist; show sample sizes.
 4. Reconsider a salary model only after complete salary observations grow substantially.
-5. Deploy the prepared demo to Render when hosting is requested.
 
 ## Verification
 
