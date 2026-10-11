@@ -121,6 +121,19 @@ class ApiTests(unittest.IsolatedAsyncioTestCase):
         )
         self.assertNotIn("api.groq.com", response.text)
 
+    async def test_ask_identifies_html_upstream_rejection(self) -> None:
+        upstream_error = HTTPError(
+            "https://api.groq.com/", 403, "Forbidden", None,
+            io.BytesIO(b"<!DOCTYPE html><html><body>Access denied</body></html>"),
+        )
+        with patch.dict("os.environ", {"GROQ_API_KEY": "test-only"}), patch(
+            "skillscope.api.ask_groq", side_effect=upstream_error
+        ):
+            response = await self._post("/api/ask", {"question": "Which skills?"})
+
+        self.assertEqual(response.headers["x-ask-error"], "upstream-403-html")
+        self.assertNotIn("Access denied", response.text)
+
     async def test_ask_does_not_invent_untracked_role_data(self) -> None:
         with patch.dict("os.environ", {"GROQ_API_KEY": "test-only"}), patch(
             "skillscope.api.ask_groq"
