@@ -3,7 +3,16 @@
 .section-insight { font-size: 26px; line-height: 1.4; margin: 23px 0 15px; }
 .section-insight strong { font-weight: 750; }
 .analysis-grid { gap: 44px; grid-template-columns: 1.15fr 1fr; }
+.analysis-jump { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px 24px; border-bottom: 1px solid var(--line); padding-bottom: 16px; }
+.analysis-jump button { background: transparent; color: var(--muted); font-size: 12px; font-weight: 600; padding: 5px 0; }
+.analysis-jump button:hover, .analysis-jump button:focus-visible { color: var(--ink); text-decoration: underline; text-underline-offset: 5px; }
+.analysis-jump button span { margin-left: 3px; }
+.analysis-grid > section { scroll-margin-top: 195px; }
+.analysis-grid > .skills-section { grid-column: 1 / -1; padding-top: 32px; border-top: 1px solid var(--line); }
 .comparison-note { margin-bottom: 26px; }
+.combined-scope { display: flex; gap: 8px 18px; align-items: baseline; padding: 10px 0 13px; border-top: 1px solid var(--line); font-size: 11px; line-height: 1.6; }
+.combined-scope strong { flex: none; color: var(--ink); }
+.combined-scope span { color: var(--muted); }
 
 .kpi-grid { background: #edf0e3; padding: 26px 0; margin-top: 20px; border: 0; }
 .kpi-card, .kpi-card:first-child, .kpi-card:last-child { padding: 0 24px; }
@@ -15,7 +24,7 @@
 .composition-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin-bottom: 22px; }
 .composition-heading h3 { font-size: 23px; font-weight: 600; letter-spacing: -.025em; }
 .composition-heading p { color: var(--muted); font-size: 12px; line-height: 1.7; max-width: 53ch; }
-.country-mix { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid #9bab8f; }
+.country-mix { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid #9bab8f; }
 .country-mix button { text-align: left; padding: 23px 25px 19px; background: transparent; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); }
 .country-mix button:first-child { padding-left: 0; }
 .country-mix button:last-child { border-right: 0; }
@@ -29,6 +38,21 @@
 .country-share { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--muted); margin-top: 14px; }
 .country-share svg, .row-explore { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; flex-shrink: 0; transition: transform 160ms ease-out; }
 .country-mix button:hover svg { transform: translateX(3px); }
+.market-skill-comparison { margin: 46px 0 34px; }
+.market-skill-comparison .section-heading h3 { font-size: 25px; font-weight: 600; letter-spacing: -.025em; }
+.market-skill-comparison .section-heading p { color: var(--muted); font-size: 12px; line-height: 1.7; margin-top: 8px; max-width: 82ch; }
+.market-skill-list { list-style: none; padding: 0; margin: 0; }
+.market-skill-country { display: grid; grid-template-columns: minmax(160px, 1fr) minmax(0, 3fr); gap: 18px; align-items: start; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.market-skill-country-name { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 9px; }
+.market-skill-country-name strong { width: 100%; font-size: 14px; }
+.market-skill-country-name span, .market-skill-country-name em { color: var(--muted); font-size: 11px; font-style: normal; }
+.market-skill-country-name em { color: var(--ink); font-weight: 650; }
+.market-skill-country dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0; }
+.market-skill-country dt { color: var(--muted); font-size: 11px; }
+.market-skill-country dd { display: flex; align-items: baseline; gap: 7px; margin: 4px 0 0; font-variant-numeric: tabular-nums; }
+.market-skill-country dd strong { font-size: 20px; font-weight: 650; }
+.market-skill-country dd span, .market-skill-country > p { color: var(--muted); font-size: 11px; }
+.market-skill-comparison > .section-foot { max-width: 80ch; }
 
 .role-chart { --meter-track: #c6d6c7; --meter-fill: #315f49; padding: 18px 22px 8px; color: var(--ink); background: #e7ede3; border-radius: 4px; }
 .role-chart :focus-visible { outline-color: #416f4c; outline-offset: 2px; }
@@ -127,11 +151,22 @@
 .salary-table td:last-child, .salary-table thead th:last-child { padding-right: 16px; }
 .salary-table tbody th { font-weight: 600; }
 .salary-table tbody tr[data-market-start="true"] > * { border-top: 2px solid #a7b798; }
-.salary-table .salary-observed { background: #edf1e4; }
+.salary-table .salary-observed, .salary-table .salary-partial { background: #edf1e4; }
 .salary-table .salary-value { background: #e0e9d1; }
 .salary-table .salary-value strong { color: #274b32; font-size: 18px; }
+.salary-signal { display: flex; flex-wrap: wrap; align-items: baseline; gap: 3px 10px; }
+.salary-signal + .salary-signal { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line); }
+.salary-signal span { font-size: 11px; color: var(--muted); }
+.salary-signal small { font-size: 11px; color: var(--muted); }
 .salary-table tbody tr:hover { background: #e3ebd5; }
 .salary-table tbody tr:hover .salary-value { background: #d6e3c3; }
+.salary-currency-switch { display: inline-flex; align-self: flex-start; gap: 2px; padding: 3px; border: 1px solid var(--line); border-radius: 7px; flex-shrink: 0; }
+.salary-currency-switch button { border: 0; border-radius: 4px; background: transparent; color: var(--muted); padding: 8px 13px; font: inherit; font-size: 12px; font-weight: 650; cursor: pointer; }
+.salary-currency-switch button[aria-pressed="true"] { background: #dbe8cd; color: #25472f; }
+.salary-currency-switch button:hover:not(:disabled):not([aria-pressed="true"]) { color: var(--ink); }
+.salary-currency-switch button:disabled { opacity: .45; cursor: not-allowed; }
+.salary-currency-switch button:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
+.salary-original { display: block; margin-top: 5px; color: #405639; font-size: 11px; font-family: "Manrope", sans-serif; font-weight: 500; white-space: normal; }
 .range-confidence { font-size: 11px; }
 .market-code { background: #dbe5cb; color: #405d37; }
 .model-note, .methodology-details { border-bottom: 1px solid var(--line); }
@@ -152,6 +187,12 @@
   .country-mix button { padding-left: 18px; padding-right: 18px; }
 }
 @media (max-width: 700px) {
+  .combined-scope { display: block; }
+  .combined-scope strong { display: block; }
+  .market-skill-country { grid-template-columns: 1fr; gap: 12px; }
+  .market-skill-country-name strong { width: auto; }
+  .analysis-grid > section { scroll-margin-top: 75px; }
+  .salary-currency-switch { margin-top: 8px; }
   .country-mix { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .analysis-grid { grid-template-columns: minmax(0, 1fr); gap: 36px; }
   .section-heading h2 { font-size: 25px; }
@@ -195,11 +236,11 @@
   .single-field .matrix-stat small { font-size: 10px; }
   .salary-table tbody tr { padding: 20px 12px; gap: 15px; }
   .salary-table tbody tr:first-child { padding-top: 20px; }
-  .salary-table .salary-observed { margin: 0; padding: 20px 12px; }
+  .salary-table .salary-observed, .salary-table .salary-partial { margin: 0; padding: 20px 12px; }
   .salary-table td:first-child, .salary-table td:last-child { padding: 0; }
   .salary-table tbody tr[data-market-start="true"] { border-top: 2px solid #a7b798; }
   .salary-table tbody tr[data-market-start="true"] > * { border-top: 0; }
-  .salary-table .salary-value { padding: 10px !important; margin: -5px; }
+  .salary-table .salary-value { grid-column: 1 / -1; padding: 10px !important; margin: 0; }
   .salary-table .salary-value strong { font-size: 15px; }
   .salary-table .market-name { font-size: 10px; }
   .field-coverage { padding: 14px; }

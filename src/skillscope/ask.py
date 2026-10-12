@@ -15,6 +15,8 @@ MARKETS = {
     "uz": ("Uzbekistan", "uzbek", "узбек"),
     "tj": ("Tajikistan", "tajik", "таджик"),
     "tm": ("Turkmenistan", "turkmen", "туркмен"),
+    "ge": ("Georgia", "georgian", "груз", "грузия", "грузии", "საქართველო"),
+    "ru": ("Russia", "russian", "россия", "россии", "россий", "россию"),
 }
 MODEL = "openai/gpt-oss-20b"
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
@@ -25,7 +27,8 @@ def is_project_question(question: str) -> bool:
     return bool(re.search(
         r"\b(?:owner|owns|creator|author|operator|contact|email|who (?:made|built|created))\b"
         r"|владел|автор|создал|создат|разработчик|контакт|связат"
-        r"|^\s*(?:what is skillscope|tell me about skillscope|что такое skillscope|что это за сайт)\s*[?!.]?\s*$",
+        r"|^\s*(?:what is skillscope|tell me about skillscope|"
+        r"что такое skillscope|что это за сайт)\s*[?!.]?\s*$",
         lower,
     ))
 
@@ -149,7 +152,7 @@ def build_evidence(
         "scope": {
             "markets": [MARKETS[code][0] for code in sorted(markets)]
             if markets
-            else "all five configured markets",
+            else "all seven configured markets",
             "roles": [roles[code] for code in sorted(tracked_roles)]
             if tracked_roles
             else "all ten tracked roles",
@@ -187,16 +190,19 @@ def ask_groq(question: str, evidence: dict[str, Any], api_key: str) -> str:
     instructions = (
         "You are Mr. Scope, SkillScope's guide for students and early-career IT specialists. "
         "Project facts: SkillScope is a personal project created and operated by Arsen. "
-        "It examines ten selected IT roles in five Central Asian markets using reviewed "
+        "It examines ten selected IT roles in five Central Asian markets, "
+        "Georgia and Russia, using reviewed "
         "HeadHunter vacancies. This is a limited snapshot, not all hiring. "
         "Contact: arsenbektemirov01@gmail.com. For questions about the website, its "
         "owner, or contact, use only these project facts; if they do not answer the "
         "question, say you do not know. Do not add vacancy metrics to those answers. "
         "For job-market questions, use only the supplied vacancy evidence. "
-        "Start with a direct answer, then relevant numbers and their scope when discussing vacancies. "
+        "Start with a direct answer, then relevant numbers and their scope "
+        "when discussing vacancies. "
         "Use a friendly, precise tone. Answer in the question's language. "
         "Keep site answers brief and market answers to 1-2 short prose paragraphs, "
-        "with counts and denominators for market claims. Never output JSON, code blocks, tables, or lists. "
+        "with counts and denominators for market claims. "
+        "Never output JSON, code blocks, tables, or lists. "
         "Focus on what was asked; omit unrelated metrics. Compare rates when sample sizes "
         "differ, and check numeric direction before saying higher or lower. "
         "Flag cited groups with fewer than 20 vacancies as limited samples. "

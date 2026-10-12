@@ -2,8 +2,14 @@
 
 The Windows Task Scheduler can run the full HeadHunter collection every Monday
 at 09:00 local time. The task runs as the current Windows user, reads the
-project `.env`, audits all five markets and configured role queries, and stops
+project `.env`, audits all seven markets and configured role queries, and stops
 before collection if the audit is incomplete or truncated.
+
+The audit searches all configured roles each week. Detail requests fetch new
+vacancies and listings whose visible fields changed. Unchanged details are reused
+from the local raw archive and refreshed periodically (every 3–6 weeks, spread
+across vacancy IDs) to catch description edits. Keep `data/raw/` between runs;
+removing it forces a full detail download.
 
 Set up the project environment and credentials first:
 
@@ -32,6 +38,12 @@ published. The run log is at
 `data/processed/weekly/logs/weekly_collection.log`. Failures return a nonzero
 exit status and are recorded in that log. HeadHunter's token/API quota is used
 for the audit and collection.
+
+The run also saves dated Frankfurter rates in
+`src/skillscope/exchange_rates.json` for the optional USD salary view. A rate
+request failure is logged without discarding the vacancy collection. Commit
+this file with the new vacancy snapshot; the site disables USD conversion when
+their dates differ.
 
 These recovery copies are local and use the same disk as the project. They
 protect against a damaged current database or accidental replacement, but not

@@ -1,6 +1,6 @@
 .heading-actions { display: flex; flex-wrap: wrap; gap: 8px 26px; }
 .tab-label-mobile { display: none; }
-.dashboard-tabs { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.dashboard-tabs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
 .my-route { padding: 12px 0 32px; }
 .route-heading { display: flex; justify-content: space-between; align-items: end; gap: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--line); }

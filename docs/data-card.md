@@ -6,9 +6,9 @@ HeadHunter vacancy search and vacancy detail API.
 
 ## Population represented
 
-Public vacancies returned by HeadHunter for the configured search terms in Kazakhstan,
-Kyrgyzstan, Uzbekistan, Tajikistan and Turkmenistan. This is not a census of any
-national labour market.
+Public vacancies returned by HeadHunter for the configured search terms in
+Kyrgyzstan, Kazakhstan, Uzbekistan, Tajikistan, Turkmenistan, Georgia and Russia.
+This is not a census of any national labour market.
 
 ## Initial role families
 
@@ -18,17 +18,22 @@ national labour market.
 - Cybersecurity: Information Security Specialist
 - QA: QA Engineer
 
-The 2026-10-10 strict audit covered all five countries and ten roles. It found 358
-candidates; role review retained 338 in Kyrgyzstan, Kazakhstan and Uzbekistan.
-No configured role matched in Tajikistan or Turkmenistan. The expanded sample still
-has rule-based classification uncertainty. The packaged demo contains this expanded
-sample after title review and excludes vacancy identity and full text.
+The packaged 2026-10-12 demo covers all seven configured markets and ten roles.
+The collection found 2,541 candidates; deterministic role rules retained 2,297 and
+excluded 244. Included vacancies by market: Kyrgyzstan 15, Kazakhstan 186,
+Uzbekistan 133, Georgia 38 and Russia 1,925. No configured role matched in
+Tajikistan or Turkmenistan. Only 263 included vacancies have complete salary ranges.
+The demo omits vacancy identity and full text. Its classifications have not been
+manually validated as a representative sample.
+
 The [stratified validation note](validation-2026-10-10.md) documents a 40-vacancy
-manual role review and skill-dictionary coverage check.
+manual role review and skill-dictionary coverage check for the earlier 2026-10-10
+five-market collection (338 included vacancies). It does not measure precision or
+recall for the packaged 2026-10-12 demo.
 
 ## Known limitations
 
-- HeadHunter does not cover every hiring channel in the five countries.
+- HeadHunter does not cover every hiring channel in the seven configured markets.
 - Search results may contain semantically unrelated vacancies.
 - Configured title searches do not capture every relevant vacancy, and search depth may
   cap high-volume roles.

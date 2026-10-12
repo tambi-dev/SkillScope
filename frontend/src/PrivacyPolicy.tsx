@@ -42,7 +42,7 @@ export default function PrivacyPolicy() {
           <p className="legal-feedback" role="status">{cleared ? t("Saved SkillScope preferences cleared. Reload to reset the theme and language.") : ""}</p>
         </section>
       </div>
-      <footer className="page-footer"><a className="footer-brand" href="/">SkillScope.</a><span>{t("Central Asia’s IT markets, in focus.")}</span><a className="footer-privacy" href="/">{t("Back to dashboard")}</a></footer>
+        <footer className="page-footer"><a className="footer-brand" href="/">SkillScope.</a><span>{t("Selected IT markets, in focus.")}</span><a className="footer-privacy" href="/">{t("Back to dashboard")}</a></footer>
     </main>
   </div>;
 }

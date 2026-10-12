@@ -1,4 +1,4 @@
-export type MarketCode = "kg" | "kz" | "uz" | "tj" | "tm";
+export type MarketCode = "kg" | "kz" | "uz" | "tj" | "tm" | "ge" | "ru";
 export type RoleCode = string;
 export type CategoryCode = string;
 
@@ -71,7 +71,19 @@ export interface SalaryGroup {
   vacancies_with_reported_salary: number;
   complete_salary_ranges: number;
   coverage: number | null;
+  from_only_count?: number;
+  to_only_count?: number;
+  median_from_only_local?: number | null;
+  median_to_only_local?: number | null;
+  median_range_from_local?: number | null;
+  median_range_to_local?: number | null;
   median_midpoint_local: number | null;
+}
+
+export interface ExchangeRates {
+  date: string;
+  source: string;
+  rates_per_usd: Record<string, number>;
 }
 
 export interface SeniorityResponse {

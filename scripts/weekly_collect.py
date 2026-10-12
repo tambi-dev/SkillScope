@@ -19,10 +19,11 @@ from typing import Any
 from skillscope.audit import run_audit
 from skillscope.collect import run_collection
 from skillscope.config import Settings, load_markets, load_role_queries
+from skillscope.exchange_rates import refresh_exchange_rates
 from skillscope.ingestion.hh_client import HHClient
 
 LOGGER = logging.getLogger("skillscope.weekly")
-EXPECTED_MARKETS = {"kg", "kz", "uz", "tj", "tm"}
+EXPECTED_MARKETS = {"kg", "kz", "uz", "tj", "tm", "ge", "ru"}
 AUDIT_MAX_PAGES = 20
 AUDIT_PER_PAGE = 100
 
@@ -55,7 +56,7 @@ def run_weekly_collection(project_root: Path) -> Path:
     markets = load_markets(project_root / "config" / "markets.toml")
     roles = load_role_queries(project_root / "src" / "skillscope" / "role_catalog.toml")
     if {market.code for market in markets} != EXPECTED_MARKETS:
-        raise ValueError("Weekly collection must include all five configured markets")
+        raise ValueError("Weekly collection must include all seven configured markets")
 
     client = HHClient(
         user_agent=settings.hh_user_agent,
@@ -104,6 +105,10 @@ def run_weekly_collection(project_root: Path) -> Path:
         classification_path=classification_path,
         classification=classification,
     )
+    try:
+        refresh_exchange_rates(project_root, classification["created_at"][:10])
+    except (OSError, ValueError, KeyError, TypeError, AttributeError) as error:
+        LOGGER.warning("Exchange rates were not updated: %s", error)
     LOGGER.info(
         "Collection complete: included=%s excluded=%s backup=%s",
         classification["decision_counts"].get("included", 0),
@@ -129,7 +134,7 @@ def _validate_audit(
         raise ValueError("HeadHunter audit was not authenticated")
     market_codes = {str(item.get("code")) for item in report.get("markets", [])}
     if market_codes != EXPECTED_MARKETS:
-        raise ValueError("Audit report does not cover all five markets")
+        raise ValueError("Audit report does not cover all seven markets")
     role_codes = {str(item.get("code")) for item in report.get("roles", [])}
     if role_codes != {role.code for role in roles}:
         raise ValueError("Audit report does not cover the configured role catalog")

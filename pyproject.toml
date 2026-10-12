@@ -34,6 +34,7 @@ where = ["src"]
 [tool.setuptools.package-data]
 skillscope = [
   "demo_vacancies.jsonl",
+  "exchange_rates.json",
   "role_catalog.toml",
   "static/index.html",
   "static/assets/*",

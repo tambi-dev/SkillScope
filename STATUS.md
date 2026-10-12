@@ -1,10 +1,10 @@
 # SkillScope — project status
 
-Last updated: 2026-10-10
+Last updated: 2026-10-12
 
 ## Current milestone
 
-Five-country IT role coverage and durable collection history.
+Seven-market collection, dated demo snapshots and a weekly local refresh workflow.
 
 ## Scope
 
@@ -13,12 +13,12 @@ Five-country IT role coverage and durable collection history.
 - DevOps & Cloud: DevOps Engineer
 - Cybersecurity: Information Security Specialist
 - QA: QA Engineer
-- Geography: Kazakhstan (`area=40`), Kyrgyzstan (`area=48`), Uzbekistan (`area=97`)
-- Added geography: Tajikistan (`area=86`), Turkmenistan (`area=93`)
+- Geography: Kazakhstan (`area=40`), Kyrgyzstan (`area=48`), Uzbekistan (`area=97`),
+  Tajikistan (`area=86`), Turkmenistan (`area=93`), Georgia and Russia.
 - Role/category definitions and title patterns are config-driven. Expanded roles need a
   new HeadHunter sample and manual review before their charts can support market claims.
 
-## Completed
+## Development history
 
 - Python package scaffold and project configuration.
 - Market and search-query configuration.
@@ -96,7 +96,7 @@ Five-country IT role coverage and durable collection history.
   the frontend shows which source is active.
 - Built React assets are packaged with the Python app and served by FastAPI. Local
   review now needs one server command rather than separate API and Vite processes.
-- Five analysis tabs cover Overview, My route, Roles & experience, Skills and Salaries.
+- Four analysis tabs cover Overview, My route, Roles & skills and Salaries.
   My route uses role-specific skill frequencies, browser-local known skills and clear
   count, date, empty-sample and small-sample labels; its results link to the skill matrix.
 - Market Radar supports hover previews, pinned skills, frequency comparisons, keyboard
@@ -119,27 +119,22 @@ Five-country IT role coverage and durable collection history.
 - Processed JSONL snapshots are retained by collection and market selection in local,
   gitignored storage while the dashboard continues to read the latest snapshot.
 
-## Current local snapshot
+## Current packaged snapshot
 
-- The authenticated 2026-10-10 strict audit covered five countries and ten roles:
-  358 unique candidates, with no truncated queries. Reviewed rules included 338.
-- Included by country: Kyrgyzstan 16, Kazakhstan 193, Uzbekistan 129,
-  Tajikistan 0, Turkmenistan 0. The API returned 19 total listings for Tajikistan
-  and 2 for Turkmenistan, but none matched the configured roles.
-- By category: Data & AI 95, Software Engineering 107, DevOps & Cloud 42,
-  Cybersecurity 24, QA 70. There are 34 complete local-currency salary ranges.
-- The local history has 369 distinct tracked vacancies and 504 observations across
-  three collections; the two older runs retain their original 166 observations.
-- The packaged demo now contains the 2026-10-10 identity-stripped snapshot: 338
-  included vacancies across all ten roles and five configured markets.
-- A stratified 40-vacancy role review corrected one design-only Frontend match;
-  13 missing technologies were added to the dictionary. Skill extraction remains
-  dictionary-based and has no measured precision or recall estimate.
+- The 2026-10-12 demo has 2,541 candidates and 2,297 included vacancies across ten
+  roles. It is a dated, identity-stripped export of HeadHunter search results.
+- Included by market: Kyrgyzstan 15, Kazakhstan 186, Uzbekistan 133, Georgia 38,
+  Russia 1,925, Tajikistan 0 and Turkmenistan 0. Russia makes up 84% of the
+  combined sample.
+- By category: Data & AI 693, Software Engineering 637, DevOps & Cloud 406,
+  Cybersecurity 103 and QA 458. There are 263 complete salary ranges.
+- The 40-vacancy manual review documents the earlier 2026-10-10 collection. It
+  does not establish classification accuracy for this newer snapshot.
 
 ## Next actions
 
 1. Reprocess the two older raw collections to backfill analytical history fields.
-2. Schedule comparable full-market collections with durable storage and backups.
+2. Register the weekly task where collection runs; monitor runs and local backups.
 3. Add trend views after enough comparable collections exist; show sample sizes.
 4. Reconsider a salary model only after complete salary observations grow substantially.
 

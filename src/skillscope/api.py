@@ -23,9 +23,12 @@ from skillscope.config import load_role_categories, load_role_queries
 
 logger = logging.getLogger(__name__)
 
-Market = Literal["kg", "kz", "uz", "tj", "tm"]
+Market = Literal["kg", "kz", "uz", "tj", "tm", "ge", "ru"]
 SENIORITY_LEVELS = ("Junior", "Middle", "Senior", "Unknown")
-MARKET_CURRENCIES = {"kg": "KGS", "kz": "KZT", "uz": "UZS", "tj": "TJS", "tm": "TMT"}
+MARKET_CURRENCIES = {
+    "kg": "KGS", "kz": "KZT", "uz": "UZS", "tj": "TJS",
+    "tm": "TMT", "ge": "GEL", "ru": "RUB",
+}
 
 
 class SkillItem(BaseModel):
@@ -51,7 +54,19 @@ class SalaryGroup(BaseModel):
     vacancies_with_reported_salary: int
     complete_salary_ranges: int
     coverage: float | None
+    from_only_count: int
+    to_only_count: int
+    median_from_only_local: float | None
+    median_to_only_local: float | None
+    median_range_from_local: float | None
+    median_range_to_local: float | None
     median_midpoint_local: float | None
+
+
+class ExchangeRates(BaseModel):
+    date: str
+    source: str
+    rates_per_usd: dict[str, float]
 
 
 class MarketSalaryCoverage(BaseModel):
@@ -217,10 +232,20 @@ def create_app(data_path: Path | None = None) -> FastAPI:
     app = FastAPI(
         title="SkillScope API",
         version="0.1.0",
-        description="Descriptive statistics for IT vacancies in Central Asia.",
+        description=(
+            "Descriptive statistics for selected IT vacancy markets "
+            "in Central Asia, Georgia and Russia."
+        ),
     )
     ask_times: deque[float] = deque()
     ask_lock = Lock()
+
+    @app.get("/api/exchange-rates", response_model=ExchangeRates, tags=["salary"])
+    def exchange_rates() -> ExchangeRates:
+        path = Path(__file__).with_name("exchange_rates.json")
+        if not path.exists():
+            raise HTTPException(status_code=503, detail="Exchange rates are unavailable.")
+        return ExchangeRates.model_validate_json(path.read_text(encoding="utf-8"))
 
     @app.get("/api/ask/status", tags=["ask"])
     def ask_status() -> dict[str, bool]:
@@ -245,7 +270,11 @@ def create_app(data_path: Path | None = None) -> FastAPI:
         project_question = is_project_question(question)
         scope = evidence["scope"]
         russian = any("\u0400" <= char <= "\u04ff" for char in question)
-        if not project_question and scope["untracked_role_requested"] and not scope["tracked_role_requested"]:
+        if (
+            not project_question
+            and scope["untracked_role_requested"]
+            and not scope["tracked_role_requested"]
+        ):
             return AskResponse(
                 answer=(
                     "Data Engineer не входит в десять ролей SkillScope. "
@@ -491,12 +520,29 @@ def create_app(data_path: Path | None = None) -> FastAPI:
 
         result: list[SalaryGroup] = []
         for (market_code, currency, role_family), rows in sorted(groups.items()):
-            midpoints = [
-                float(row["salary_midpoint_local"])
+            from_only = [
+                float(row["salary_from"])
                 for row in rows
-                if isinstance(row.get("salary_midpoint_local"), int | float)
-                and not isinstance(row.get("salary_midpoint_local"), bool)
+                if isinstance(row.get("salary_from"), int | float)
+                and not isinstance(row.get("salary_from"), bool)
+                and row.get("salary_to") is None
             ]
+            to_only = [
+                float(row["salary_to"])
+                for row in rows
+                if isinstance(row.get("salary_to"), int | float)
+                and not isinstance(row.get("salary_to"), bool)
+                and row.get("salary_from") is None
+            ]
+            complete_ranges = [
+                (float(row["salary_from"]), float(row["salary_to"]))
+                for row in rows
+                if isinstance(row.get("salary_from"), int | float)
+                and not isinstance(row.get("salary_from"), bool)
+                and isinstance(row.get("salary_to"), int | float)
+                and not isinstance(row.get("salary_to"), bool)
+            ]
+            midpoints = [(lower + upper) / 2 for lower, upper in complete_ranges]
             reported = sum(
                 row.get("salary_from") is not None or row.get("salary_to") is not None
                 for row in rows
@@ -511,6 +557,18 @@ def create_app(data_path: Path | None = None) -> FastAPI:
                     vacancies_with_reported_salary=reported,
                     complete_salary_ranges=len(midpoints),
                     coverage=round(reported / len(rows), 4) if rows else None,
+                    from_only_count=len(from_only),
+                    to_only_count=len(to_only),
+                    median_from_only_local=median(from_only) if from_only else None,
+                    median_to_only_local=median(to_only) if to_only else None,
+                    median_range_from_local=(
+                        median(lower for lower, _ in complete_ranges)
+                        if complete_ranges else None
+                    ),
+                    median_range_to_local=(
+                        median(upper for _, upper in complete_ranges)
+                        if complete_ranges else None
+                    ),
                     median_midpoint_local=median(midpoints) if midpoints else None,
                 )
             )

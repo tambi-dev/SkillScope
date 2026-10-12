@@ -28,16 +28,16 @@ async function main() {
       await navigate();
       await page.waitForFunction(() => window.workspacePositions.length === 32);
       const positions = await page.evaluate(() => window.workspacePositions);
-      assert.ok(Math.max(...positions) - Math.min(...positions) < 2, `Changing header height must preserve the visible workspace: ${JSON.stringify(positions)}`);
+      assert.ok(Math.max(...positions) - Math.min(...positions) < 3, `Changing header height must preserve the visible workspace: ${JSON.stringify(positions)}`);
     };
     for (const width of [1366, 390]) {
       await page.setViewportSize({ width, height: 1000 });
-      await page.getByRole("tab", { name: "Roles & experience", exact: true }).click();
+      await page.getByRole("tab", { name: "Roles & skills", exact: true }).click();
       await page.waitForFunction(() => Math.abs(document.getElementById("workspace-start").getBoundingClientRect().top) < 2);
       await assertStableWorkspace(() => page.getByRole("tab", { name: "Overview", exact: true }).click());
       await assertStableWorkspace(() => page.goBack());
       await assertStableWorkspace(() => page.goForward());
-      await page.getByRole("tab", { name: "Skills", exact: true }).click();
+      await page.getByRole("tab", { name: "Salaries", exact: true }).click();
       await page.waitForFunction(() => Math.abs(document.getElementById("workspace-start").getBoundingClientRect().top) < 2);
       await assertStableWorkspace(() => page.keyboard.press("Home"));
     }

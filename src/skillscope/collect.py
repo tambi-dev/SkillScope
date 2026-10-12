@@ -6,8 +6,9 @@ import argparse
 import csv
 import json
 import logging
+import shutil
 from collections import Counter, defaultdict
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -133,10 +134,14 @@ def run_collection(
     skills_path = settings.project_root / "config" / "skills.toml"
     skill_definitions = load_skill_definitions(skills_path)
     role_definitions = load_role_queries(Path(__file__).with_name("role_catalog.toml"))
+    previous_details = _previous_detail_paths(source_dir.parent, source_dir)
     records: list[dict[str, Any]] = []
     for market in markets:
         provenance = load_candidate_provenance(source_dir, market_code=market.code)
         LOGGER.info("Processing market=%s candidates=%s", market.code, len(provenance))
+        reused_details = 0
+        fetched_details = 0
+        missing_details = 0
         for index, vacancy_id in enumerate(sorted(provenance), start=1):
             detail_path = details_dir / market.code / f"{vacancy_id}.json"
             if detail_path.exists() and not refresh_details:
@@ -148,16 +153,47 @@ def run_collection(
                     len(provenance),
                 )
                 detail = _read_json(detail_path)
+                reused_details += 1
             else:
-                LOGGER.info(
-                    "Fetching market=%s vacancy=%s (%s/%s)",
-                    market.code,
-                    vacancy_id,
-                    index,
-                    len(provenance),
+                previous_path = previous_details.get((market.code, vacancy_id))
+                previous_detail = (
+                    _read_json(previous_path) if previous_path and not refresh_details else None
                 )
-                detail = client.get_vacancy(vacancy_id, host=market.host)
-                _write_json(detail_path, detail)
+                if (
+                    previous_path is not None
+                    and previous_detail is not None
+                    and not _needs_detail_refresh(
+                        vacancy_id,
+                        provenance[vacancy_id]["listing"],
+                        previous_detail,
+                        previous_path,
+                    )
+                ):
+                    detail_path.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(previous_path, detail_path)
+                    detail = previous_detail
+                    reused_details += 1
+                else:
+                    LOGGER.info(
+                        "Fetching market=%s vacancy=%s (%s/%s)",
+                        market.code,
+                        vacancy_id,
+                        index,
+                        len(provenance),
+                    )
+                    try:
+                        detail = client.get_vacancy(vacancy_id, host=market.host)
+                    except HHApiError as error:
+                        if error.status_code != 404:
+                            raise
+                        LOGGER.warning(
+                            "Skipping market=%s vacancy=%s: no longer available on HeadHunter",
+                            market.code, vacancy_id,
+                        )
+                        missing_details += 1
+                        continue
+                    _write_json(detail_path, detail)
+                    fetched_details += 1
             records.append(
                 to_processed_record(
                     detail,
@@ -167,6 +203,10 @@ def run_collection(
                     role_definitions,
                 )
             )
+        LOGGER.info(
+            "Processed market=%s details_reused=%s details_fetched=%s unavailable=%s",
+            market.code, reused_details, fetched_details, missing_details,
+        )
     history_update: HistoryUpdate | None = None
     history_path = settings.project_root / "data" / "processed" / "vacancy_history.sqlite3"
     if search_mode == "strict":
@@ -311,9 +351,9 @@ def run_collection(
 
 def load_candidate_provenance(
     source_dir: Path, *, market_code: str
-) -> dict[str, dict[str, list[str]]]:
-    provenance: dict[str, dict[str, set[str]]] = defaultdict(
-        lambda: {"roles": set(), "queries": set()}
+) -> dict[str, dict[str, Any]]:
+    provenance: dict[str, dict[str, Any]] = defaultdict(
+        lambda: {"roles": set(), "queries": set(), "listing": {}}
     )
     market_dir = source_dir / "search_pages" / market_code
     for page_path in sorted(market_dir.glob("*/*/page_*.json")):
@@ -325,18 +365,49 @@ def load_candidate_provenance(
             vacancy_id = str(item["id"])
             provenance[vacancy_id]["roles"].add(role_code)
             provenance[vacancy_id]["queries"].add(page_path.parent.name)
+            provenance[vacancy_id]["listing"] = item
     return {
         vacancy_id: {
             "roles": sorted(values["roles"]),
             "queries": sorted(values["queries"]),
+            "listing": values["listing"],
         }
         for vacancy_id, values in provenance.items()
     }
 
 
+def _previous_detail_paths(raw_root: Path, current_run: Path) -> dict[tuple[str, str], Path]:
+    paths: dict[tuple[str, str], Path] = {}
+    if not raw_root.exists():
+        return paths
+    for run_dir in sorted(raw_root.iterdir(), reverse=True):
+        if run_dir == current_run or not run_dir.is_dir():
+            continue
+        for detail_path in (run_dir / "vacancies").glob("*/*.json"):
+            paths.setdefault((detail_path.parent.name, detail_path.stem), detail_path)
+    return paths
+
+
+def _needs_detail_refresh(
+    vacancy_id: str, listing: dict[str, Any], detail: dict[str, Any], path: Path,
+) -> bool:
+    for field in ("name", "published_at", "archived"):
+        if field in listing and listing[field] != detail.get(field):
+            return True
+    for field, keys in (("salary", ("from", "to", "currency", "gross")),
+                        ("experience", ("id",))):
+        if field in listing:
+            listed = listing[field] or {}
+            stored = detail.get(field) or {}
+            if any(listed.get(key) != stored.get(key) for key in keys):
+                return True
+    age = datetime.now(UTC) - datetime.fromtimestamp(path.stat().st_mtime, UTC)
+    return age >= timedelta(days=21 + (int(vacancy_id) % 4) * 7)
+
+
 def to_processed_record(
     detail: dict[str, Any],
-    provenance: dict[str, list[str]],
+    provenance: dict[str, Any],
     market: Market,
     skill_definitions: tuple[SkillDefinition, ...],
     role_definitions: tuple[RoleQueries, ...] | None = None,

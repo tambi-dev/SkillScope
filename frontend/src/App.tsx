@@ -5,6 +5,7 @@ import AskSkillScope from "./AskSkillScope";
 import { LanguageSwitch, useLanguage } from "./i18n";
 import {
   getModelInsights,
+  getExchangeRates,
   getOverview,
   getRoles,
   getSalaries,
@@ -14,6 +15,7 @@ import {
 } from "./api";
 import type {
   CategoryCode,
+  ExchangeRates,
   MarketCode,
   ModelInsights,
   Overview,
@@ -28,29 +30,30 @@ import type {
 } from "./types";
 
 const marketOptions: Array<{ value: MarketCode | "all"; label: string }> = [
-  { value: "all", label: "All markets" },
+  { value: "all", label: "Combined sample" },
   { value: "kg", label: "Kyrgyzstan" },
   { value: "kz", label: "Kazakhstan" },
   { value: "uz", label: "Uzbekistan" },
   { value: "tj", label: "Tajikistan" },
   { value: "tm", label: "Turkmenistan" },
+  { value: "ge", label: "Georgia" },
+  { value: "ru", label: "Russia" },
 ];
 
 const dashboardTabs = [
   { id: "overview", label: "Overview" },
   { id: "route", label: "My route" },
-  { id: "roles", label: "Roles & experience" },
-  { id: "skills", label: "Skills" },
+  { id: "roles", label: "Roles & skills" },
   { id: "salary", label: "Salaries" },
 ] as const;
 type DashboardTab = typeof dashboardTabs[number]["id"];
 const kyrgyzMobileTabs: Record<DashboardTab, string> = {
-  overview: "Жалпы", route: "Багытым", roles: "Ролдор", skills: "Көндүм", salary: "Айлык",
+  overview: "Жалпы", route: "Багытым", roles: "Ролдор", salary: "Айлык",
 };
 
 function tabFromHash(): DashboardTab {
   const hash = window.location.hash.slice(1);
-  if (hash === "seniority") return "roles";
+  if (hash === "seniority" || hash === "skills") return "roles";
   return dashboardTabs.find((tab) => tab.id === hash)?.id ?? "overview";
 }
 
@@ -75,6 +78,7 @@ interface DashboardData {
   roles: RoleDemandResponse;
   skills: SkillsResponse;
   categorySkills: Array<{ category: TaxonomyCategory; response: SkillsResponse }>;
+  marketSkills: Array<{ market: MarketCode; response: SkillsResponse }>;
   salaries: SalaryGroup[];
   seniority: SeniorityResponse;
   model: ModelInsights;
@@ -94,6 +98,8 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retry, setRetry] = useState(0);
+  const [salaryCurrency, setSalaryCurrency] = useState<"local" | "usd">("local");
+  const [exchangeRates, setExchangeRates] = useState<ExchangeRates | null>(null);
   const [comparedSkill, setComparedSkill] = useState<string | null>(null);
   const [comparedSource, setComparedSource] = useState<"Radar" | "My route">("Radar");
   const previousWorkspaceTop = useRef<number | null>(null);
@@ -101,6 +107,12 @@ function App() {
   const preserveComparison = useRef(false);
 
   useEffect(() => { document.title = language === "ky" ? "SkillScope — Борбор Азиядагы IT рыногу" : "SkillScope — IT market intelligence"; }, [language]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    getExchangeRates(controller.signal).then(setExchangeRates).catch(() => setExchangeRates(null));
+    return () => controller.abort();
+  }, []);
 
   function toggleTheme() {
     const nextTheme = theme === "dark" ? "light" : "dark";
@@ -169,7 +181,7 @@ function App() {
   }, [market, role, category]);
 
   useLayoutEffect(() => {
-    if (activeTab !== "skills" || !comparedSkill || loading || data?.selection.market !== market || data.selection.role !== role || data.selection.category !== category) return;
+    if (activeTab !== "roles" || !comparedSkill || loading || data?.selection.market !== market || data.selection.role !== role || data.selection.category !== category) return;
     const row = [...document.querySelectorAll<HTMLTableRowElement>(".skill-matrix tbody tr")]
       .find((item) => item.dataset.skill === comparedSkill);
     if (!row) return;
@@ -205,7 +217,7 @@ function App() {
           : category === "all"
             ? taxonomy
             : taxonomy.filter((item) => item.code === category);
-        const [roles, skills, salaries, seniority, model, categorySkills] = await Promise.all([
+        const [roles, skills, salaries, seniority, model, categorySkills, marketSkills] = await Promise.all([
           getRoles(market, category, controller.signal),
           getSkills(market, role, category, controller.signal),
           getSalaries(market, role, category, controller.signal),
@@ -215,9 +227,13 @@ function App() {
             category: item,
             response: await getSkills(market, role, item.code, controller.signal, 100),
           }))),
+          market === "all" ? Promise.all(marketOptions.filter((item): item is { value: MarketCode; label: string } => item.value !== "all").map(async (item) => ({
+            market: item.value,
+            response: await getSkills(item.value, role, category, controller.signal, 100),
+          }))) : [],
         ]);
         if (current) {
-          setData({ selection: { market, role, category }, taxonomy, overview, roles, skills, categorySkills, salaries, seniority, model });
+          setData({ selection: { market, role, category }, taxonomy, overview, roles, skills, categorySkills, marketSkills, salaries, seniority, model });
         }
       })
       .catch((reason: unknown) => {
@@ -253,6 +269,19 @@ function App() {
     salaryStats.denominator += row.included_vacancies;
     salaryStats.complete += row.complete_salary_ranges;
   }
+  const salaryRows = data?.salaries.filter((row) => row.vacancies_with_reported_salary > 0) ?? [];
+  const ratesForSnapshot = exchangeRates?.date === data?.overview.last_seen_at?.slice(0, 10) ? exchangeRates : null;
+  const canShowUsd = !!ratesForSnapshot && salaryRows.every((row) => {
+    const rate = ratesForSnapshot.rates_per_usd[row.currency === "RUR" ? "RUB" : row.currency];
+    return Number.isFinite(rate) && rate > 0;
+  });
+  const showUsd = salaryCurrency === "usd" && canShowUsd;
+  const formatSalaryAmount = (amount: number, currency: string) => {
+    const code = currency === "RUR" ? "RUB" : currency;
+    return showUsd
+      ? formatCurrency(amount / ratesForSnapshot!.rates_per_usd[code], "USD")
+      : formatCurrency(amount, code);
+  };
 
   const topSkill = data?.skills.items[0];
   const shownSelection = data?.selection ?? { market, role, category };
@@ -280,8 +309,10 @@ function App() {
   const countryMix = marketOptions.filter((option) => option.value !== "all").map((option) => ({
     ...option,
     label: t(option.label),
-    vacancies: (data?.salaries ?? []).filter((row) => row.market === option.value).reduce((sum, row) => sum + row.included_vacancies, 0),
+    vacancies: data?.marketSkills.find((item) => item.market === option.value)?.response.vacancy_denominator ?? 0,
   }));
+  const dominantMarket = countryMix.find((item) => sampleSize > 0 && item.vacancies / sampleSize > 0.5);
+  const comparedMarketSkills = data?.skills.items.slice(0, 3) ?? [];
   const sharedSkill = matrixSkills[0];
   const sharedFieldCount = sampledCategories.filter(({ response }) => response.items.some((item) => item.skill === sharedSkill)).length;
 
@@ -302,16 +333,16 @@ function App() {
       const link = (event.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"]');
       if (!link || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button !== 0) return;
       const destination = link.hash.slice(1);
-      if (!["explore", "methodology", "seniority", ...dashboardTabs.map((tab) => tab.id)].includes(destination)) return;
+      if (!["explore", "methodology", "seniority", "skills", ...dashboardTabs.map((tab) => tab.id)].includes(destination)) return;
       event.preventDefault();
       if (destination === "explore") {
         scrollToWorkspace();
         document.querySelector<HTMLSelectElement>(".filter-control select")?.focus({ preventScroll: true });
       } else if (destination === "methodology") openMethodology();
       else {
-        const tab = destination === "seniority" ? "roles" : destination as DashboardTab;
-        const fromComparison = tab === "skills" && link.hasAttribute("data-compare-skill");
-        if (tab === activeTab) scrollToWorkspace();
+        const tab = destination === "seniority" || destination === "skills" ? "roles" : destination as DashboardTab;
+        const fromComparison = destination === "skills" && link.hasAttribute("data-compare-skill");
+        if (tab === activeTab && !fromComparison) scrollToWorkspace();
         else selectTab(tab, !fromComparison);
         if (!fromComparison) requestAnimationFrame(() => document.getElementById(`tab-${tab}`)?.focus({ preventScroll: true }));
       }
@@ -320,7 +351,7 @@ function App() {
       <header className="site-header">
         <a className="brand" href="#overview" aria-label={t("SkillScope home")}><span className="brand-mark">S</span><span>SkillScope<span className="brand-period">.</span></span></a>
         <div className="header-actions">
-          <span className="header-region">{t("Central Asia")}</span>
+          <span className="header-region">{t("Central Asia & beyond")}</span>
           <LanguageSwitch />
           <button type="button" className="theme-toggle" onClick={toggleTheme} aria-label={t(theme === "dark" ? "Switch to light theme" : "Switch to dark theme")}>
             <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
@@ -336,10 +367,10 @@ function App() {
           {activeTab === "overview" ? <>
           <h1>{t("The IT market.")}<br /><span>{t("On your radar.")}</span></h1>
           <div className="heading-intro">
-            <p>{t("Explore the skills, roles and salary signals across Central Asia. Find a direction worth learning for.")}</p>
+            <p>{t("Explore skills, roles and salary signals across Central Asia, Georgia and Russia. Find a direction worth learning for.")}</p>
             <div className="heading-actions"><a href="#explore" className="text-link">{t("Explore the market")} <span aria-hidden="true">↘</span></a><a href="#route" className="text-link">{t("Build my route")} <span aria-hidden="true">↗</span></a><button type="button" className="text-link heading-ask" onClick={() => setAskOpen(true)}>{t("Ask Mr. Scope")} <span aria-hidden="true">↗</span></button></div>
           </div>
-          </> : <><h1>{t(dashboardTabs.find((tab) => tab.id === activeTab)?.label ?? "")}</h1><p className="tab-intro">{t(activeTab === "route" ? "Turn vacancy evidence into a personal learning direction." : activeTab === "roles" ? "Find the roles and experience levels in your market." : activeTab === "skills" ? "Compare the skills connecting different IT fields." : "Explore advertised salary ranges and their coverage.")}</p></>}
+          </> : <><h1>{t(dashboardTabs.find((tab) => tab.id === activeTab)?.label ?? "")}</h1><p className="tab-intro">{t(activeTab === "route" ? "Turn vacancy evidence into a personal learning direction." : activeTab === "roles" ? "Explore roles, experience requirements and the skills employers mention." : "Explore advertised salary ranges and their coverage.")}</p></>}
         </section>
 
         <div id="workspace-start" />
@@ -360,7 +391,7 @@ function App() {
                 document.getElementById(`tab-${dashboardTabs[next].id}`)?.focus({ preventScroll: true });
               }}
               aria-label={t(tab.label)}
-            ><span className="tab-label-full">{t(tab.label)}</span><span className="tab-label-mobile" aria-hidden="true">{language === "ky" ? kyrgyzMobileTabs[tab.id] : tab.id === "roles" ? "Roles" : tab.label}</span></button>)}
+            ><span className="tab-label-full">{t(tab.label)}</span><span className="tab-label-mobile" aria-hidden="true">{language === "ky" ? kyrgyzMobileTabs[tab.id] : tab.id === "roles" ? "Roles + skills" : tab.label}</span></button>)}
           </div>
         <section className="explore-section" id="explore" aria-label={t("Dashboard filters")} hidden={activeTab === "route"}>
           <div className="filter-row">
@@ -387,6 +418,7 @@ function App() {
             <span className="snapshot-status" role="status"><span className="status-dot" />{t(error ? "Snapshot unavailable" : loading ? data ? "Updating · previous snapshot shown" : "Reading snapshot…" : data?.overview.data_mode === "demo" ? "Demo snapshot" : "Local snapshot")}</span>
             <div className="snapshot-meta"><span>{data ? t("Observed {date} · HeadHunter", { date: formatDate(data.overview.last_seen_at) }) : t("HeadHunter vacancy snapshots")}</span><button className="methodology-button" aria-expanded={showMethodology} aria-controls="methodology" onClick={() => { setShowMethodology((value) => !value); scrollToWorkspace(); }}>{t("About the data")}</button></div>
           </div>
+          {data && shownSelection.market === "all" && <div className="combined-scope" role="note"><strong>{t("Combined sample · {count} vacancies", { count: sampleSize })}</strong><span>{dominantMarket ? t("{market}: {count} of {total} ({share}%). Combined percentages mostly reflect this country. Select a country above for its own sample.", { market: dominantMarket.label, count: dominantMarket.vacancies, total: sampleSize, share: Math.round(dominantMarket.vacancies / sampleSize * 100) }) : t("Countries contribute different numbers of vacancies. Select one above to view its own sample.")}</span></div>}
         </section>
         </div>
 
@@ -394,9 +426,9 @@ function App() {
             <button className="methodology-close" onClick={() => { setShowMethodology(false); document.querySelector<HTMLButtonElement>(".methodology-button")?.focus({ preventScroll: true }); }}>{t("Close methodology")}</button>
             <div className="methodology-intro"><h2 id="methodology-heading">{t("A snapshot.")}<br />{t("With perspective.")}</h2><p>{t("Good decisions start with knowing what the data can tell you, and where it stops.")}</p><span>{t("Source: HeadHunter public API")}</span></div>
             <div className="methodology-details">
-              <details><summary>{t("Scope & coverage")}</summary><p>{t("Ten roles across Data & AI, Software Engineering, DevOps & Cloud, Cybersecurity and QA in Kyrgyzstan, Kazakhstan, Uzbekistan, Tajikistan and Turkmenistan. HeadHunter search results are filtered by title and description. This sample does not cover every hiring channel; markets and fields without reviewed vacancies are marked as not sampled.")}</p></details>
+              <details><summary>{t("Scope & coverage")}</summary><p>{t("Ten roles across five IT fields in Kyrgyzstan, Kazakhstan, Uzbekistan, Tajikistan, Turkmenistan, Georgia and Russia. HeadHunter search results are filtered by title and description. This sample does not cover every hiring channel; markets and fields without reviewed vacancies are marked as not sampled.")}</p></details>
               <details><summary>{t("Skills & seniority")}</summary><p>{t("Dictionary rules normalize skill aliases. Seniority is inferred from explicit title markers, then description markers, then HeadHunter experience bands. Vacancies requiring no experience are also tracked as an access signal; they are not treated as a confirmed Junior label.")}</p></details>
-              <details><summary>{t("Salary uncertainty")}</summary><p>{t("Missing salaries stay unknown. A midpoint summarizes an advertised two-sided range; it is not an observed employee salary. Currencies stay separate, no exchange-rate conversion is applied, and gross/net amounts are not harmonized. Small groups and undisclosed salaries limit comparisons.")}</p></details>
+              <details><summary>{t("Salary uncertainty")}</summary><p>{t("Missing salaries stay unknown. A midpoint summarizes an advertised two-sided range; it is not an observed employee salary. Salary groups stay separate by currency; optional USD display uses a dated reference rate. Gross/net amounts and living costs are not harmonized. Small groups and undisclosed salaries limit comparisons.")}</p></details>
               <details><summary>{t("Reading the signals")}</summary><p>{t("Skill frequencies reflect explicit mentions in this HeadHunter snapshot, not the full labour market. Group counts expose small samples. Country mix and salary disclosure create selection bias. Skill associations cannot establish salary effects. No salary model has been trained.")}</p></details>
             </div>
           </section>
@@ -426,12 +458,27 @@ function App() {
           </section>
 
           {shownSelection.market === "all" && <section className="market-composition" aria-labelledby="composition-heading">
-            <div className="composition-heading"><h3 id="composition-heading">{t("Five markets. One snapshot.")}</h3><p>{t("Country mix shapes the combined results. Select a market to explore.")}</p></div>
+            <div className="composition-heading"><h3 id="composition-heading">{t("Seven markets in scope. One snapshot.")}</h3><p>{dominantMarket ? t("{market} makes up {share}% of this view. Select a country for a clearer comparison.", { market: dominantMarket.label, share: Math.round(dominantMarket.vacancies / sampleSize * 100) }) : t("Country mix shapes the combined results. Select a market to explore.")}</p></div>
             <div className="country-mix">{countryMix.map((item) => <button key={item.value} onClick={() => setMarket(item.value)} aria-label={t("Explore {market}: {count} vacancies", { market: item.label, count: item.vacancies })}>
               <span className="country-identity"><span>{item.value.toUpperCase()}</span>{item.label}</span><strong>{item.vacancies}<small>{t("vacancies")}</small></strong>
               <span className="country-meter" aria-hidden="true"><span style={{ width: `${sampleSize ? item.vacancies / sampleSize * 100 : 0}%` }} /></span>
               <span className="country-share">{item.vacancies === 0 ? t("No reviewed sample") : item.vacancies < 20 ? t("Small sample") : t("{share}% of this view", { share: Math.round(item.vacancies / sampleSize * 100) })}<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8H13M8 3L13 8L8 13" /></svg></span>
             </button>)}</div>
+          </section>}
+          {shownSelection.market === "all" && comparedMarketSkills.length > 0 && <section className="market-skill-comparison" aria-labelledby="market-skills-heading">
+            <div className="section-heading"><div><h3 id="market-skills-heading">{t("Skills within each country")}</h3><p>{t("The three most mentioned skills in the combined sample. Each percentage uses that country's own vacancy count; it is not a ranking of hiring volume.")}</p></div></div>
+            <ul className="market-skill-list">{countryMix.map((item) => {
+              const response = data.marketSkills.find((entry) => entry.market === item.value)?.response;
+              const count = response?.vacancy_denominator ?? 0;
+              return <li key={item.value} className="market-skill-country">
+                <div className="market-skill-country-name"><strong>{item.label}</strong><span>{t("{count} vacancies", { count })}</span>{count > 0 && count < 20 && <em>{t("Small sample")}</em>}</div>
+                {count ? <dl>{comparedMarketSkills.map((skill) => {
+                  const signal = response?.items.find((entry) => entry.skill === skill.skill);
+                  return <div key={skill.skill}><dt>{skill.skill}</dt><dd><strong>{Math.round((signal?.share ?? 0) * 100)}%</strong><span>{signal?.vacancies_with_skill ?? 0} / {count}</span></dd></div>;
+                })}</dl> : <p>{t("No reviewed vacancies for this selection.")}</p>}
+              </li>;
+            })}</ul>
+            <p className="section-foot">{t("Small samples can change sharply from one vacancy. These are HeadHunter search results, not total hiring in each country.")}</p>
           </section>}
           </div>
 
@@ -447,6 +494,9 @@ function App() {
           </div>
 
           <div className="tab-panel analysis-grid" role="tabpanel" id="panel-roles" aria-labelledby="tab-roles" hidden={activeTab !== "roles"} tabIndex={0}>
+            <nav className="analysis-jump" aria-label={t("Jump to section")}>
+              {[["roles", "Role demand"], ["seniority", "Experience & entry routes"], ["skills", "Skills"]].map(([id, label]) => <button type="button" key={id} onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "start" })}>{t(label)} <span aria-hidden="true">↓</span></button>)}
+            </nav>
             <section className="role-panel" id="roles" aria-labelledby="roles-heading">
               <div className="section-heading"><div><h2 id="roles-heading">{t("Role demand")}</h2><p>{t("Share of the {count} vacancies in this filtered snapshot.", { count: sampleSize })}</p></div></div>
               <h3 className="section-insight">{leadingRole?.vacancies && sampleSize ? roleLeaders.length > 1 ? t("{count} roles tie at {total} vacancies each.", { count: roleLeaders.length, total: leadingRole.vacancies }) : language === "ky" ? <>{t(leadingRole.label)} алдыңкы орунда: <strong>{Math.round(leadingRole.vacancies / sampleSize * 100)}%</strong>.</> : <>{leadingRole.label} leads with <strong>{Math.round(leadingRole.vacancies / sampleSize * 100)}%</strong> of this sample.</> : t("No role sample for these filters.")}</h3>
@@ -474,9 +524,7 @@ function App() {
               </div>
               <div className="entry-signal"><div><span>{t("No experience required")}</span><strong>{experienceKnown ? `${Math.round(noExperienceRequired / experienceKnown * 100)}%` : "—"}<small>{experienceKnown ? t("{count} of {total} vacancies", { count: noExperienceRequired, total: experienceKnown }) : t("No experience data")}</small></strong></div><p>{t("A stated requirement, separate from a Junior classification.")}</p></div>
             </section>
-          </div>
 
-          <div className="tab-panel" role="tabpanel" id="panel-skills" aria-labelledby="tab-skills" hidden={activeTab !== "skills"} tabIndex={0}>
           <section className="skills-section" id="skills" aria-labelledby="skills-heading">
             <div className="section-heading"><div><h2 id="skills-heading">{t("Skill demand by field")}</h2><p>{t("Percentage of vacancies that mention a skill, using each field’s own sample.")}</p></div><span className="sample-label">{t("{count} sampled fields", { count: sampledCategories.length })}</span></div>
             <h3 className="section-insight">{sampledCategories.length > 1 && sharedSkill ? language === "ky" ? <>{sharedSkill} маалыматы бар <strong>{sampledCategories.length} багыттын {sharedFieldCount}</strong> ичинде кездешет.</> : <>{sharedSkill} appears in <strong>{sharedFieldCount} of {sampledCategories.length}</strong> sampled fields.</> : topSkill && sampledCategories.length === 1 ? t(leadingSkills.length === 1 ? "{skills} leads skill mentions in {field}." : "{skills} lead skill mentions in {field}.", { skills: leadingSkillNames, field: t(sampledCategories[0].category.label) }) : t("No skill comparison is available yet.")}</h3>
@@ -506,27 +554,32 @@ function App() {
 
           <div className="tab-panel" role="tabpanel" id="panel-salary" aria-labelledby="tab-salary" hidden={activeTab !== "salary"} tabIndex={0}>
           <section className="salary-panel" id="salary" aria-labelledby="salary-heading">
-            <div className="section-heading"><div><h2 id="salary-heading">{t("Advertised salary evidence")}</h2><p>{t("Coverage comes first. Salary values only describe the ranges that were published.")}</p></div><span className="currency-note">{t("Local currencies · No conversion")}</span></div>
+            <div className="section-heading"><div><h2 id="salary-heading">{t("Advertised salary evidence")}</h2><p>{t("Coverage comes first. Salary values only describe the ranges that were published.")}</p></div><div className="salary-currency-switch" role="group" aria-label={t("Salary display currency")}><button type="button" aria-pressed={!showUsd} onClick={() => setSalaryCurrency("local")}>{t("Local currency")}</button><button type="button" aria-pressed={showUsd} disabled={!canShowUsd} onClick={() => setSalaryCurrency("usd")}>USD</button></div></div>
             <div className="salary-evidence">
-              <h3 className="section-insight">{salaryStats.denominator ? <><strong className="coverage-total">{salaryStats.complete}<small>{t("of")} {salaryStats.denominator}</small></strong><span>{t("vacancies have a complete salary range.")}</span></> : t("No salary sample for these filters.")}</h3>
-              <p>{t(salaryStats.complete === 0 ? "Salary comparisons are unavailable without complete ranges." : salaryStats.complete < 10 ? "Limited evidence: treat these values as individual salary signals, not typical market pay." : "Compare within the same currency and check the number of ranges behind each value.")}</p>
+              <h3 className="section-insight">{salaryStats.denominator ? <><strong className="coverage-total">{salaryStats.reported}<small>{t("of")} {salaryStats.denominator}</small></strong><span>{t("vacancies include a published salary amount.")}</span></> : t("No salary sample for these filters.")}</h3>
+              <p>{t(salaryStats.reported === 0 ? "No published salaries in this view." : salaryStats.complete === 0 ? "Only one-sided salary amounts are available here; they are not full ranges." : salaryStats.complete < 10 ? "Limited evidence: treat these values as individual salary signals, not typical market pay." : showUsd ? "USD conversion is approximate. It does not account for living costs or taxes." : "Compare within the same currency and check how many ads support each value.")}</p>
               {salaryStats.denominator > 0 && <div className="coverage-breakdown"><div className="coverage-meter" role="img" aria-label={t("{complete} complete ranges, {partial} incomplete ranges, {missing} undisclosed out of {total} vacancies", { complete: salaryStats.complete, partial: salaryStats.reported - salaryStats.complete, missing: salaryStats.denominator - salaryStats.reported, total: salaryStats.denominator })}><span style={{ width: `${salaryCoverage * 100}%` }} /><span className="coverage-partial" style={{ width: `${(salaryStats.reported - salaryStats.complete) / salaryStats.denominator * 100}%` }} /></div>
                 <div className="coverage-labels"><span><i className="coverage-key complete" /><strong>{salaryStats.complete}</strong> {t("complete")} <small>{t("{share}% of this view", { share: Math.round(salaryCoverage * 100) })}</small></span><span><i className="coverage-key partial" /><strong>{salaryStats.reported - salaryStats.complete}</strong> {t("incomplete")}</span><span><i className="coverage-key absent" /><strong>{salaryStats.denominator - salaryStats.reported}</strong> {t("not disclosed")}</span></div>
               </div>}
             </div>
-            <p className="comparison-note">{t("Values below are medians of advertised range midpoints. They are not measured employee salaries.")}</p>
+            <p className="comparison-note">{t("One row groups ads by market, role and currency. Full ranges, from-only amounts and up-to-only amounts are summarized separately; each figure is the middle value in its group.")} {showUsd && <>{t("Exchange rates: {source}, {date}.", { source: ratesForSnapshot!.source, date: formatDate(ratesForSnapshot!.date) })} <a href="https://frankfurter.dev/" target="_blank" rel="noreferrer">{t("Rate source")}</a>.</>}{!canShowUsd && salaryRows.length > 0 && <> {t("USD conversion is unavailable for this snapshot.")}</>}</p>
             <div className="table-wrap">
-              <table className="salary-table">
+              {salaryRows.length > 0 && <table className="salary-table">
                 <caption className="sr-only">{t("Salary summaries for the selected market, field and role")}</caption>
-                <thead><tr><th scope="col">{t("Market")}</th><th scope="col">{t("Role")}</th><th scope="col">{t("Currency")}</th><th scope="col">{t("With salary / all")}</th><th scope="col">{t("Complete ranges")}</th><th scope="col">{t("Median range midpoint")}</th></tr></thead>
-                <tbody>{data.salaries.map((row, index) => <tr key={`${row.market}-${row.role_family}-${row.currency}`} data-market-start={index > 0 && data.salaries[index - 1].market !== row.market} className={row.median_midpoint_local === null ? "salary-missing" : "salary-observed"}>
+                <thead><tr><th scope="col">{t("Market")}</th><th scope="col">{t("Role")}</th><th scope="col">{t("Currency")}</th><th scope="col">{t("With salary / all")}</th><th scope="col">{t("Published salary amounts")}{showUsd ? " · USD" : ""}</th></tr></thead>
+                <tbody>{salaryRows.map((row, index) => <tr key={`${row.market}-${row.role_family}-${row.currency}`} data-market-start={index > 0 && salaryRows[index - 1].market !== row.market} className={row.median_midpoint_local === null ? "salary-partial" : "salary-observed"}>
                   <td data-label={t("Market")}><span className={`market-code market-${row.market}`}>{row.market.toUpperCase()}</span><span className="market-name">{t(marketOptions.find((item) => item.value === row.market)?.label ?? row.market)}</span></td>
                   <th scope="row" className="salary-role">{roleLabels.get(row.role_family) ?? row.role_family}</th>
-                  <td data-label={t("Currency")}>{row.currency}</td><td data-label={t("With salary / all")}>{row.vacancies_with_reported_salary} / {row.included_vacancies}</td><td data-label={t("Complete ranges")}>{row.complete_salary_ranges}</td>
-                  <td data-label={t("Median range midpoint")} className={row.median_midpoint_local === null ? "table-muted" : "salary-value"}>{row.median_midpoint_local === null ? t(row.vacancies_with_reported_salary ? "No complete range" : "Not disclosed") : <><strong>{formatCurrency(row.median_midpoint_local, row.currency)}</strong><small className="range-confidence">{t(row.complete_salary_ranges === 1 ? "Single range only" : row.complete_salary_ranges < 10 ? "{count} ranges · limited sample" : "{count} ranges", { count: row.complete_salary_ranges })}</small></>}</td>
+                  <td data-label={t("Currency")}>{row.currency}</td><td data-label={t("With salary / all")}>{row.vacancies_with_reported_salary} / {row.included_vacancies}</td>
+                  <td data-label={t("Published salary amounts")} className="salary-value">
+                    {row.median_midpoint_local !== null && <div className="salary-signal"><span>{t("Full range")}</span><strong>{typeof row.median_range_from_local === "number" && typeof row.median_range_to_local === "number" ? `${formatSalaryAmount(row.median_range_from_local, row.currency)}–${formatSalaryAmount(row.median_range_to_local, row.currency)}` : formatSalaryAmount(row.median_midpoint_local, row.currency)}</strong><small className="range-confidence">{t("{count} ads", { count: row.complete_salary_ranges })}</small></div>}
+                    {typeof row.median_from_only_local === "number" && <div className="salary-signal"><span>{t("From only")}</span><strong>{t("from {amount}", { amount: formatSalaryAmount(row.median_from_only_local, row.currency) })}</strong><small>{t("{count} ads", { count: row.from_only_count ?? 0 })}</small></div>}
+                    {typeof row.median_to_only_local === "number" && <div className="salary-signal"><span>{t("Up to only")}</span><strong>{t("up to {amount}", { amount: formatSalaryAmount(row.median_to_only_local, row.currency) })}</strong><small>{t("{count} ads", { count: row.to_only_count ?? 0 })}</small></div>}
+                    {row.median_midpoint_local === null && typeof row.median_from_only_local !== "number" && typeof row.median_to_only_local !== "number" && <span>{t("Salary amount unavailable")}</span>}
+                  </td>
                 </tr>)}</tbody>
-              </table>
-              {!data.salaries.length && <p className="empty-state">{t("No salary records for these filters.")}</p>}
+              </table>}
+              {!salaryRows.length && <p className="empty-state">{t("No published salary amounts for these filters.")}</p>}
             </div>
             <details className="model-note"><summary>{t("Why there is no salary prediction yet")}</summary><p>{t(data.model.explanation)}</p></details>
           </section>
@@ -534,7 +587,7 @@ function App() {
 
 
         </div> : null}
-        <footer className="page-footer"><a className="footer-brand" href="#overview">SkillScope.</a><span>{t("Central Asia’s IT markets, in focus.")}</span><a className="footer-privacy" href="/privacy">{t("Privacy & storage")}</a>{data && <span>{t("Last observed {date}", { date: formatDate(data.overview.last_seen_at) })}</span>}</footer>
+        <footer className="page-footer"><a className="footer-brand" href="#overview">SkillScope.</a><span>{t("Selected IT markets, in focus.")}</span><a className="footer-privacy" href="/privacy">{t("Privacy & storage")}</a>{data && <span>{t("Last observed {date}", { date: formatDate(data.overview.last_seen_at) })}</span>}</footer>
       </main>
       <AskSkillScope open={askOpen} onOpenChange={setAskOpen} />
     </div>

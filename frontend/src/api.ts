@@ -1,6 +1,7 @@
 import type {
   MarketCode,
   CategoryCode,
+  ExchangeRates,
   ModelInsights,
   Overview,
   RoleDemandResponse,
@@ -68,6 +69,10 @@ export function getSalaries(
   signal?: AbortSignal,
 ) {
   return getJson<SalaryGroup[]>(`/salaries${filterQuery(market, role, category)}`, signal);
+}
+
+export function getExchangeRates(signal?: AbortSignal) {
+  return getJson<ExchangeRates>("/exchange-rates", signal);
 }
 
 export function getSeniority(

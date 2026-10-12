@@ -1,5 +1,7 @@
 # Public demo on Render
 
+Public address: [SkillScope demo](https://skillscope-uedt.onrender.com/).
+
 The repository contains `render.yaml` for one free Python web service. FastAPI serves
 the bundled React files and aggregate API. The build installs `.[api]`; the start
 command is `python -m skillscope.serve`. `HOST=0.0.0.0` accepts platform traffic and
@@ -15,9 +17,7 @@ Complete the [privacy and data-use launch checks](privacy-launch-checklist.md) b
    `render.yaml`. Confirm that the proposed service uses the **Free** compute plan.
 3. After deployment, open the generated HTTPS URL. Check the dashboard, a country
    filter, and `/api/overview`. The overview should report `data_mode: demo`.
-4. Add the actual working URL to the top of README and the application portfolio.
-
-The site is deployed on Render. Add the live URL to README when it is available in the project notes.
+4. Check that the public address in README points to this deployment.
 
 ## Mr. Scope
 

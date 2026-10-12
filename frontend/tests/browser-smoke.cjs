@@ -14,8 +14,8 @@ async function main() {
     page.on("pageerror", (error) => errors.push(error.message));
     const ready = () => page.locator('.snapshot-content[aria-busy="false"] .tab-panel:not([hidden])').waitFor();
     const tabs = [
-      { id: "overview", label: "Overview" }, { id: "route", label: "My route" }, { id: "roles", label: "Roles & experience" },
-      { id: "skills", label: "Skills" }, { id: "salary", label: "Salaries" },
+      { id: "overview", label: "Overview" }, { id: "route", label: "My route" }, { id: "roles", label: "Roles & skills" },
+      { id: "salary", label: "Salaries" },
     ];
     const selectTab = async (label) => {
       await page.getByRole("tab", { name: label, exact: true }).click();
@@ -39,6 +39,13 @@ async function main() {
     await page.goto(base);
     await ready();
     const baselineSkills = await (await page.request.get(`${base}/api/skills?limit=8`)).json();
+    const russianSkills = await (await page.request.get(`${base}/api/skills?market=ru&limit=100`)).json();
+    assert.match(await page.locator(".combined-scope").innerText(), new RegExp(`Russia: ${russianSkills.vacancy_denominator} of ${baselineSkills.vacancy_denominator}`));
+    const russianComparison = page.locator(".market-skill-country").filter({ has: page.getByText("Russia", { exact: true }) });
+    assert.match(await russianComparison.innerText(), new RegExp(`${russianSkills.vacancy_denominator} vacancies`));
+    const firstMarketSkill = baselineSkills.items[0];
+    const firstRussianSkill = russianSkills.items.find((item) => item.skill === firstMarketSkill.skill);
+    assert.match(await russianComparison.innerText(), new RegExp(`${firstRussianSkill?.vacancies_with_skill ?? 0} / ${russianSkills.vacancy_denominator}`));
     const leaders = baselineSkills.items.filter((item) => item.vacancies_with_skill === baselineSkills.items[0]?.vacancies_with_skill);
     if (leaders.length === 2) {
       const headline = await page.locator(".overview-insight h2").textContent();
@@ -48,6 +55,7 @@ async function main() {
     assert.equal(await page.locator(".signal-frequency").count(), baselineSkills.items.length, "Every radar signal must expose its frequency");
     await page.getByRole("button", { name: /^Explore Kazakhstan:/ }).click();
     await assertCount(await expectedCount("kz"));
+    assert.equal(await page.locator(".combined-scope, .market-skill-comparison").count(), 0, "Country view must not present combined-sample results");
     assert.equal(await page.getByRole("combobox", { name: "Market", exact: true }).inputValue(), "kz");
     await page.getByRole("button", { name: "Reset filters" }).click();
     await assertCount(await expectedCount("all"));
@@ -65,8 +73,8 @@ async function main() {
     await page.getByRole("button", { name: "Radar", exact: true }).click();
     assert.equal(await page.getByRole("button", { name: /^SQL:/ }).getAttribute("aria-pressed"), "true");
     await page.getByRole("link", { name: "Compare across fields" }).click();
-    await page.getByRole("tab", { name: "Skills", selected: true }).waitFor();
-    assert.equal(new URL(page.url()).hash, "#skills");
+    await page.getByRole("tab", { name: "Roles & skills", selected: true }).waitFor();
+    assert.equal(new URL(page.url()).hash, "#roles");
     const comparedRow = page.locator('.skill-matrix tr[data-skill="SQL"]');
     await comparedRow.waitFor();
     assert.equal(await comparedRow.getAttribute("data-spotlight"), "true", "Radar comparison must point to the selected matrix row");
@@ -93,7 +101,7 @@ async function main() {
     assert.equal(await page.locator(".route-recommendations li").count(), 5);
     assert.equal(await page.locator(".route-recommendations li").filter({ hasText: "SQL" }).count(), 0, "Known skills must not be proposed");
     await page.getByRole("link", { name: "Compare Python across fields" }).click();
-    await page.getByRole("tab", { name: "Skills", selected: true }).waitFor();
+    await page.getByRole("tab", { name: "Roles & skills", selected: true }).waitFor();
     await page.locator('.snapshot-content[aria-busy="false"] .skill-matrix tr[data-skill="Python"]').waitFor();
     assert.match(await page.locator('.skill-matrix tr[data-skill="Python"] .matrix-row-context').innerText(), /From My route/);
     assert.equal(await page.getByRole("combobox", { name: "Market", exact: true }).inputValue(), "kz");
@@ -114,13 +122,17 @@ async function main() {
     await selectTab("Overview");
     await page.getByRole("button", { name: "Reset filters" }).click();
     await assertCount(await expectedCount("all"));
-    await selectTab("Roles & experience");
+    await selectTab("Roles & skills");
+    await page.getByRole("navigation", { name: "Jump to section" }).getByRole("button", { name: "Skills" }).click();
+    await page.waitForFunction(() => { const top = document.getElementById("skills")?.getBoundingClientRect().top; return top !== undefined && top >= 0 && top < innerHeight; });
     const rolesResponse = await (await page.request.get(`${base}/api/roles`)).json();
     const leadingRole = [...rolesResponse.items].sort((a, b) => b.vacancies - a.vacancies)[0];
     const leadingWidth = await page.getByRole("button", { name: `Explore ${leadingRole.label}`, exact: true }).locator(".role-demand-track > span").evaluate((element) => parseFloat(element.style.width));
     assert.ok(Math.abs(leadingWidth - leadingRole.share * 100) < 0.02, "Role bars must use a full 0–100% sample scale");
     await page.getByRole("button", { name: "Explore Data Analyst", exact: true }).click();
     await assertCount(await expectedCount("all", "data_analyst", "data_ai"));
+    const analystRussia = await (await page.request.get(`${base}/api/skills?market=ru&role=data_analyst&category=data_ai`)).json();
+    assert.match(await page.locator(".combined-scope").innerText(), new RegExp(`Russia: ${analystRussia.vacancy_denominator} of ${await expectedCount("all", "data_analyst", "data_ai")}`));
     assert.equal(await page.getByRole("combobox", { name: "Role family" }).inputValue(), "data_analyst");
     await page.getByRole("button", { name: "Reset filters" }).click();
     await assertCount(await expectedCount("all"));
@@ -128,9 +140,9 @@ async function main() {
     await assertCount(await expectedCount("kg"));
     if (await expectedCount("kg") < 20) await page.locator(".sample-notice").waitFor();
     const requestsBeforeTabs = apiRequests;
-    await page.getByRole("tab", { name: "Roles & experience" }).focus();
+    await page.getByRole("tab", { name: "Roles & skills" }).focus();
     await page.keyboard.press("ArrowRight");
-    await page.getByRole("tab", { name: "Skills", selected: true }).waitFor();
+    await page.getByRole("tab", { name: "Salaries", selected: true }).waitFor();
     await page.keyboard.press("End");
     await page.getByRole("tab", { name: "Salaries", selected: true }).waitFor();
     await page.keyboard.press("Home");
@@ -169,10 +181,10 @@ async function main() {
     await page.route("**/api/seniority?**", (route) => route.fulfill({ json: { vacancy_denominator: 0, items: [] } }));
     await page.getByRole("combobox", { name: "Role family" }).selectOption("bi_analyst");
     await assertCount(0);
-    await selectTab("Skills");
+    await selectTab("Roles & skills");
     await page.getByText("No reviewed skill sample for these fields yet.").waitFor();
     await selectTab("Salaries");
-    await page.getByText("No salary records for these filters.").waitFor();
+    await page.getByText("No published salary amounts for these filters.").waitFor();
     await page.unrouteAll({ behavior: "wait" });
 
     await page.getByRole("combobox", { name: "Role family" }).selectOption("all");
@@ -185,7 +197,7 @@ async function main() {
     await assertCount(await expectedCount("all", "backend_developer", "software_engineering"));
     await page.getByRole("combobox", { name: "Market", exact: true }).selectOption("tj");
     await assertCount(0);
-    await selectTab("Roles & experience");
+    await selectTab("Roles & skills");
     assert.equal(await page.locator(".role-not-sampled").innerText(), "Not sampled");
     await selectTab("Overview");
     assert.equal(await page.locator(".radar-signal").count(), 0);
@@ -200,7 +212,7 @@ async function main() {
     await ready();
     await page.goto(`${base}/#seniority`);
     await ready();
-    await page.getByRole("tab", { name: "Roles & experience", selected: true }).waitFor();
+    await page.getByRole("tab", { name: "Roles & skills", selected: true }).waitFor();
     await selectTab("Overview");
     await page.emulateMedia({ reducedMotion: "reduce" });
     // Exercise a future comparison with two sampled fields and an explicit zero match.
@@ -212,7 +224,7 @@ async function main() {
     });
     await page.getByRole("combobox", { name: "Market", exact: true }).selectOption("kz");
     await ready();
-    await selectTab("Skills");
+    await selectTab("Roles & skills");
     assert.equal(await page.locator(".skill-matrix thead th").count(), 3);
     const zeroMatch = page.locator(".skill-matrix tbody tr").filter({ has: page.getByRole("rowheader", { name: "SQL", exact: true }) }).locator('td[data-label="Software Engineering"]');
     assert.match(await zeroMatch.getAttribute("aria-label"), /0%, 0 of 4 vacancies/);
@@ -222,11 +234,15 @@ async function main() {
     await ready();
     await selectTab("Salaries");
     assert.equal(await page.locator(".range-confidence").count(), await page.locator(".salary-observed").count(), "Every available salary must carry its sample size");
-    assert.equal(await page.locator(".salary-missing .salary-value").count(), 0);
-    const salaryTotals = await page.locator(".salary-table tbody tr").evaluateAll((rows) => rows.reduce((total, row) => {
-      const [reported, included] = row.querySelector('[data-label="With salary / all"]').textContent.split("/").map(Number);
-      return { reported: total.reported + reported, included: total.included + included, complete: total.complete + Number(row.querySelector('[data-label="Complete ranges"]').textContent) };
-    }, { reported: 0, included: 0, complete: 0 }));
+    const salaryGroups = await (await page.request.get(`${base}/api/salaries`)).json();
+    const salaryTotals = salaryGroups.reduce((total, row) => ({
+      reported: total.reported + row.vacancies_with_reported_salary,
+      included: total.included + row.included_vacancies,
+      complete: total.complete + row.complete_salary_ranges,
+    }), { reported: 0, included: 0, complete: 0 });
+    assert.equal(await page.locator(".salary-table tbody tr").count(), salaryGroups.filter((row) => row.vacancies_with_reported_salary > 0).length);
+    assert.equal(await page.locator('.salary-table tbody tr').evaluateAll((rows) => rows.every((row) => Number(row.querySelector('[data-label="With salary / all"]').textContent.split(" /")[0]) > 0)), true);
+    assert.equal(await page.locator('.salary-table').textContent().then((text) => text.includes('NaN')), false);
     assert.equal(await page.locator(".coverage-meter").getAttribute("aria-label"), `${salaryTotals.complete} complete ranges, ${salaryTotals.reported - salaryTotals.complete} incomplete ranges, ${salaryTotals.included - salaryTotals.reported} undisclosed out of ${salaryTotals.included} vacancies`);
     const screenshots = path.resolve(__dirname, "../../docs/screenshots");
     fs.mkdirSync(screenshots, { recursive: true });
@@ -319,7 +335,7 @@ async function main() {
     await page.reload();
     await page.getByRole("heading", { name: "Privacy & storage" }).waitFor();
     assert.deepEqual(errors, []);
-    console.log("PASS: five tabs, personal route with counts/empty/small samples, keyboard navigation, URL/back, preserved filters/radar selection, theme persistence, desktop and mobile layouts; no browser exceptions.");
+    console.log("PASS: four tabs, personal route with counts/empty/small samples, keyboard navigation, URL/back, preserved filters/radar selection, theme persistence, desktop and mobile layouts; no browser exceptions.");
   } finally {
     await browser.close();
   }

@@ -1,14 +1,44 @@
 # SkillScope
 
-SkillScope summarizes HeadHunter vacancies across selected IT roles in Kyrgyzstan,
-Kazakhstan, Uzbekistan, Tajikistan and Turkmenistan. Its initial scope covers Data & AI,
-Software Engineering, DevOps & Cloud, Cybersecurity and QA. The dashboard reports
-observed vacancy counts, skill mentions, inferred seniority and published salary ranges.
+An interactive view of the skills, roles and salary information visible in
+HeadHunter IT vacancies across Central Asia, Georgia and Russia. It helps answer a
+practical question: **which skills recur for a role in a chosen country, and how much
+evidence supports that answer?**
 
-The packaged 2026-10-10 demo covers all ten configured roles: 338 included vacancies
-in Kyrgyzstan, Kazakhstan and Uzbekistan. The same audit found no matching roles in
-Tajikistan or Turkmenistan on HeadHunter. Counts describe this source and these
-search terms, not total IT hiring in any country.
+**[Open the public demo](https://skillscope-uedt.onrender.com/)** ·
+[Data and limitations](docs/data-card.md) ·
+[Method and validation](docs/validation-2026-10-10.md)
+
+![SkillScope Overview showing Market Radar, vacancy counts and country breakdown](docs/screenshots/overview-portfolio.png)
+
+*Local dashboard capture, 12 October 2026. The live demo may show a different
+snapshot after a later deployment.*
+
+## What the project does
+
+- Collects HeadHunter vacancies for ten configured roles in five IT fields across
+  seven markets. The weekly local workflow audits, collects and saves dated snapshots.
+- Uses explicit title rules and a versioned skill dictionary to classify vacancies;
+  keeps exclusions and ambiguous seniority reviewable.
+- Lets visitors filter vacancy counts, skill mentions, experience signals and
+  advertised salaries by market, field and role. My route compares roles against
+  skills marked as known in the browser.
+- Shows denominators and missing coverage alongside comparisons. Salary ranges stay
+  in their original currencies; the optional USD view uses dated exchange rates.
+
+The packaged **12 October 2026** demo includes 2,297 of 2,541 collected candidates
+across Kyrgyzstan, Kazakhstan, Uzbekistan, Georgia and Russia. Tajikistan and
+Turkmenistan had no matching configured roles in this run. Russia contributes 1,925
+vacancies (84%) to the combined view, so country comparisons use each country's own
+denominator. Only 263 included vacancies have complete salary ranges. These are
+HeadHunter search results for configured terms, not estimates of all IT hiring.
+
+**How to review the work:** start with the [data card](docs/data-card.md) for scope
+and limitations, the [validation note](docs/validation-2026-10-10.md) for a manual
+check of an earlier snapshot, and the [weekly collection design](docs/weekly-collection.md)
+for the refresh and recovery process. The dashboard has Overview, My route, Roles &
+skills and Salaries tabs. The 2026-10-10 manual review does not validate the newer
+2026-10-12 snapshot.
 
 ## Run the dashboard
 
@@ -76,13 +106,13 @@ duplicate. Earlier observations remain in place when later collections run.
 
 Each processed run also writes a separate local JSONL snapshot under
 `data/processed/snapshots/`; `vacancies_latest.jsonl` remains the dashboard input.
-Collect all five markets in one audit when you want a comparable five-country view;
+Collect all seven markets in one audit when you want a comparable seven-country view;
 a selected-market run updates the dashboard's latest snapshot with only that selection.
 Keep the SQLite database and snapshot directory in persistent storage and back them up.
 They are gitignored and are not included in the packaged demo or an ephemeral deployment.
 Run `python -m skillscope.audit` before `python -m skillscope.collect` for each new
 collection. Collection defaults to the markets present in its audit report, so older
-three-market reports remain reprocessable. The demo shows the 2026-10-10 snapshot,
+three-market reports remain reprocessable. The demo shows the 2026-10-12 snapshot,
 not a trend estimate.
 
 For a weekly Windows Task Scheduler run with a local recovery copy, follow
@@ -90,8 +120,8 @@ For a weekly Windows Task Scheduler run with a local recovery copy, follow
 HeadHunter API token from `.env` and requires the computer to be on with the configured
 Windows user logged in.
 
-The first full-scope audit is in `artifacts/reports/feasibility_five_markets_20261010.json`;
-its classification summary is `artifacts/reports/classification_latest.json`. The
+The first five-market audit is in `artifacts/reports/feasibility_five_markets_20261010.json`.
+The latest classification summary is `artifacts/reports/classification_latest.json`. The
 private review worksheet is `data/processed/manual_review_latest.csv`. The bundled demo
 retains only the twelve allowlisted analytical fields, without vacancy identity or text.
 The [2026-10-10 validation note](docs/validation-2026-10-10.md) records the stratified
@@ -114,7 +144,7 @@ pnpm --dir frontend build
 
 Commit the regenerated files in `src/skillscope/static` with the frontend changes.
 
-The dashboard has five tabs: Overview, My route, Roles & experience, Skills and Salaries.
+The dashboard has four tabs: Overview, My route, Roles & skills, and Salaries.
 My route compares two sampled roles across all markets or within one country, then uses
 the current snapshot to list up to five frequently mentioned skills the visitor has not
 marked as known for that scope and role. The combined view mixes countries unevenly.
@@ -122,6 +152,8 @@ Counts, observation date
 and small-sample warnings stay visible; known skills are saved only in the browser.
 Shared filters persist across tabs. Market Radar previews and pins skill frequencies and
 offers keyboard navigation, a List view and reduced-motion support.
+The combined sample shows each country's contribution before aggregate findings; the
+country skill comparison uses each country's own vacancy count and updates with the snapshot.
 
 ## Checks
 
@@ -162,7 +194,7 @@ Interactive API documentation is available at `/docs`.
   market demand. Categories with few records should not be ranked as if samples were equal.
 - Role and skill assignments use explicit rules and dictionaries.
 - Seniority is inferred from titles, descriptions and experience bands.
-- Salary values are sparse. Only complete local-currency ranges contribute a midpoint; currencies are not converted or pooled.
+- Salary values are sparse. Only complete local-currency ranges contribute a midpoint. Groups are not pooled across currencies; the salary page optionally shows approximate USD values using saved, dated Frankfurter rates beside the original amounts.
 - No salary prediction model has been trained.
 
 ## Stack

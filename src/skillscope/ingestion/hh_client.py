@@ -17,6 +17,10 @@ from typing import Any, cast
 class HHApiError(RuntimeError):
     """Raised when the HeadHunter API cannot return a usable response."""
 
+    def __init__(self, message: str, status_code: int | None = None) -> None:
+        super().__init__(message)
+        self.status_code = status_code
+
 
 @dataclass(frozen=True, slots=True)
 class TransportResponse:
@@ -119,7 +123,10 @@ class HHClient:
                 )
             if response.status not in self.retryable_statuses or attempt >= self.max_retries:
                 message = response.body.decode("utf-8", errors="replace")[:500]
-                raise HHApiError(f"HH API returned HTTP {response.status}: {message}")
+                raise HHApiError(
+                    f"HH API returned HTTP {response.status}: {message}",
+                    status_code=response.status,
+                )
             self._sleep(self._backoff_seconds(attempt, response.headers.get("Retry-After")))
 
         raise AssertionError("Retry loop terminated unexpectedly")

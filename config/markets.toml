@@ -32,3 +32,17 @@ host = "hh.ru"
 area_id = "93"
 currency = "TMT"
 enabled = true
+
+[markets.ge]
+name = "Georgia"
+host = "headhunter.ge"
+area_id = "28"
+currency = "GEL"
+enabled = true
+
+[markets.ru]
+name = "Russia"
+host = "hh.ru"
+area_id = "113"
+currency = "RUB"
+enabled = true

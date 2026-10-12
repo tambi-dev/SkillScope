@@ -192,12 +192,53 @@ class ApiTests(unittest.IsolatedAsyncioTestCase):
         self.assertFalse(insights["imputation_used"])
         self.assertEqual(insights["complete_salary_ranges"], 1)
 
+    async def test_one_sided_salary_amounts_remain_separate(self) -> None:
+        records = [
+            {
+                "market": "ge",
+                "review_decision": "included",
+                "role_family": "qa_engineer",
+                "salary_currency": "USD",
+                "salary_from": 1_000 if index == 0 else None,
+                "salary_to": 2_000 if index == 1 else None,
+                "salary_midpoint_local": None,
+            }
+            for index in range(2)
+        ]
+        self.data_path.write_text(
+            "".join(json.dumps(record) + "\n" for record in records), encoding="utf-8"
+        )
+        salary = (await self._get("/api/salaries", {"market": "ge"})).json()[0]
+        self.assertEqual(salary["vacancies_with_reported_salary"], 2)
+        self.assertEqual(salary["complete_salary_ranges"], 0)
+        self.assertEqual(salary["from_only_count"], 1)
+        self.assertEqual(salary["to_only_count"], 1)
+        self.assertEqual(salary["median_from_only_local"], 1_000)
+        self.assertEqual(salary["median_to_only_local"], 2_000)
+        self.assertIsNone(salary["median_midpoint_local"])
+
+    async def test_published_full_range_counts_without_stored_midpoint(self) -> None:
+        self.data_path.write_text(json.dumps({
+            "market": "ge",
+            "review_decision": "included",
+            "role_family": "qa_engineer",
+            "salary_currency": "USD",
+            "salary_from": 1_000,
+            "salary_to": 2_000,
+            "salary_midpoint_local": None,
+        }) + "\n", encoding="utf-8")
+        salary = (await self._get("/api/salaries", {"market": "ge"})).json()[0]
+        self.assertEqual(salary["complete_salary_ranges"], 1)
+        self.assertEqual(salary["median_range_from_local"], 1_000)
+        self.assertEqual(salary["median_range_to_local"], 2_000)
+        self.assertEqual(salary["median_midpoint_local"], 1_500)
+
     async def test_unknown_market_is_rejected(self) -> None:
-        response = await self._get("/api/skills", {"market": "ru"})
+        response = await self._get("/api/skills", {"market": "xx"})
         self.assertEqual(response.status_code, 422)
 
     async def test_new_markets_return_empty_samples_without_error(self) -> None:
-        for market in ("tj", "tm"):
+        for market in ("tj", "tm", "ge", "ru"):
             with self.subTest(market=market):
                 response = await self._get("/api/skills", {"market": market})
                 self.assertEqual(response.status_code, 200)
@@ -229,6 +270,8 @@ class ApiTests(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(skills["items"][0]["skill"], "Python")
                 salaries = (await self._get("/api/salaries", {"market": market})).json()
                 self.assertEqual(salaries[0]["currency"], currency)
+                self.assertEqual(salaries[0]["from_only_count"], 0)
+                self.assertEqual(salaries[0]["to_only_count"], 0)
                 self.assertEqual(salaries[0]["median_midpoint_local"], 1_500)
 
     async def test_overview_keeps_collection_date_for_excluded_only_run(self) -> None:
@@ -307,8 +350,10 @@ class ApiTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(response.status_code, 200)
         overview = response.json()
         self.assertEqual(overview["data_mode"], "demo")
-        self.assertEqual(overview["candidate_vacancies"], 358)
-        self.assertEqual(overview["included_vacancies"], 338)
+        self.assertEqual(overview["candidate_vacancies"], 2541)
+        self.assertEqual(overview["included_vacancies"], 2297)
+        self.assertIn("ge", overview["markets"])
+        self.assertIn("ru", overview["markets"])
         self.assertEqual(len(overview["role_counts"]), 10)
 
     async def test_serves_built_dashboard_from_api_server(self) -> None:
