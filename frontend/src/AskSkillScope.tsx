@@ -25,9 +25,10 @@ function ScopiMark() {
 interface AskSkillScopeProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  launcherHidden?: boolean;
 }
 
-export default function AskSkillScope({ open, onOpenChange }: AskSkillScopeProps) {
+export default function AskSkillScope({ open, onOpenChange, launcherHidden = false }: AskSkillScopeProps) {
   const { language, t, formatDate } = useLanguage();
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState<AskAnswer | null>(null);
@@ -68,16 +69,16 @@ export default function AskSkillScope({ open, onOpenChange }: AskSkillScopeProps
     const onEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         onOpenChange(false);
-        requestAnimationFrame(() => launcher.current?.focus());
+        requestAnimationFrame(() => launcherHidden ? document.getElementById("route-ask")?.focus() : launcher.current?.focus());
       }
     };
     window.addEventListener("keydown", onEscape);
     return () => window.removeEventListener("keydown", onEscape);
-  }, [open, onOpenChange]);
+  }, [open, onOpenChange, launcherHidden]);
 
   function close() {
     onOpenChange(false);
-    requestAnimationFrame(() => launcher.current?.focus());
+    requestAnimationFrame(() => launcherHidden ? document.getElementById("route-ask")?.focus() : launcher.current?.focus());
   }
 
   async function submit(value = question) {
@@ -99,7 +100,7 @@ export default function AskSkillScope({ open, onOpenChange }: AskSkillScopeProps
     }
   }
 
-  return <div className="scopi-assistant">
+  return <div className="scopi-assistant" data-inline-launcher={launcherHidden}>
     <section className="scopi-panel" id="ask-skillscope" aria-labelledby="scopi-heading" hidden={!open}>
       <header className="scopi-panel-head">
         <div className="scopi-portrait"><ScopiMark /></div>
@@ -116,14 +117,20 @@ export default function AskSkillScope({ open, onOpenChange }: AskSkillScopeProps
       <div className="scopi-compose">
         <form onSubmit={(event) => { event.preventDefault(); void submit(); }}>
           <label className="sr-only" htmlFor="scopi-question">{t("Your question")}</label>
-          <textarea ref={input} id="scopi-question" value={question} maxLength={400} rows={2} placeholder={t("Ask about SkillScope or this snapshot…")} onChange={(event) => setQuestion(event.target.value)} disabled={working} />
+          <textarea ref={input} id="scopi-question" value={question} maxLength={400} rows={2} placeholder={t("Ask about SkillScope or this snapshot…")} aria-describedby="scopi-keyboard-hint" onChange={(event) => setQuestion(event.target.value)} onKeyDown={(event) => {
+            if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing && event.nativeEvent.keyCode !== 229) {
+              event.preventDefault();
+              if (!event.repeat) event.currentTarget.form?.requestSubmit();
+            }
+          }} disabled={working} />
           <button type="submit" disabled={!available || working || question.trim().length < 3} aria-label={t(working ? "Reading the snapshot" : "Ask Mr. Scope")}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 16 16 4M6 4h10v10" /></svg></button>
         </form>
+        <p className="scopi-status" id="scopi-keyboard-hint">{t("Enter to send · Shift+Enter for a new line")}</p>
         <p className="scopi-status">{t(available === null ? "Checking availability…" : available ? "SkillScope facts and reviewed HeadHunter vacancies" : "Mr. Scope is unavailable right now. Try again later.")}</p>
         <p className="scopi-caution">{t("Skill mentions are frequency signals, not a measure of your readiness. Questions are sent to an AI provider.")} <a href="/privacy">{t("Privacy details")}</a></p>
       </div>
     </section>
-    <button type="button" className="scopi-launcher" ref={launcher} aria-controls="ask-skillscope" aria-expanded={open} aria-label={t(open ? "Close Mr. Scope assistant" : "Open Mr. Scope assistant")} onClick={() => open ? close() : onOpenChange(true)}>
+    <button type="button" className="scopi-launcher" hidden={launcherHidden} ref={launcher} aria-controls="ask-skillscope" aria-expanded={open} aria-label={t(open ? "Close Mr. Scope assistant" : "Open Mr. Scope assistant")} onClick={() => open ? close() : onOpenChange(true)}>
       <span className="scopi-launcher-mark"><ScopiMark /></span>
       <span className="scopi-launcher-copy"><strong><span>Mr.</span> Scope</strong><small>{t("Ask the snapshot")}</small></span>
       <svg className="scopi-launcher-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={open ? "M5 12l5-5 5 5" : "M5 8l5 5 5-5"} /></svg>

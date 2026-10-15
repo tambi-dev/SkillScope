@@ -1,30 +1,40 @@
 # SkillScope
 
-An interactive view of the skills, roles and salary information visible in
-HeadHunter IT vacancies across Central Asia, Georgia and Russia. It helps answer a
-practical question: **which skills recur for a role in a chosen country, and how much
-evidence supports that answer?**
+A tool for beginners asking **which IT direction should I try, and what can I do
+first?** Compare three kinds of work, try a small exercise and leave with a concrete
+next step. HeadHunter vacancy evidence adds country-specific context across Central
+Asia, Georgia and Russia.
 
 **[Open the public demo](https://skillscope-uedt.onrender.com/)** ·
 [Data and limitations](docs/data-card.md) ·
 [Method and validation](docs/validation-2026-10-10.md)
 
-![SkillScope Overview showing Market Radar, vacancy counts and country breakdown](docs/screenshots/overview-portfolio.png)
+![SkillScope My route with three clearly explained IT fields to explore](docs/screenshots/my-route-1366.png)
 
-*Local dashboard capture, 12 October 2026. The live demo may show a different
-snapshot after a later deployment.*
+*Local My route capture, 14 October 2026. The public demo follows its last deployment.*
 
 ## What the project does
 
+- Opens with three fields explained in ordinary language: Data analysis, Web
+  development and Software testing. Visitors read one field guide at a time,
+  try a short task and save a next learning step. There is no aptitude quiz.
+- Provides all practice tools in the browser: check a small sales table, edit
+  HTML with a preview, or test an age rule and record a bug. Instructions, worked
+  examples and feedback support each task. Vacancy figures and deeper topics are
+  optional. [Guide design and sources](docs/career-guides.md).
 - Collects HeadHunter vacancies for ten configured roles in five IT fields across
   seven markets. The weekly local workflow audits, collects and saves dated snapshots.
 - Uses explicit title rules and a versioned skill dictionary to classify vacancies;
   keeps exclusions and ambiguous seniority reviewable.
 - Lets visitors filter vacancy counts, skill mentions, experience signals and
-  advertised salaries by market, field and role. My route compares roles against
-  skills marked as known in the browser.
-- Shows denominators and missing coverage alongside comparisons. Salary ranges stay
-  in their original currencies; the optional USD view uses dated exchange rates.
+  advertised salaries by market, field and role. All ten roles remain available in
+  My route's expandable skill exploration section.
+- Shows denominators and missing coverage alongside comparisons. One salary table
+  shows country, role and all published formats, each with its vacancy count below.
+  It starts with all experience levels, offers a no-experience filter and anonymised examples
+  with salary, experience requirements and skill mentions. [Salary guide](docs/salary-guide.md).
+  The optional USD view uses dated exchange rates. Country lists follow
+  the latest snapshot's vacancy counts, largest first.
 
 The packaged **12 October 2026** demo includes 2,297 of 2,541 collected candidates
 across Kyrgyzstan, Kazakhstan, Uzbekistan, Georgia and Russia. Tajikistan and
@@ -52,8 +62,9 @@ python -m venv .venv
 
 Open `http://127.0.0.1:8000`. The app uses `data/processed/vacancies_latest.jsonl` when present; otherwise it serves the sanitized snapshot packaged with the project. The demo snapshot omits vacancy IDs, titles, employers, links and descriptions.
 
-The header theme control switches between light and dark. A first visit follows the
-operating system preference; an explicit choice is saved in browser storage.
+The header theme control switches between light and dark. A first visit uses dark;
+an explicit choice is saved in browser storage. Task completion sound is enabled
+by default and can be muted. Mr. Scope sends on Enter; Shift+Enter adds a new line.
 Mr. Scope turns the current vacancy aggregates into short answers from any dashboard tab.
 It needs a server-side `GROQ_API_KEY`; without one, the dashboard remains usable and
 Mr. Scope shows that answers are unavailable. See [deployment setup](docs/deployment.md).
@@ -144,8 +155,10 @@ pnpm --dir frontend build
 
 Commit the regenerated files in `src/skillscope/static` with the frontend changes.
 
-The dashboard has four tabs: Overview, My route, Roles & skills, and Salaries.
-My route compares two sampled roles across all markets or within one country, then uses
+The dashboard has four tabs: Overview, My route (the default entry), Roles & skills,
+and Salaries. Beginner guides, reflections and plan downloads work independently of
+vacancy evidence; country counts and skill mentions refresh from the deployed snapshot.
+The expandable advanced section compares two sampled roles across markets, then uses
 the current snapshot to list up to five frequently mentioned skills the visitor has not
 marked as known for that scope and role. The combined view mixes countries unevenly.
 Counts, observation date
@@ -169,7 +182,11 @@ pnpm --dir frontend exec playwright install chromium
 ```
 
 With the API server running, use `pnpm --dir frontend test:browser` and
-`node frontend/tests/radar-interactions.cjs`. Set `PLAYWRIGHT_CHANNEL=chrome` to use
+`node frontend/tests/radar-interactions.cjs`. The beginner flow is checked with
+`node frontend/tests/career-route.cjs` (including sound and reduced-motion feedback).
+Country ordering and salary details/conversion are checked with
+`node frontend/tests/ui-refinements.cjs`; experience filtering and real vacancy
+examples with `node frontend/tests/salary-examples.cjs`. Set `PLAYWRIGHT_CHANNEL=chrome` to use
 installed Chrome instead, or `SKILLSCOPE_URL` to check another local server.
 
 ## API
@@ -179,6 +196,8 @@ installed Chrome instead, or `SKILLSCOPE_URL` to check another local server.
 - `GET /api/roles?market=kz&category=software_engineering`
 - `GET /api/skills?market=kz&role=data_analyst`
 - `GET /api/salaries`
+- `GET /api/salaries?experience=noExperience`
+- `GET /api/salary-examples?market=ru&role=data_analyst&currency=RUB&experience=noExperience`
 - `GET /api/seniority`
 - `GET /api/model-insights`
 
@@ -194,7 +213,7 @@ Interactive API documentation is available at `/docs`.
   market demand. Categories with few records should not be ranked as if samples were equal.
 - Role and skill assignments use explicit rules and dictionaries.
 - Seniority is inferred from titles, descriptions and experience bands.
-- Salary values are sparse. Only complete local-currency ranges contribute a midpoint. Groups are not pooled across currencies; the salary page optionally shows approximate USD values using saved, dated Frankfurter rates beside the original amounts.
+- Salary values are sparse. Only complete local-currency ranges contribute a midpoint. Groups are not pooled across currencies; the salary page optionally shows approximate USD values using saved, dated Frankfurter rates and identifies each group's original currency. Summaries include different experience levels and are not junior salary expectations.
 - No salary prediction model has been trained.
 
 ## Stack

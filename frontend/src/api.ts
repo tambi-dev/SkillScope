@@ -7,6 +7,8 @@ import type {
   RoleDemandResponse,
   RoleCode,
   SalaryGroup,
+  SalaryExample,
+  SalaryExperience,
   SeniorityResponse,
   SkillsResponse,
   TaxonomyCategory,
@@ -67,8 +69,17 @@ export function getSalaries(
   role: RoleCode | "all",
   category: CategoryCode | "all",
   signal?: AbortSignal,
+  experience: SalaryExperience = "all",
 ) {
-  return getJson<SalaryGroup[]>(`/salaries${filterQuery(market, role, category)}`, signal);
+  const params = new URLSearchParams(filterQuery(market, role, category).slice(1));
+  if (experience !== "all") params.set("experience", experience);
+  return getJson<SalaryGroup[]>(`/salaries${params.size ? "?" + params : ""}`, signal);
+}
+
+export function getSalaryExamples(row: SalaryGroup, experience: SalaryExperience, signal?: AbortSignal) {
+  const params = new URLSearchParams({ market: row.market, role: row.role_family, currency: row.currency });
+  if (experience !== "all") params.set("experience", experience);
+  return getJson<SalaryExample[]>(`/salary-examples?${params}`, signal);
 }
 
 export function getExchangeRates(signal?: AbortSignal) {

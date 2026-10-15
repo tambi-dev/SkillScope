@@ -1,0 +1,97 @@
+const assert = require("node:assert/strict");
+const path = require("node:path");
+const { chromium } = require("playwright");
+
+async function main() {
+  const base = process.env.SKILLSCOPE_URL || "http://127.0.0.1:8001";
+  const browser = await chromium.launch({ headless: true, channel: process.env.PLAYWRIGHT_CHANNEL || undefined });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1366, height: 1000 }, reducedMotion: "reduce" });
+    page.setDefaultTimeout(15000);
+    const errors = [], exampleRequests = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    page.on("request", (request) => { if (new URL(request.url()).pathname === "/api/salary-examples") exampleRequests.push(new URL(request.url())); });
+    await page.goto(`${base}/#salary`);
+    const ready = () => page.locator('#salary .salary-results[aria-busy="false"]').waitFor();
+    await ready();
+    const scope = page.getByRole("combobox", { name: "Experience requirements", exact: true });
+    assert.equal(await scope.inputValue(), "all", "All experience levels is the default");
+    await scope.selectOption("noExperience");
+    await ready();
+    const groups = await (await page.request.get(`${base}/api/salaries?experience=noExperience`)).json();
+    const published = groups.filter((row) => row.vacancies_with_reported_salary > 0);
+    assert.equal(await page.locator(".salary-summary-table tbody tr").count(), published.length);
+    assert.equal(exampleRequests.length, 0, "Examples load only on request");
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    await page.screenshot({ path: path.resolve(__dirname, "../../artifacts/salary-beginner-overview.png") });
+    const reference = published.find((row) => row.complete_salary_ranges > 0) || published[0];
+    const row = page.locator(`.salary-summary-table tr[data-market="${reference.market}"][data-role="${reference.role_family}"][data-currency="${reference.currency}"]`);
+    await page.route("**/api/salary-examples?**", (route) => route.fulfill({ status: 503, body: "Unavailable" }));
+    await row.getByText("View vacancy examples", { exact: true }).click();
+    await row.getByText("Examples could not load.", { exact: false }).waitFor();
+    await page.unroute("**/api/salary-examples?**");
+    await row.getByRole("button", { name: "Try again", exact: true }).click();
+    await row.locator(".salary-example-list li").first().waitFor();
+    const examples = await (await page.request.get(`${base}/api/salary-examples?market=${reference.market}&role=${reference.role_family}&currency=${reference.currency}&experience=noExperience`)).json();
+    assert.equal(await row.locator(".salary-example-list li").count(), examples.length);
+    assert.ok(examples.every((example) => example.experience === "noExperience"));
+    assert.equal(await row.getByText("No experience required", { exact: true }).count(), examples.length);
+    const number = (value) => new Intl.NumberFormat("en", { maximumFractionDigits: 0 }).format(value).replaceAll(",", "\u202f");
+    for (const [index, example] of examples.entries()) {
+      const item = row.locator(".salary-example-list li").nth(index);
+      const amount = example.salary_from !== null && example.salary_to !== null ? `${number(example.salary_from)}–${number(example.salary_to)}` : example.salary_from !== null ? `from ${number(example.salary_from)}` : `up to ${number(example.salary_to)}`;
+      assert.ok((await item.innerText()).includes(amount));
+      for (const skill of example.skills) assert.ok((await item.innerText()).includes(skill));
+    }
+    assert.ok(exampleRequests.every((url) => url.searchParams.get("experience") === "noExperience" && url.searchParams.get("currency") === reference.currency));
+    const capture = async (name) => {
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+      await page.screenshot({ path: path.resolve(__dirname, `../../artifacts/${name}`) });
+    };
+    await row.evaluate((element) => window.scrollTo({ top: scrollY + element.getBoundingClientRect().top - document.querySelector(".workspace-controls").getBoundingClientRect().height - 12, behavior: "instant" }));
+    await capture("salary-examples-desktop.png");
+    await page.setViewportSize({ width: 390, height: 844 });
+    await row.evaluate((element) => window.scrollTo({ top: scrollY + element.getBoundingClientRect().top - 68, behavior: "instant" }));
+    await capture("salary-examples-mobile.png");
+    await page.setViewportSize({ width: 320, height: 740 });
+    await page.getByRole("button", { name: "Switch to Kyrgyz" }).click();
+    await row.evaluate((element) => window.scrollTo({ top: scrollY + element.getBoundingClientRect().top - 68, behavior: "instant" }));
+    await capture("salary-examples-ky-dark.png");
+    await page.getByRole("button", { name: "Англисчеге өтүү" }).click();
+    await page.setViewportSize({ width: 1366, height: 1000 });
+    await page.getByRole("combobox", { name: "Market", exact: true }).selectOption("tj");
+    await page.getByText("No published salaries from vacancies explicitly asking for no experience in this selection.").waitFor();
+    assert.equal(await scope.inputValue(), "noExperience", "An empty beginner sample never falls back silently");
+    assert.equal(await page.locator(".salary-example-list").count(), 0, "Changing country clears prior examples");
+    await page.getByRole("button", { name: "Compare all experience levels", exact: true }).click();
+    assert.equal(await scope.inputValue(), "all");
+    await page.getByRole("combobox", { name: "Market", exact: true }).selectOption("all");
+    await page.locator('.snapshot-content[aria-busy="false"]').waitFor();
+    await ready();
+    const all = await (await page.request.get(`${base}/api/salaries`)).json();
+    const allCount = all.filter((item) => item.vacancies_with_reported_salary > 0).length;
+    assert.equal(await page.locator(".salary-summary-table tbody tr").count(), allCount);
+    await page.route("**/api/salaries?experience=noExperience", (route) => route.fulfill({ status: 503, body: "Unavailable" }));
+    await scope.selectOption("noExperience");
+    await page.getByText("Salary data could not load.", { exact: false }).waitFor();
+    assert.equal(await page.locator(".salary-summary-table").count(), 0, "Failure must not show all-experience values as beginner salaries");
+    await page.unroute("**/api/salaries?experience=noExperience");
+    await page.locator("#salary").getByRole("button", { name: "Try again", exact: true }).click();
+    await ready();
+    assert.equal(await page.locator(".salary-summary-table tbody tr").count(), published.length);
+    let release;
+    const gate = new Promise((resolve) => { release = resolve; });
+    await scope.selectOption("all");
+    await page.route("**/api/salaries?experience=noExperience", async (route) => { await gate; await route.continue().catch(() => {}); });
+    await scope.selectOption("noExperience");
+    await page.getByText("Loading salaries for this experience group…", { exact: true }).waitFor();
+    await scope.selectOption("all");
+    release();
+    await page.unrouteAll({ behavior: "wait" });
+    await ready();
+    assert.equal(await page.locator(".salary-summary-table tbody tr").count(), allCount, "Cancelled beginner requests cannot replace the chosen all-level view");
+    assert.deepEqual(errors, []);
+    console.log("PASS: all-level default with explicit beginner filter; real scoped salary/experience/skill examples; lazy load, retry, empty sample, filter reset, cancelled requests; 1366/390/320px and Kyrgyz.");
+  } finally { await browser.close(); }
+}
+main().catch((error) => { console.error(error); process.exitCode = 1; });

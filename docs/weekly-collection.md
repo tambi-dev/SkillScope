@@ -1,6 +1,6 @@
 # Weekly local collection
 
-The Windows Task Scheduler can run the full HeadHunter collection every Monday
+The Windows Task Scheduler can run the full HeadHunter collection every Sunday
 at 09:00 local time. The task runs as the current Windows user, reads the
 project `.env`, audits all seven markets and configured role queries, and stops
 before collection if the audit is incomplete or truncated.

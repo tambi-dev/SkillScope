@@ -237,18 +237,10 @@ h2 { font-size: 30px; font-weight: 600; letter-spacing: -.035em; line-height: 1.
 .salary-context { display: grid; grid-template-columns: 195px 1fr; gap: 20px; align-items: center; border-top: 1px solid #d7dec8; border-bottom: 1px solid #d7dec8; background: #edf0e3; padding: 15px 20px; margin: 24px 0 15px; }
 .salary-context strong { font-size: 13px; font-weight: 600; }
 .salary-context p { font-size: 12px; line-height: 1.7; color: #596a50; max-width: 80ch; }
-.salary-table { width: 100%; border-collapse: collapse; }
-.salary-table thead th { font-size: 11px; font-weight: 500; color: var(--muted); padding: 17px 15px; text-align: left; border-bottom: 1px solid #bec9b5; }
-.salary-table td, .salary-table tbody th { padding: 16px 15px; text-align: left; font-size: 12px; border-bottom: 1px solid #dfe4d7; font-weight: 500; font-variant-numeric: tabular-nums; }
-.salary-table td:last-child, .salary-table thead th:last-child { text-align: right; }
-.salary-table td:first-child, .salary-table thead th:first-child { padding-left: 0; }
-.salary-table td:last-child, .salary-table thead th:last-child { padding-right: 0; }
-.salary-table tbody tr:hover { background: #eef1e5; }
 .market-code { display: inline-block; font-family: var(--mono); font-size: 11px; border-radius: 3px; padding: 4px 7px; color: #496742; background: #e4eadb; }
 .market-kz { background: #e1e7ee; color: #526780; }
 .market-uz { background: #eee5d9; color: #7d6541; }
 .table-muted { color: var(--muted); }
-.salary-table .salary-value { font-family: var(--mono); font-weight: 600; }
 .empty-state { padding: 30px 0; font-size: 13px; color: var(--muted); line-height: 1.8; }
 .model-note { margin-top: 18px; }
 .model-note summary { font-size: 12px; color: var(--muted); padding: 13px 0; width: fit-content; }
@@ -336,7 +328,6 @@ h2 { font-size: 30px; font-weight: 600; letter-spacing: -.035em; line-height: 1.
   .skill-matrix td strong { font-size: 12px; }
   .methodology-panel { gap: 28px; }
   .methodology-intro h2 { font-size: 30px; }
-  .salary-table thead th, .salary-table td, .salary-table tbody th { padding: 14px 8px; font-size: 11px; }
 }
 @media (max-width: 600px) {
   .site-header { padding-left: 20px; padding-right: 20px; }
@@ -420,15 +411,6 @@ h2 { font-size: 30px; font-weight: 600; letter-spacing: -.035em; line-height: 1.
   .currency-note { font-size: 10px; padding: 0; }
   .salary-context { display: block; padding: 16px; margin-bottom: 24px; }
   .salary-context p { font-size: 11px; margin-top: 8px; }
-  .salary-table, .salary-table tbody { display: block; }
-  .salary-table thead { display: none; }
-  .salary-table tbody tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; border-bottom: 1px solid #ced8c5; padding: 19px 0; }
-  .salary-table tbody tr:first-child { padding-top: 0; }
-  .salary-table td, .salary-table tbody th { padding: 0; border: 0; font-size: 12px; text-align: left; }
-  .salary-table .salary-role { grid-row: 1; grid-column: 1 / -1; padding-right: 45px; font-size: 14px; font-weight: 650; }
-  .salary-table td:first-child { grid-row: 1; grid-column: 2; justify-self: end; }
-  .salary-table td[data-label]:not(:first-child)::before { content: attr(data-label); display: block; font-family: "Manrope", sans-serif; font-size: 10px; color: var(--muted); margin-bottom: 6px; font-weight: 400; }
-  .salary-table td:last-child { text-align: left; }
   .model-note summary { font-size: 11px; }
   .methodology-panel { grid-template-columns: 1fr; margin-top: 45px; padding-top: 31px; gap: 26px; }
   .methodology-intro h2 { font-size: 34px; }
@@ -580,21 +562,12 @@ h2 { font-size: 30px; font-weight: 600; letter-spacing: -.035em; line-height: 1.
 .coverage-meter > span { display: block; height: 100%; background: var(--meter-fill); }
 .coverage-labels { display: flex; justify-content: space-between; gap: 20px; font-size: 12px; color: #526548; margin-top: 10px; }
 .coverage-labels strong { color: var(--ink); font-weight: 750; }
-.salary-table { table-layout: auto; }
-.salary-table thead th { font-size: 12px; }
-.salary-table td, .salary-table tbody th { font-size: 13px; }
-.salary-table .salary-observed { background: #edf0e3; }
-.salary-table .salary-value strong { font-size: 16px; font-weight: 650; white-space: nowrap; }
-.range-confidence { display: block; margin-top: 5px; font-family: "Manrope", sans-serif; color: #6b5831; font-size: 11px; font-weight: 500; }
 .market-name { display: inline-block; margin-left: 7px; font-size: 12px; }
 .salary-missing .table-muted { font-size: 12px; }
 
 @media (max-width: 800px) {
   .section-insight { font-size: 21px; }
   .role-axis, .role-demand-row { grid-template-columns: minmax(130px, 1.2fr) minmax(45px, 1fr) 72px; }
-  .salary-table td, .salary-table tbody th { font-size: 12px; }
-  .salary-table .salary-value strong { font-size: 13px; }
-  .salary-table .market-name { font-size: 11px; margin-left: 4px; }
 }
 @media (max-width: 600px) {
   .overview-insight h2 { font-size: 22px; line-height: 1.45; }
@@ -639,13 +612,6 @@ h2 { font-size: 30px; font-weight: 600; letter-spacing: -.035em; line-height: 1.
   .salary-evidence { padding: 20px; }
   .salary-evidence > p { font-size: 12px; }
   .coverage-labels { font-size: 11px; gap: 14px; line-height: 1.5; }
-  .salary-table .salary-role { padding-right: 105px; font-size: 14px; }
-  .salary-table .salary-observed { padding: 19px 10px; margin: 0 -10px; }
-  .salary-table .salary-value strong { font-size: 14px; }
-  .salary-table .market-code { display: none; }
-  .salary-table .market-name { display: block; font-size: 11px; margin: 0; text-align: right; }
-  .salary-table td[data-label]:not(:first-child)::before { font-size: 11px; }
-  .range-confidence { font-size: 10px; line-height: 1.6; }
 }
 
 .market-radar {

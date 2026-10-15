@@ -10,7 +10,7 @@ async function main() {
     const errors = [];
     page.on("pageerror", (error) => errors.push(error.message));
     const ready = () => page.locator('.snapshot-content[aria-busy="false"]').waitFor();
-    await page.goto(base);
+    await page.goto(`${base}/#overview`);
     await ready();
     await page.getByRole("link", { name: "Explore the market" }).click();
     await page.waitForFunction(() => Math.abs(document.getElementById("workspace-start").getBoundingClientRect().top) < 2);
@@ -142,7 +142,7 @@ async function main() {
     assert.deepEqual(errors, []);
 
     const touch = await browser.newPage({ viewport: { width: 390, height: 900 }, isMobile: true, hasTouch: true });
-    await touch.goto(base);
+    await touch.goto(`${base}/#overview`);
     await touch.locator('.snapshot-content[aria-busy="false"]').waitFor();
     await touch.getByRole("button", { name: new RegExp(`^${third.skill}:`) }).tap();
     assert.equal(await touch.locator(".radar-inspector h3").innerText(), third.skill);

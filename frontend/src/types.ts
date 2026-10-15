@@ -80,6 +80,17 @@ export interface SalaryGroup {
   median_midpoint_local: number | null;
 }
 
+export type SalaryExperience = "all" | "noExperience";
+export interface SalaryExample {
+  market: string;
+  role_family: string;
+  currency: string;
+  salary_from: number | null;
+  salary_to: number | null;
+  experience: string | null;
+  skills: string[];
+}
+
 export interface ExchangeRates {
   date: string;
   source: string;

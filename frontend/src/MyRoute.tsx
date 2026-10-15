@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import RoleCompare from "./RoleCompare";
+import CareerExplorer from "./CareerExplorer";
 import { useLanguage } from "./i18n";
 import type { MarketCode, RoleCode, SkillsResponse, TaxonomyCategory } from "./types";
 
@@ -20,15 +21,19 @@ interface MyRouteProps {
   skills: SkillsResponse | null;
   observedDate: string;
   loading: boolean;
+  dataError: boolean;
+  onRetry: () => void;
+  onAsk: () => void;
   onMarketChange: (market: MarketCode | "all") => void;
   onRoleChange: (role: RoleCode | "all") => void;
   onCompareSkill: (skill: string) => void;
 }
 
-export default function MyRoute({ markets, taxonomy, market, role, skills, observedDate, loading, onMarketChange, onRoleChange, onCompareSkill }: MyRouteProps) {
+export default function MyRoute({ markets, taxonomy, market, role, skills, observedDate, loading, dataError, onRetry, onAsk, onMarketChange, onRoleChange, onCompareSkill }: MyRouteProps) {
   const { t } = useLanguage();
   const [knownSkills, setKnownSkills] = useState<string[]>(readKnownSkills);
   const [showAllSkills, setShowAllSkills] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const chosenMarket = market === "all" ? t("all markets") : markets.find((item) => item.value === market)?.label ?? market;
   const marketContext = market === "all" ? t("across all markets") : t("in {market}", { market: chosenMarket });
   const chosenRole = taxonomy.flatMap((item) => item.roles).find((item) => item.code === role)?.label;
@@ -50,12 +55,17 @@ export default function MyRoute({ markets, taxonomy, market, role, skills, obser
   }
 
   return <section className="my-route" id="route" aria-labelledby="route-heading">
-    <div className="route-heading">
-      <div><h2 id="route-heading">{t("My route")}</h2><p>{t("Compare roles across all markets or choose a country. Then mark skills you know and explore frequent mentions for your role.")}</p></div>
-      <span>{t("Observed {date} · HeadHunter", { date: observedDate })}</span>
-    </div>
+    <CareerExplorer markets={markets} market={market} onMarketChange={onMarketChange} onExploreRole={(code) => {
+      setShowAdvanced(true);
+      onRoleChange(code);
+      requestAnimationFrame(() => document.getElementById("advanced-route-title")?.focus());
+    }} />
 
-    <div className="route-layout">
+    <details className="route-advanced" open={showAdvanced} onToggle={(event) => setShowAdvanced(event.currentTarget.open)}>
+    <summary id="advanced-route-title">{t("Already know a role? Explore all ten")}</summary>
+    <button type="button" className="career-link" id="route-ask" onClick={onAsk}>{t("Ask Mr. Scope about vacancies")}</button>
+    <p className="career-note">{t("Compare roles across all markets or choose a country. Then mark skills you know and explore frequent mentions for your role.")} {t("Observed {date} · HeadHunter", { date: observedDate })}</p>
+    {showAdvanced && <div className="route-layout">
       <div className="route-inputs">
         <h3>{t("Your direction")}</h3>
         <div className="route-selects">
@@ -84,7 +94,8 @@ export default function MyRoute({ markets, taxonomy, market, role, skills, obser
 
       <div className="route-output">
         {role === "all" ? <RoleCompare key={market} market={market} marketLabel={chosenMarket} observedDate={observedDate} onChooseRole={onRoleChange} />
-          : loading || !skills ? <div className="route-empty" role="status"><h3>{t("Reading the snapshot…")}</h3><p>{t("Checking {role} vacancies {market}.", { role: chosenRole ?? "", market: marketContext })}</p></div>
+          : dataError ? <div className="route-empty" role="alert"><h3>{t("Skill evidence unavailable")}</h3><p>{t("The exercises are still available. Retry the snapshot to explore skill mentions.")}</p><button className="career-link" type="button" onClick={onRetry}>{t("Retry evidence")}</button></div>
+            : loading || !skills ? <div className="route-empty" role="status"><h3>{t("Reading the snapshot…")}</h3><p>{t("Checking {role} vacancies {market}.", { role: chosenRole ?? "", market: marketContext })}</p></div>
             : skills.vacancy_denominator === 0 ? <div className="route-empty"><h3>{t("No route from this sample yet.")}</h3><p>{t("No reviewed {role} vacancies matched {market} on HeadHunter. Try another market or role; this is not evidence that no one is hiring.", { role: chosenRole ?? "", market: marketContext })}</p></div>
               : items.length === 0 ? <div className="route-empty"><h3>{t("No classified skill signals.")}</h3><p>{t("There are {count} matching vacancies, but none mention a skill in the current dictionary.", { count: skills.vacancy_denominator })}</p></div>
                 : <>
@@ -100,6 +111,7 @@ export default function MyRoute({ markets, taxonomy, market, role, skills, obser
                   <p className="route-method">{t("Ranked by explicit mentions in this snapshot. A mention is not a job requirement or a measure of your fit.")} {market === "all" && t("The combined sample mixes countries unevenly. ")}{t("The snapshot was observed {date}.", { date: observedDate })}</p>
                 </>}
       </div>
-    </div>
+    </div>}
+    </details>
   </section>;
 }

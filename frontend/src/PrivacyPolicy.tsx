@@ -11,7 +11,9 @@ export default function PrivacyPolicy() {
     try {
       window.localStorage.removeItem("skillscope-theme");
       window.localStorage.removeItem("skillscope-known-skills");
+      window.localStorage.removeItem("skillscope-career-route");
       window.localStorage.removeItem("skillscope-language");
+      window.localStorage.removeItem("skillscope-sound");
       setCleared(true);
     } catch {
       setCleared(false);
@@ -28,7 +30,7 @@ export default function PrivacyPolicy() {
       <p className="legal-kicker">{t("SkillScope / Site information")}</p>
       <h1>{t("Privacy & storage")}</h1>
       <p className="legal-lead">{t("SkillScope is a personal project by Arsen. For privacy questions or requests, email")} <a href="mailto:arsenbektemirov01@gmail.com">arsenbektemirov01@gmail.com</a>.</p>
-      <p className="legal-date">{t("Last updated: 11 October 2026")}</p>
+      <p className="legal-date">{t("Last updated: 14 October 2026")}</p>
       <div className="legal-content">
         <section>
           <h2>{t("What reaches the server")}</h2>
@@ -37,7 +39,7 @@ export default function PrivacyPolicy() {
         </section>
         <section>
           <h2>{t("What stays in your browser")}</h2>
-          <p>{t("SkillScope does not set cookies or use analytics or advertising scripts. Your theme, language and skills marked in My route are saved in this browser. Marked skills are not sent to the server.")}</p>
+          <p>{t("SkillScope does not set cookies or use analytics or advertising scripts. Your theme, language, sound preference, marked skills, practice drafts and reflections are saved in this browser. Practice drafts and reflections are not sent to the server or AI. Downloaded plans are files you control.")}</p>
           <button className="legal-clear" type="button" onClick={clearPreferences}>{t("Clear saved preferences")}</button>
           <p className="legal-feedback" role="status">{cleared ? t("Saved SkillScope preferences cleared. Reload to reset the theme and language.") : ""}</p>
         </section>

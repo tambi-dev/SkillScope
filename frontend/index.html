@@ -5,23 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Evidence-led job market intelligence for IT roles across Central Asia."
+      content="Compare IT directions, try practical exercises and choose what to learn next, with vacancy evidence from selected markets."
     />
-    <meta name="theme-color" content="#f6f6ee" />
+    <meta name="theme-color" content="#111c19" />
     <script>
       (() => {
         let savedTheme;
         try { savedTheme = localStorage.getItem("skillscope-theme"); } catch { /* Storage can be unavailable. */ }
         try { document.documentElement.lang = localStorage.getItem("skillscope-language") === "ky" ? "ky" : "en"; } catch { /* Storage can be unavailable. */ }
-        const theme = savedTheme === "light" || savedTheme === "dark"
-          ? savedTheme
-          : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        const theme = savedTheme === "light" ? "light" : "dark";
         document.documentElement.dataset.theme = theme;
         document.querySelector('meta[name="theme-color"]').content = theme === "dark" ? "#111c19" : "#f6f6ee";
       })();
     </script>
     <link rel="icon" type="image/svg+xml" href="/src/assets/favicon.svg" />
-    <title>SkillScope — IT market intelligence</title>
+    <title>SkillScope — Find your IT direction</title>
   </head>
   <body>
     <div id="root"></div>

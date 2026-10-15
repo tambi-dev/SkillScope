@@ -137,23 +137,10 @@
 :root[data-theme="dark"] .salary-evidence > p,
 :root[data-theme="dark"] .coverage-labels { color: #c9dbc4; }
 :root[data-theme="dark"] .coverage-labels strong { color: #f0f5e9; }
-:root[data-theme="dark"] .salary-table thead { background: #284334; }
-:root[data-theme="dark"] .salary-table thead th { color: #eaf1e8; border-color: var(--line); }
-:root[data-theme="dark"] .salary-table td,
-:root[data-theme="dark"] .salary-table tbody th,
-:root[data-theme="dark"] .salary-table tbody tr[data-market-start="true"] > * { border-color: var(--line); }
-:root[data-theme="dark"] .salary-table .salary-observed,
-:root[data-theme="dark"] .salary-table .salary-partial { background: #20372c; }
-:root[data-theme="dark"] .salary-table .salary-value { background: #2a4835; }
-:root[data-theme="dark"] .salary-table .salary-value strong { color: #e2f2bd; }
 :root[data-theme="dark"] .salary-currency-switch button[aria-pressed="true"] { background: #315a40; color: #e2f2bd; }
-:root[data-theme="dark"] .salary-original { color: #c9dbc4; }
-:root[data-theme="dark"] .salary-table tbody tr:hover { background: #294236; }
-:root[data-theme="dark"] .salary-table tbody tr:hover .salary-value { background: #355840; }
 :root[data-theme="dark"] .market-code { color: #d9ebcc; background: #31543a; }
 :root[data-theme="dark"] .market-code.market-kz { color: #d6e7f5; background: #304758; }
 :root[data-theme="dark"] .market-code.market-uz { color: #f0dfb8; background: #514331; }
-:root[data-theme="dark"] .range-confidence { color: #ead39d; }
 
 :root[data-theme="dark"] .sample-notice { color: #f4e3bd; background: #3b3223; }
 :root[data-theme="dark"] .sample-notice button { color: #f2db9e; }
@@ -164,14 +151,12 @@
 :root[data-theme="dark"] .action-button { color: #183527; background: var(--lime); }
 :root[data-theme="dark"] .action-button:hover { background: #e6f5ab; }
 
-@media (max-width: 600px) {
-  :root[data-theme="dark"] .salary-table tbody tr { border-color: var(--line); }
-}
+
 
 @media (prefers-reduced-motion: no-preference) {
   :root, .app-shell, .site-header, .workspace-controls, .dashboard-tabs,
   .kpi-grid, .experience-profile, .field-coverage, .salary-context,
-  .salary-evidence, .salary-table thead, .salary-table td,
+  .salary-evidence,
   .skill-matrix thead, .skill-matrix td, .methodology-panel,
   .sample-notice, .error-banner, .market-radar, .role-chart {
     transition: background-color 220ms ease, color 220ms ease, border-color 220ms ease;

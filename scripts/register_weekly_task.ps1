@@ -21,7 +21,7 @@ $action = New-ScheduledTaskAction `
     -Execute $python `
     -Argument "`"$runner`"" `
     -WorkingDirectory $projectRoot
-$trigger = New-ScheduledTaskTrigger -Weekly -WeeksInterval 1 -DaysOfWeek Monday -At "9:00AM"
+$trigger = New-ScheduledTaskTrigger -Weekly -WeeksInterval 1 -DaysOfWeek Sunday -At "9:00AM"
 $principal = New-ScheduledTaskPrincipal `
     -UserId ([Security.Principal.WindowsIdentity]::GetCurrent().Name) `
     -LogonType Interactive `
@@ -40,5 +40,5 @@ Register-ScheduledTask `
     -Description "Weekly SkillScope HeadHunter audit, collection and local recovery copy." `
     -Force | Out-Null
 
-Write-Output "Registered '$taskName' for Mondays at 09:00 local time."
+Write-Output "Registered '$taskName' for Sundays at 09:00 local time."
 Write-Output "The task runs only while this Windows user is logged in."

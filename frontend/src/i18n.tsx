@@ -1,9 +1,44 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { careerKyrgyz } from "./careerTranslations";
 
 type Language = "en" | "ky";
 type Values = Record<string, string | number>;
 
 const kyrgyz: Record<string, string> = {
+  ...careerKyrgyz,
+  "Compare published salaries, then open real examples to see their experience requirements and skill mentions.": "Жарыяланган айлыктарды салыштырып, тажрыйба талаптарын жана аталган көндүмдөрдү чыныгы мисалдардан караңыз.",
+  "Experience requirements": "Тажрыйба талаптары",
+  "All experience levels": "Бардык тажрыйба деңгээлдери",
+  "Only vacancies explicitly marked no experience required. A Junior title alone is not enough.": "Тажрыйба талап кылынбайт деп так көрсөтүлгөн вакансиялар гана. Аталыштагы Junior сөзү жетишсиз.",
+  "Loading salaries for this experience group…": "Бул тажрыйба тобунун айлыктары жүктөлүүдө…",
+  "Salary data could not load.": "Айлык маалыматтары жүктөлгөн жок.",
+  "No published salaries from vacancies explicitly asking for no experience in this selection.": "Бул тандоодо тажрыйбасыз талапкерлер үчүн айлыгы көрсөтүлгөн вакансиялар жок.",
+  "Compare all experience levels": "Бардык тажрыйба деңгээлдерин салыштыруу",
+  "Both limits listed · medians": "Эки чек тең көрсөтүлгөн · медианалар",
+  "Minimum only · median": "Төмөнкү чек гана · медиана",
+  "Maximum only · median": "Жогорку чек гана · медиана",
+  "View vacancy examples": "Вакансия мисалдарын көрүү",
+  "Loading vacancy examples…": "Вакансия мисалдары жүктөлүүдө…",
+  "Examples could not load.": "Мисалдар жүктөлгөн жок.",
+  "No published examples for this selection.": "Бул тандоо үчүн жарыяланган мисалдар жок.",
+  "Anonymised vacancies from this snapshot. Examples show original published amounts, not a ranking or a prediction.": "Бул жыйнактагы жеке маалыматы алынган вакансиялар. Мисалдарда баштапкы суммалар көрсөтүлөт; алар рейтинг же божомол эмес.",
+  "Vacancy example {number}": "Вакансия мисалы {number}",
+  "1–3 years required": "1–3 жылдык тажрыйба талап кылынат",
+  "3–6 years required": "3–6 жылдык тажрыйба талап кылынат",
+  "More than 6 years required": "6 жылдан ашык тажрыйба талап кылынат",
+  "Experience requirement unavailable": "Тажрыйба талабы белгисиз",
+  "Mentioned skills: {skills}": "Көрсөтүлгөн көндүмдөр: {skills}",
+  "No dictionary-matched skills recorded; this does not mean no skills are required.": "Сөздүккө дал келген көндүмдөр табылган жок; бул көндүмдөр талап кылынбайт дегенди билдирбейт.",
+  "Completion sound": "Тапшырма бүткөндөгү үн",
+  "Sound on": "Үн күйүк",
+  "Sound off": "Үн өчүк",
+  "Based on 1 vacancy": "1 вакансиянын негизинде",
+  "Based on {count} vacancies": "{count} вакансиянын негизинде",
+  "Reported in {currency}": "Баштапкы валюта: {currency}",
+  "Enter to send · Shift+Enter for a new line": "Enter — жөнөтүү · Shift+Enter — жаңы сап",
+  "How to read these figures": "Бул сандарды кантип түшүнүү керек",
+  "These summaries include different experience levels. They are not junior salary expectations.": "Бул жыйынтыктар ар кандай тажрыйба деңгээлдерин камтыйт. Аларды башталгычтын күтүлгөн айлыгы деп түшүнбөңүз.",
+  "Each figure uses only the vacancies counted beneath it. A lower or upper limit is not a complete salary range.": "Ар бир сан анын астында көрсөтүлгөн вакансиялардан гана эсептелет. Төмөнкү же жогорку чек толук айлык акы аралыгы эмес.",
   "Site language": "Сайттын тили",
   "Switch to Kyrgyz": "Кыргызчага өтүү",
   "Switch to English": "Англисчеге өтүү",
@@ -414,8 +449,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     document.documentElement.lang = language;
     document.querySelector('meta[name="description"]')?.setAttribute("content", language === "ky"
-      ? "Борбор Азиядагы IT вакансиялары, көндүмдөр жана айлык акылар тууралуу маалымат."
-      : "Evidence-led job market intelligence for selected IT markets across Central Asia, Georgia and Russia.");
+      ? "IT багыттарын салыштырып, практикалык тапшырманы сынап, кийинки окуу кадамыңызды тандаңыз."
+      : "Compare IT directions, try practical exercises and choose what to learn next, with vacancy evidence from selected markets.");
     try { window.localStorage.setItem("skillscope-language", language); } catch { /* Language still works without storage. */ }
   }, [language]);
 

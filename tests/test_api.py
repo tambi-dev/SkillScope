@@ -237,6 +237,73 @@ class ApiTests(unittest.IsolatedAsyncioTestCase):
         response = await self._get("/api/skills", {"market": "xx"})
         self.assertEqual(response.status_code, 422)
 
+    async def test_salary_experience_filter_uses_explicit_requirements(self) -> None:
+        records = [
+            {"market": "ru", "role_family": "data_analyst", "review_decision": "included",
+             "seniority": "Junior", "experience": experience, "salary_currency": "RUR",
+             "salary_from": lower, "salary_to": lower + 100}
+            for experience, lower in (("noExperience", 100), ("between1And3", 500), (None, 900))
+        ]
+        self.data_path.write_text("".join(json.dumps(row) + "\n" for row in records))
+        filtered = (await self._get("/api/salaries", {"experience": "noExperience"})).json()
+        self.assertEqual(len(filtered), 1)
+        self.assertEqual(filtered[0]["included_vacancies"], 1)
+        self.assertEqual(filtered[0]["median_range_from_local"], 100)
+        all_rows = (await self._get("/api/salaries")).json()
+        self.assertEqual(all_rows[0]["included_vacancies"], 3)
+        invalid = await self._get("/api/salaries", {"experience": "Junior"})
+        self.assertEqual(invalid.status_code, 422)
+
+    async def test_salary_currency_alias_keeps_undisclosed_records_in_denominator(self) -> None:
+        records = [
+            {"market": "ru", "role_family": "data_analyst", "review_decision": "included",
+             "salary_currency": currency, "salary_from": lower, "salary_to": upper}
+            for currency, lower, upper in (("RUR", 100, 200), ("RUB", 200, 300), (None, None, None))
+        ]
+        self.data_path.write_text("".join(json.dumps(row) + "\n" for row in records))
+        rows = (await self._get("/api/salaries")).json()
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["currency"], "RUB")
+        self.assertEqual(rows[0]["included_vacancies"], 3)
+        self.assertEqual(rows[0]["vacancies_with_reported_salary"], 2)
+
+    async def test_salary_examples_are_actual_filtered_records_without_identity(self) -> None:
+        records = [
+            {"market": "ru", "role_family": "data_analyst", "review_decision": decision,
+             "experience": experience, "salary_currency": currency,
+             "salary_from": lower, "salary_to": upper, "skills_normalized": ["SQL"],
+             "vacancy_id": "private", "title": "Private title", "employer": "Private company",
+             "description": "Private text", "url": "https://example.com/private"}
+            for decision, experience, currency, lower, upper in (
+                ("included", "noExperience", "RUR", 100, 200),
+                ("included", "noExperience", "RUB", 150, None),
+                ("included", "noExperience", "RUR", None, 250),
+                ("included", "between1And3", "RUR", 500, 600),
+                ("included", None, "RUR", 700, 800),
+                ("included", "noExperience", "USD", 1, 2),
+                ("excluded", "noExperience", "RUR", 900, 1000),
+            )
+        ]
+        self.data_path.write_text("".join(json.dumps(row) + "\n" for row in records))
+        query = {"market": "ru", "role": "data_analyst", "currency": "RUB",
+                 "experience": "noExperience"}
+        response = await self._get("/api/salary-examples", query)
+        self.assertEqual(response.status_code, 200)
+        examples = response.json()
+        self.assertEqual([(row["salary_from"], row["salary_to"]) for row in examples],
+                         [(100, 200), (150, None), (None, 250)])
+        self.assertTrue(all(row["experience"] == "noExperience" for row in examples))
+        self.assertTrue(all(row["currency"] == "RUB" and row["skills"] == ["SQL"]
+                            for row in examples))
+        self.assertNotIn("private", json.dumps(examples).lower())
+        for key in ("vacancy_id", "title", "employer", "url", "description"):
+            self.assertTrue(all(key not in row for row in examples))
+        limited = await self._get("/api/salary-examples", {**query, "limit": "1"})
+        self.assertEqual(len(limited.json()), 1)
+        for invalid in ({"limit": "6"}, {"role": "unknown"}):
+            response = await self._get("/api/salary-examples", {**query, **invalid})
+            self.assertEqual(response.status_code, 422)
+
     async def test_new_markets_return_empty_samples_without_error(self) -> None:
         for market in ("tj", "tm", "ge", "ru"):
             with self.subTest(market=market):

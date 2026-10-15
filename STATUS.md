@@ -1,10 +1,11 @@
 # SkillScope — project status
 
-Last updated: 2026-10-12
+Last updated: 2026-10-14
 
 ## Current milestone
 
-Seven-market collection, dated demo snapshots and a weekly local refresh workflow.
+Beginner exploration: three field explanations, guided in-browser tasks and
+a saved next learning step, with optional current vacancy evidence.
 
 ## Scope
 
@@ -20,6 +21,21 @@ Seven-market collection, dated demo snapshots and a weekly local refresh workflo
 
 ## Development history
 
+- Added salary-only experience filtering with an all-level default and
+  on-demand anonymised vacancy examples. Examples share the summary scope and
+  preserve original salary amounts; the API whitelists public fields and normalises
+  RUB/RUR aliases. See `docs/salary-guide.md` for method and limits.
+- Added restrained task completion feedback with reduced-motion support and optional
+  local sound. Country ordering now follows the overall snapshot's vacancy counts;
+  salaries use one table with all figures visible and a vacancy-count caption beneath
+  each amount. Dark theme and sound default to on, remembering manual choices;
+  Mr. Scope sends on Enter and uses Shift+Enter for new lines.
+- Added a beginner route with three plain-language field guides, everyday
+  examples and short in-browser tasks. It shows one stage at a time and keeps
+  optional vacancy evidence behind a disclosure. The earlier interest quiz and
+  download-first exercises were removed after feedback about beginner clarity.
+- Task drafts and reflections stay local. Existing saved reflections migrate to
+  the new flow. Counts and entry signals follow the chosen market and snapshot.
 - Python package scaffold and project configuration.
 - Market and search-query configuration.
 - HeadHunter API client with pagination, retries and `429`/`5xx` handling.
@@ -134,7 +150,7 @@ Seven-market collection, dated demo snapshots and a weekly local refresh workflo
 ## Next actions
 
 1. Reprocess the two older raw collections to backfill analytical history fields.
-2. Register the weekly task where collection runs; monitor runs and local backups.
+2. Monitor weekly collections and local backups; the 12 October run succeeded.
 3. Add trend views after enough comparable collections exist; show sample sizes.
 4. Reconsider a salary model only after complete salary observations grow substantially.
 
@@ -149,6 +165,7 @@ pnpm --dir frontend test
 pnpm --dir frontend build
 pnpm --dir frontend test:browser
 node frontend/tests/radar-interactions.cjs
+node frontend/tests/career-route.cjs
 ```
 
 ## Guidance for a new chat

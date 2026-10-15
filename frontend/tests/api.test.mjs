@@ -1,6 +1,6 @@
 import { afterEach, test } from "node:test";
 import assert from "node:assert/strict";
-import { getOverview, getRoles, getSkills, getSalaries, getSeniority, getTaxonomy } from "../src/api.ts";
+import { getOverview, getRoles, getSkills, getSalaries, getSalaryExamples, getSeniority, getTaxonomy } from "../src/api.ts";
 
 const originalFetch = globalThis.fetch;
 afterEach(() => { globalThis.fetch = originalFetch; });
@@ -38,6 +38,20 @@ test("taxonomy and role-demand endpoints are available to the dashboard", async 
   const query = new URL(urls[1], "http://test").searchParams;
   assert.equal(query.get("market"), "uz");
   assert.equal(query.get("category"), "software_engineering");
+});
+
+test("salary summaries and examples retain the same explicit experience and currency scope", async () => {
+  const urls = [];
+  globalThis.fetch = async (url) => { urls.push(new URL(url, "http://test")); return Response.json([]); };
+  await getSalaries("ru", "data_analyst", "data_ai", undefined, "noExperience");
+  await getSalaryExamples({ market: "ru", role_family: "data_analyst", currency: "RUB" }, "noExperience");
+  for (const url of urls) {
+    assert.equal(url.searchParams.get("experience"), "noExperience");
+    assert.equal(url.searchParams.get("market"), "ru");
+    assert.equal(url.searchParams.get("role"), "data_analyst");
+  }
+  assert.equal(urls[1].pathname, "/api/salary-examples");
+  assert.equal(urls[1].searchParams.get("currency"), "RUB");
 });
 
 test("server errors reject rather than becoming empty charts", async () => {

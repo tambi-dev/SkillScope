@@ -69,6 +69,16 @@ class ExchangeRates(BaseModel):
     rates_per_usd: dict[str, float]
 
 
+class SalaryExample(BaseModel):
+    market: str
+    role_family: str
+    currency: str
+    salary_from: float | None
+    salary_to: float | None
+    experience: str | None
+    skills: list[str]
+
+
 class MarketSalaryCoverage(BaseModel):
     currency: str | None
     included_vacancies: int
@@ -215,6 +225,17 @@ def _skill_counts(records: list[dict[str, Any]]) -> tuple[int, Counter[str]]:
     for record in records:
         counts.update(set(record.get("skills_normalized") or []))
     return len(records), counts
+
+
+def _salary_currency(record: dict[str, Any]) -> str:
+    currency = str(record.get("salary_currency") or MARKET_CURRENCIES.get(
+        str(record.get("market")), "unknown"
+    ))
+    return "RUB" if currency == "RUR" else currency
+
+
+def _salary_number(value: Any) -> float | None:
+    return float(value) if isinstance(value, int | float) and not isinstance(value, bool) else None
 
 
 def create_app(data_path: Path | None = None) -> FastAPI:
@@ -499,21 +520,21 @@ def create_app(data_path: Path | None = None) -> FastAPI:
         market: Market | None = None,
         role: str | None = None,
         category: str | None = None,
+        experience: Literal["noExperience"] | None = None,
     ) -> list[SalaryGroup]:
         _validate_filters(role, category, role_codes, category_codes)
         records = _included(
             _read_records(source_path), market, role, category, category_by_role
         )
+        if experience is not None:
+            records = [row for row in records if row.get("experience") == experience]
         groups: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
         for record in records:
             market_code = str(record.get("market") or "unknown")
             groups[
                 (
                     market_code,
-                    str(
-                        record.get("salary_currency")
-                        or MARKET_CURRENCIES.get(market_code, "unknown")
-                    ),
+                    _salary_currency(record),
                     str(record.get("role_family") or "Unknown"),
                 )
             ].append(record)
@@ -573,6 +594,50 @@ def create_app(data_path: Path | None = None) -> FastAPI:
                 )
             )
         return result
+
+    @app.get("/api/salary-examples", response_model=list[SalaryExample], tags=["salary"])
+    def salary_examples(
+        market: Market,
+        role: str,
+        currency: str = Query(min_length=3, max_length=3, pattern="^[A-Z]{3}$"),
+        experience: Literal["noExperience"] | None = None,
+        limit: int = Query(default=3, ge=1, le=5),
+    ) -> list[SalaryExample]:
+        _validate_filters(role, None, role_codes, category_codes)
+        currency = "RUB" if currency == "RUR" else currency
+        records = [
+            row for row in _included(
+                _read_records(source_path), market, role, None, category_by_role
+            )
+            if _salary_currency(row) == currency
+            and (experience is None or row.get("experience") == experience)
+            and (_salary_number(row.get("salary_from")) is not None
+                 or _salary_number(row.get("salary_to")) is not None)
+        ]
+        # Show one actual record per available format, then fill from snapshot order.
+        selected: list[int] = []
+        seen_formats: set[tuple[bool, bool]] = set()
+        for index, row in enumerate(records):
+            kind = (
+                _salary_number(row.get("salary_from")) is not None,
+                _salary_number(row.get("salary_to")) is not None,
+            )
+            if kind not in seen_formats:
+                seen_formats.add(kind)
+                selected.append(index)
+        selected.extend(index for index in range(len(records)) if index not in selected)
+        return [
+            SalaryExample(
+                market=market,
+                role_family=role,
+                currency=currency,
+                salary_from=_salary_number(records[index].get("salary_from")),
+                salary_to=_salary_number(records[index].get("salary_to")),
+                experience=records[index].get("experience"),
+                skills=[skill for skill in (records[index].get("skills_normalized") or [])
+                        if isinstance(skill, str)][:5],
+            ) for index in selected[:limit]
+        ]
 
     @app.get("/api/seniority", response_model=SeniorityResponse, tags=["seniority"])
     def seniority(

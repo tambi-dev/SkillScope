@@ -20,9 +20,14 @@ async function main() {
     const selectTab = async (label) => {
       await page.getByRole("tab", { name: label, exact: true }).click();
       await page.getByRole("tab", { name: label, exact: true, selected: true }).waitFor();
+      if (label === "Salaries") await page.getByRole("combobox", { name: "Experience requirements", exact: true }).selectOption("all");
     };
     let apiRequests = 0;
-    page.on("request", (request) => { if (new URL(request.url()).pathname.startsWith("/api/")) apiRequests++; });
+    page.on("request", (request) => {
+      const url = new URL(request.url());
+      const salaryDetail = url.pathname === "/api/salaries" && url.searchParams.has("experience");
+      if (url.pathname.startsWith("/api/") && !salaryDetail && url.pathname !== "/api/exchange-rates") apiRequests++;
+    });
     const expectedCount = async (market, role = "all", category = "all") => {
       const query = new URLSearchParams();
       if (market !== "all") query.set("market", market);
@@ -36,8 +41,9 @@ async function main() {
       assert.equal((await page.locator(".kpi-primary .kpi-value").textContent()).trim(), `${expected} vacancies`);
     };
 
-    await page.goto(base);
+    await page.goto(`${base}/#overview`);
     await ready();
+    await page.getByRole("button", { name: "Switch to light theme" }).click();
     const baselineSkills = await (await page.request.get(`${base}/api/skills?limit=8`)).json();
     const russianSkills = await (await page.request.get(`${base}/api/skills?market=ru&limit=100`)).json();
     assert.match(await page.locator(".combined-scope").innerText(), new RegExp(`Russia: ${russianSkills.vacancy_denominator} of ${baselineSkills.vacancy_denominator}`));
@@ -84,6 +90,7 @@ async function main() {
     await page.getByRole("tab", { name: "Overview", selected: true }).waitFor();
     assert.equal(await page.locator(".radar-inspector h3").innerText(), "SQL");
     await selectTab("My route");
+    await page.locator(".route-advanced > summary").click();
     assert.equal(await page.getByRole("combobox", { name: "Route market" }).inputValue(), "all");
     await page.getByRole("heading", { name: "Compare two roles" }).waitFor();
     const globalRole = await page.getByRole("combobox", { name: "Compare role 1" }).inputValue();
@@ -233,16 +240,16 @@ async function main() {
     await page.getByRole("combobox", { name: "Market", exact: true }).selectOption("all");
     await ready();
     await selectTab("Salaries");
-    assert.equal(await page.locator(".range-confidence").count(), await page.locator(".salary-observed").count(), "Every available salary must carry its sample size");
+    assert.equal(await page.locator(".salary-figure").count(), await page.locator(".salary-sample").count(), "Every salary summary must carry its own sample size");
     const salaryGroups = await (await page.request.get(`${base}/api/salaries`)).json();
     const salaryTotals = salaryGroups.reduce((total, row) => ({
       reported: total.reported + row.vacancies_with_reported_salary,
       included: total.included + row.included_vacancies,
       complete: total.complete + row.complete_salary_ranges,
     }), { reported: 0, included: 0, complete: 0 });
-    assert.equal(await page.locator(".salary-table tbody tr").count(), salaryGroups.filter((row) => row.vacancies_with_reported_salary > 0).length);
-    assert.equal(await page.locator('.salary-table tbody tr').evaluateAll((rows) => rows.every((row) => Number(row.querySelector('[data-label="With salary / all"]').textContent.split(" /")[0]) > 0)), true);
-    assert.equal(await page.locator('.salary-table').textContent().then((text) => text.includes('NaN')), false);
+    assert.equal(await page.locator(".salary-summary-table tbody tr").count(), salaryGroups.filter((row) => row.vacancies_with_reported_salary > 0).length);
+    assert.equal(await page.locator('.salary-summary-table tbody tr').evaluateAll((rows) => rows.every((row) => Number(row.querySelector(".salary-sample").textContent.match(/\d+/)[0]) > 0)), true);
+    assert.equal(await page.locator('.salary-summary-table').allTextContents().then((texts) => texts.join(" ").includes('NaN')), false);
     assert.equal(await page.locator(".coverage-meter").getAttribute("aria-label"), `${salaryTotals.complete} complete ranges, ${salaryTotals.reported - salaryTotals.complete} incomplete ranges, ${salaryTotals.included - salaryTotals.reported} undisclosed out of ${salaryTotals.included} vacancies`);
     const screenshots = path.resolve(__dirname, "../../docs/screenshots");
     fs.mkdirSync(screenshots, { recursive: true });
@@ -274,7 +281,7 @@ async function main() {
         await page.evaluate(() => { const anchor = document.getElementById("workspace-start"); window.scrollTo(0, anchor.getBoundingClientRect().top + window.scrollY); });
         await page.screenshot({ path: path.resolve(__dirname, `../../artifacts/clarity-${tab.id}-${width}.png`) });
       }
-      const clippedCells = await page.locator(".tab-panel:not([hidden]) .skill-matrix td, .tab-panel:not([hidden]) .salary-table td, .tab-panel:not([hidden]) .radar-signal .signal-name").evaluateAll((elements) => elements.filter((element) => element.scrollWidth > element.clientWidth + 1).length);
+      const clippedCells = await page.locator(".tab-panel:not([hidden]) .skill-matrix td, .tab-panel:not([hidden]) .salary-summary-table td, .tab-panel:not([hidden]) .radar-signal .signal-name").evaluateAll((elements) => elements.filter((element) => element.scrollWidth > element.clientWidth + 1).length);
       assert.equal(clippedCells, 0, `Clipped values or signals at ${width}px`);
       if (tab.id === "overview") {
         const escapedLabels = await page.locator(".radar-signal .signal-name").evaluateAll((elements) => elements.filter((element) => {
@@ -320,10 +327,10 @@ async function main() {
     assert.equal(await page.locator("html").getAttribute("data-theme"), "dark", "Saved theme must survive reload");
     await page.getByRole("button", { name: "Switch to light theme" }).click();
     assert.equal(await page.evaluate(() => localStorage.getItem("skillscope-theme")), "light");
-    const preferredDark = await browser.newContext({ colorScheme: "dark" });
+    const preferredDark = await browser.newContext({ colorScheme: "light" });
     const freshPage = await preferredDark.newPage();
     await freshPage.goto(base);
-    assert.equal(await freshPage.locator("html").getAttribute("data-theme"), "dark", "Fresh visits should use the system theme");
+    assert.equal(await freshPage.locator("html").getAttribute("data-theme"), "dark", "Fresh visits default to dark even with a light OS preference");
     await preferredDark.close();
     await page.getByRole("link", { name: "Privacy & storage" }).click();
     await page.getByRole("heading", { name: "Privacy & storage" }).waitFor();
