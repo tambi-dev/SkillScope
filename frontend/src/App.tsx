@@ -44,7 +44,7 @@ function tabFromHash(): DashboardTab {
   const hash = window.location.hash.slice(1);
   if (hash === "explore") return "overview";
   if (hash === "seniority" || hash === "skills") return "roles";
-  return dashboardTabs.find((tab) => tab.id === hash)?.id ?? "route";
+  return dashboardTabs.find((tab) => tab.id === hash)?.id ?? "overview";
 }
 
 function scrollToWorkspace() {
@@ -320,7 +320,7 @@ function App() {
     }}>
       <a className="skip-link" href={activeTab === "route" ? "#route" : "#explore"}>{t(activeTab === "route" ? "Skip to my route" : "Skip to market filters")}</a>
       <header className="site-header">
-        <a className="brand" href="#route" aria-label={t("SkillScope home")}><span className="brand-mark">S</span><span>SkillScope<span className="brand-period">.</span></span></a>
+        <a className="brand" href="#overview" aria-label={t("SkillScope home")}><span className="brand-mark">S</span><span>SkillScope<span className="brand-period">.</span></span></a>
         <div className="header-actions">
           <span className="header-region">{t("Central Asia & beyond")}</span>
           <LanguageSwitch />

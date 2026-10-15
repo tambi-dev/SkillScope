@@ -41,8 +41,10 @@ async function main() {
       assert.equal((await page.locator(".kpi-primary .kpi-value").textContent()).trim(), `${expected} vacancies`);
     };
 
-    await page.goto(`${base}/#overview`);
+    await page.goto(`${base}/`);
     await ready();
+    await page.getByRole("tab", { name: "Overview", exact: true, selected: true }).waitFor();
+    assert.equal(await page.getByRole("link", { name: "SkillScope home", exact: true }).getAttribute("href"), "#overview");
     await page.getByRole("button", { name: "Switch to light theme" }).click();
     const baselineSkills = await (await page.request.get(`${base}/api/skills?limit=8`)).json();
     const russianSkills = await (await page.request.get(`${base}/api/skills?market=ru&limit=100`)).json();
