@@ -1,6 +1,6 @@
 # SkillScope — project status
 
-Last updated: 2026-10-14
+Last updated: 2026-10-25
 
 ## Current milestone
 
@@ -137,22 +137,21 @@ a saved next learning step, with optional current vacancy evidence.
 
 ## Current packaged snapshot
 
-- The 2026-10-12 demo has 2,541 candidates and 2,297 included vacancies across ten
+- The 2026-10-25 demo has 2,434 candidates and 2,191 included vacancies across ten
   roles. It is a dated, identity-stripped export of HeadHunter search results.
-- Included by market: Kyrgyzstan 15, Kazakhstan 186, Uzbekistan 133, Georgia 38,
-  Russia 1,925, Tajikistan 0 and Turkmenistan 0. Russia makes up 84% of the
+- Included by market: Kyrgyzstan 16, Kazakhstan 157, Uzbekistan 130, Georgia 36,
+  Russia 1,852, Tajikistan 0 and Turkmenistan 0. Russia makes up about 85% of the
   combined sample.
-- By category: Data & AI 693, Software Engineering 637, DevOps & Cloud 406,
-  Cybersecurity 103 and QA 458. There are 263 complete salary ranges.
+- By category: Data & AI 637, Software Engineering 664, DevOps & Cloud 381,
+  Cybersecurity 112 and QA 397. There are 236 complete salary ranges.
 - The 40-vacancy manual review documents the earlier 2026-10-10 collection. It
   does not establish classification accuracy for this newer snapshot.
 
 ## Next actions
 
 1. Reprocess the two older raw collections to backfill analytical history fields.
-2. Monitor weekly collections and local backups; the 12 October run succeeded.
-3. Add trend views after enough comparable collections exist; show sample sizes.
-4. Reconsider a salary model only after complete salary observations grow substantially.
+2. Monitor weekly collections and local backups; the 25 October run succeeded.
+3. Collect user feedback before deciding whether a trend view answers a useful question.
 
 ## Verification
 

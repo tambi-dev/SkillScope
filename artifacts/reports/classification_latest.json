@@ -1,274 +1,271 @@
 {
-  "candidates": 2541,
-  "created_at": "2026-10-12T10:24:43.988746+00:00",
+  "candidates": 2434,
+  "created_at": "2026-10-25T09:56:41.729713+00:00",
   "decision_counts": {
-    "excluded": 244,
-    "included": 2297
+    "excluded": 243,
+    "included": 2191
   },
   "history_update": {
-    "existing_vacancies": 326,
-    "new_vacancies": 1971,
-    "total_tracked": 2340
+    "existing_vacancies": 1865,
+    "new_vacancies": 326,
+    "total_tracked": 3319
   },
   "included_category_counts": {
-    "cybersecurity": 103,
-    "data_ai": 693,
-    "devops_cloud": 406,
-    "qa": 458,
-    "software_engineering": 637
+    "cybersecurity": 112,
+    "data_ai": 637,
+    "devops_cloud": 381,
+    "qa": 397,
+    "software_engineering": 664
   },
   "included_role_counts": {
-    "backend_developer": 288,
-    "bi_analyst": 60,
-    "data_analyst": 384,
-    "data_scientist": 135,
-    "devops_engineer": 406,
-    "frontend_developer": 163,
-    "fullstack_developer": 186,
-    "information_security_specialist": 103,
-    "ml_engineer": 114,
-    "qa_engineer": 458
+    "backend_developer": 316,
+    "bi_analyst": 62,
+    "data_analyst": 342,
+    "data_scientist": 138,
+    "devops_engineer": 381,
+    "frontend_developer": 146,
+    "fullstack_developer": 202,
+    "information_security_specialist": 112,
+    "ml_engineer": 95,
+    "qa_engineer": 397
   },
   "included_seniority_counts": {
-    "Junior": 169,
-    "Middle": 800,
-    "Senior": 505,
-    "Unknown": 823
+    "Junior": 227,
+    "Middle": 726,
+    "Senior": 434,
+    "Unknown": 804
   },
   "included_skill_counts": {
-    ".NET": 95,
-    "AWS": 99,
-    "Angular": 67,
-    "Ansible": 291,
-    "Azure": 77,
-    "C#": 109,
-    "C++": 66,
-    "CI/CD": 791,
+    ".NET": 85,
+    "AWS": 96,
+    "Angular": 56,
+    "Ansible": 268,
+    "Azure": 73,
+    "C#": 97,
+    "C++": 46,
+    "CI/CD": 759,
     "Cypress": 38,
-    "Django": 68,
-    "Docker": 867,
-    "Excel": 221,
-    "FastAPI": 173,
-    "Git": 792,
-    "Go": 47,
-    "Google Cloud": 49,
-    "Grafana": 423,
+    "Django": 87,
+    "Docker": 823,
+    "Excel": 201,
+    "FastAPI": 182,
+    "Git": 766,
+    "Go": 40,
+    "Google Cloud": 45,
+    "Grafana": 387,
     "Helm": 169,
-    "Java": 290,
-    "JavaScript": 306,
-    "Jira": 227,
-    "Kafka": 410,
-    "Kubernetes": 596,
-    "Laravel": 67,
-    "Linux": 660,
-    "Machine Learning": 374,
-    "NestJS": 51,
-    "Node.js": 149,
-    "NumPy": 148,
-    "OWASP": 28,
-    "PHP": 150,
-    "Pandas": 219,
-    "Playwright": 110,
-    "PostgreSQL": 790,
-    "Postman": 187,
-    "Power BI": 193,
-    "Prometheus": 352,
-    "Python": 1105,
-    "REST API": 449,
-    "RabbitMQ": 259,
-    "React": 269,
-    "Redis": 325,
-    "SIEM": 28,
-    "SQL": 1069,
-    "Selenium": 97,
-    "Splunk": 5,
-    "Spring": 47,
-    "Statistics": 82,
+    "Java": 296,
+    "JavaScript": 296,
+    "Jira": 226,
+    "Kafka": 351,
+    "Kubernetes": 554,
+    "Laravel": 64,
+    "Linux": 638,
+    "Machine Learning": 336,
+    "NestJS": 46,
+    "Node.js": 138,
+    "NumPy": 137,
+    "OWASP": 27,
+    "PHP": 159,
+    "Pandas": 205,
+    "Playwright": 113,
+    "PostgreSQL": 754,
+    "Postman": 176,
+    "Power BI": 183,
+    "Prometheus": 326,
+    "Python": 1111,
+    "REST API": 446,
+    "RabbitMQ": 248,
+    "React": 265,
+    "Redis": 321,
+    "SIEM": 34,
+    "SQL": 1048,
+    "Selenium": 89,
+    "Splunk": 4,
+    "Spring": 76,
+    "Statistics": 88,
     "Tableau": 89,
-    "Terraform": 177,
-    "TypeScript": 323,
-    "Vue": 114,
-    "scikit-learn": 104
+    "Terraform": 166,
+    "TypeScript": 312,
+    "Vue": 123,
+    "scikit-learn": 101
   },
-  "included_with_any_skill": 2229,
+  "included_with_any_skill": 2130,
   "market_counts": {
     "ge": {
-      "included": 38
+      "included": 36
     },
     "kg": {
       "excluded": 3,
-      "included": 15
+      "included": 16
     },
     "kz": {
       "excluded": 11,
-      "included": 186
+      "included": 157
     },
     "ru": {
-      "excluded": 224,
-      "included": 1925
+      "excluded": 219,
+      "included": 1852
     },
     "uz": {
-      "excluded": 6,
-      "included": 133
+      "excluded": 10,
+      "included": 130
     }
   },
   "market_summary": [
     {
-      "candidates": 38,
+      "candidates": 36,
       "category_counts": {
         "cybersecurity": 1,
-        "data_ai": 8,
-        "devops_cloud": 4,
-        "qa": 13,
-        "software_engineering": 12
+        "data_ai": 9,
+        "devops_cloud": 7,
+        "qa": 10,
+        "software_engineering": 9
       },
-      "included": 38,
+      "included": 36,
       "market": "ge",
       "role_counts": {
         "backend_developer": 3,
         "bi_analyst": 1,
-        "data_analyst": 1,
-        "devops_engineer": 4,
-        "frontend_developer": 3,
-        "fullstack_developer": 6,
+        "data_analyst": 5,
+        "devops_engineer": 7,
+        "frontend_developer": 1,
+        "fullstack_developer": 5,
         "information_security_specialist": 1,
-        "ml_engineer": 6,
-        "qa_engineer": 13
+        "ml_engineer": 3,
+        "qa_engineer": 10
       },
-      "salary_coverage": 0.2105,
+      "salary_coverage": 0.1667,
       "seniority_counts": {
-        "Junior": 2,
-        "Middle": 5,
-        "Senior": 16,
-        "Unknown": 15
+        "Junior": 3,
+        "Middle": 6,
+        "Senior": 11,
+        "Unknown": 16
       },
-      "with_salary": 8
+      "with_salary": 6
     },
     {
-      "candidates": 18,
+      "candidates": 19,
       "category_counts": {
         "cybersecurity": 1,
-        "data_ai": 4,
-        "devops_cloud": 1,
-        "qa": 1,
-        "software_engineering": 8
+        "data_ai": 5,
+        "devops_cloud": 2,
+        "qa": 4,
+        "software_engineering": 4
       },
-      "included": 15,
+      "included": 16,
       "market": "kg",
       "role_counts": {
-        "backend_developer": 5,
-        "bi_analyst": 2,
-        "data_analyst": 2,
-        "devops_engineer": 1,
+        "backend_developer": 1,
+        "data_analyst": 5,
+        "devops_engineer": 2,
         "frontend_developer": 1,
         "fullstack_developer": 2,
         "information_security_specialist": 1,
-        "qa_engineer": 1
+        "qa_engineer": 4
       },
-      "salary_coverage": 0.5333,
+      "salary_coverage": 0.3125,
       "seniority_counts": {
-        "Junior": 1,
-        "Middle": 8,
-        "Senior": 3,
-        "Unknown": 3
+        "Middle": 12,
+        "Unknown": 4
       },
-      "with_salary": 8
+      "with_salary": 5
     },
     {
-      "candidates": 197,
+      "candidates": 168,
       "category_counts": {
         "cybersecurity": 10,
-        "data_ai": 47,
-        "devops_cloud": 25,
-        "qa": 40,
-        "software_engineering": 64
+        "data_ai": 42,
+        "devops_cloud": 23,
+        "qa": 31,
+        "software_engineering": 51
       },
-      "included": 186,
+      "included": 157,
       "market": "kz",
       "role_counts": {
-        "backend_developer": 33,
-        "bi_analyst": 3,
+        "backend_developer": 23,
+        "bi_analyst": 2,
         "data_analyst": 19,
-        "data_scientist": 12,
-        "devops_engineer": 25,
-        "frontend_developer": 9,
-        "fullstack_developer": 22,
+        "data_scientist": 11,
+        "devops_engineer": 23,
+        "frontend_developer": 5,
+        "fullstack_developer": 23,
         "information_security_specialist": 10,
-        "ml_engineer": 13,
-        "qa_engineer": 40
+        "ml_engineer": 10,
+        "qa_engineer": 31
       },
-      "salary_coverage": 0.2204,
+      "salary_coverage": 0.2484,
       "seniority_counts": {
         "Junior": 8,
-        "Middle": 62,
-        "Senior": 44,
-        "Unknown": 72
+        "Middle": 53,
+        "Senior": 37,
+        "Unknown": 59
       },
-      "with_salary": 41
+      "with_salary": 39
     },
     {
-      "candidates": 2149,
+      "candidates": 2071,
       "category_counts": {
-        "cybersecurity": 80,
-        "data_ai": 592,
-        "devops_cloud": 362,
-        "qa": 374,
-        "software_engineering": 517
+        "cybersecurity": 90,
+        "data_ai": 549,
+        "devops_cloud": 327,
+        "qa": 325,
+        "software_engineering": 561
       },
-      "included": 1925,
+      "included": 1852,
       "market": "ru",
       "role_counts": {
-        "backend_developer": 231,
-        "bi_analyst": 52,
-        "data_analyst": 338,
-        "data_scientist": 120,
-        "devops_engineer": 362,
-        "frontend_developer": 141,
-        "fullstack_developer": 145,
-        "information_security_specialist": 80,
-        "ml_engineer": 82,
-        "qa_engineer": 374
+        "backend_developer": 269,
+        "bi_analyst": 57,
+        "data_analyst": 296,
+        "data_scientist": 123,
+        "devops_engineer": 327,
+        "frontend_developer": 131,
+        "fullstack_developer": 161,
+        "information_security_specialist": 90,
+        "ml_engineer": 73,
+        "qa_engineer": 325
       },
-      "salary_coverage": 0.2769,
+      "salary_coverage": 0.291,
       "seniority_counts": {
-        "Junior": 154,
-        "Middle": 665,
-        "Senior": 413,
-        "Unknown": 693
+        "Junior": 209,
+        "Middle": 592,
+        "Senior": 364,
+        "Unknown": 687
       },
-      "with_salary": 533
+      "with_salary": 539
     },
     {
-      "candidates": 139,
+      "candidates": 140,
       "category_counts": {
-        "cybersecurity": 11,
-        "data_ai": 42,
-        "devops_cloud": 14,
-        "qa": 30,
-        "software_engineering": 36
+        "cybersecurity": 10,
+        "data_ai": 32,
+        "devops_cloud": 22,
+        "qa": 27,
+        "software_engineering": 39
       },
-      "included": 133,
+      "included": 130,
       "market": "uz",
       "role_counts": {
-        "backend_developer": 16,
+        "backend_developer": 20,
         "bi_analyst": 2,
-        "data_analyst": 24,
-        "data_scientist": 3,
-        "devops_engineer": 14,
-        "frontend_developer": 9,
+        "data_analyst": 17,
+        "data_scientist": 4,
+        "devops_engineer": 22,
+        "frontend_developer": 8,
         "fullstack_developer": 11,
-        "information_security_specialist": 11,
-        "ml_engineer": 13,
-        "qa_engineer": 30
+        "information_security_specialist": 10,
+        "ml_engineer": 9,
+        "qa_engineer": 27
       },
-      "salary_coverage": 0.188,
+      "salary_coverage": 0.2154,
       "seniority_counts": {
-        "Junior": 4,
-        "Middle": 60,
-        "Senior": 29,
-        "Unknown": 40
+        "Junior": 7,
+        "Middle": 63,
+        "Senior": 22,
+        "Unknown": 38
       },
-      "with_salary": 25
+      "with_salary": 28
     }
   ],
   "markets": [
@@ -284,11 +281,11 @@
     "history_database": "data\\processed\\vacancy_history.sqlite3",
     "manual_review_csv": "data\\processed\\manual_review_latest.csv",
     "processed_jsonl": "data\\processed\\vacancies_latest.jsonl",
-    "snapshot_jsonl": "data\\processed\\snapshots\\20261012T101701330377Z_strict_ge-kg-kz-ru-tj-tm-uz.jsonl"
+    "snapshot_jsonl": "data\\processed\\snapshots\\20261025T094942275132Z_strict_ge-kg-kz-ru-tj-tm-uz.jsonl"
   },
-  "salary_coverage_included": 0.2677,
+  "salary_coverage_included": 0.2816,
   "schema_version": 5,
   "search_mode": "strict",
-  "source_collection_id": "20261012T101701330377Z",
+  "source_collection_id": "20261025T094942275132Z",
   "warning": "Automatic title rules are scope filters, not ground truth; validate a sample manually before publishing analytical claims."
 }

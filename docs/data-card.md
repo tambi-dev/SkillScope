@@ -18,18 +18,18 @@ This is not a census of any national labour market.
 - Cybersecurity: Information Security Specialist
 - QA: QA Engineer
 
-The packaged 2026-10-12 demo covers all seven configured markets and ten roles.
-The collection found 2,541 candidates; deterministic role rules retained 2,297 and
-excluded 244. Included vacancies by market: Kyrgyzstan 15, Kazakhstan 186,
-Uzbekistan 133, Georgia 38 and Russia 1,925. No configured role matched in
-Tajikistan or Turkmenistan. Only 263 included vacancies have complete salary ranges.
+The packaged 2026-10-25 demo covers all seven configured markets and ten roles.
+The collection processed 2,434 candidates; deterministic role rules retained 2,191
+and excluded 243. Included vacancies by market: Kyrgyzstan 16, Kazakhstan 157,
+Uzbekistan 130, Georgia 36 and Russia 1,852. No configured role matched in
+Tajikistan or Turkmenistan. Only 236 included vacancies have complete salary ranges.
 The demo omits vacancy identity and full text. Its classifications have not been
 manually validated as a representative sample.
 
 The [stratified validation note](validation-2026-10-10.md) documents a 40-vacancy
 manual role review and skill-dictionary coverage check for the earlier 2026-10-10
 five-market collection (338 included vacancies). It does not measure precision or
-recall for the packaged 2026-10-12 demo.
+recall for the packaged 2026-10-25 demo.
 
 ## Known limitations
 

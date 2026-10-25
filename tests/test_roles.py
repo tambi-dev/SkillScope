@@ -78,6 +78,27 @@ class RoleClassificationTests(unittest.TestCase):
         self.assertIsNone(result.role_family)
         self.assertIn("accounting_role", result.reason_codes)
 
+    def test_excludes_reviewed_adjacent_roles(self) -> None:
+        examples = {
+            "Senior Data Engineer (Azure databricks & Devops)": "adjacent_data_engineer_role",
+            "Ведущий разработчик (Fullstack, Backend) / Технический директор": "technical_director_role",
+            "Руководитель направления аудита (кибербезопасность)": "security_management_role",
+            "Руководитель проектов по информационной безопасности": "security_management_role",
+        }
+        for title, reason in examples.items():
+            with self.subTest(title=title):
+                result = classify_role(title)
+                self.assertEqual(result.decision, "excluded")
+                self.assertIn(reason, result.reason_codes)
+        self.assertEqual(
+            classify_role("Руководитель команды ML/Lead ML Engineer").role_family,
+            "ml_engineer",
+        )
+        self.assertEqual(
+            classify_role("Data Engineer / ML Engineer").role_family,
+            "ml_engineer",
+        )
+
     def test_includes_core_internship(self) -> None:
         result = classify_role("Стажёр Data Analyst")
 

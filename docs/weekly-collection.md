@@ -27,7 +27,7 @@ the scheduled task:
 
 The PC must be on and the configured Windows user must be logged in at the
 scheduled time. If Windows misses the start time, `StartWhenAvailable` runs the
-task when it becomes available. The task skips overlapping runs. It does not
+task when it becomes available, including on battery power. The task skips overlapping runs. It does not
 call ChatGPT or Codex; it uses the HeadHunter API token configured in `.env`.
 
 Each successful run stores its audit, classification report, sanitized

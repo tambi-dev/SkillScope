@@ -24,6 +24,12 @@ class SalaryNormalizationTests(unittest.TestCase):
         self.assertIsNone(result.midpoint_local)
         self.assertEqual(result.status, "currency_mismatch")
 
+    def test_headhunter_rur_uses_rub_market_currency(self) -> None:
+        result = normalize_salary(100_000, 200_000, "RUR", "RUB")
+
+        self.assertEqual(result.midpoint_local, 150_000)
+        self.assertEqual(result.status, "complete_range")
+
 
 if __name__ == "__main__":
     unittest.main()

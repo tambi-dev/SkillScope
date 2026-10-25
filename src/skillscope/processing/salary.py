@@ -21,7 +21,7 @@ def normalize_salary(
     upper = _number_or_none(salary_to)
     if lower is None and upper is None:
         return NormalizedSalary(None, "missing")
-    if currency != expected_currency:
+    if ("RUB" if currency == "RUR" else currency) != expected_currency:
         return NormalizedSalary(None, "currency_mismatch")
     if lower is None or upper is None:
         return NormalizedSalary(None, "one_sided_range")

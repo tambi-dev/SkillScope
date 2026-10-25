@@ -34,6 +34,23 @@ EXCLUSION_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
         "accounting_role",
         re.compile(r"\b(специалист\s+по\s+учету|бухгалтер|data\s+entry)\b"),
     ),
+    (
+        "adjacent_data_engineer_role",
+        re.compile(
+            r"^(?:senior\s+|middle\s+|junior\s+)?"
+            r"(?:data\s+engineer|инженер\s+данных)\b.*\bdevops\b"
+        ),
+    ),
+    (
+        "technical_director_role",
+        re.compile(r"\b(?:технический\s+директор|cto)\b"),
+    ),
+    (
+        "security_management_role",
+        re.compile(
+            r"\bруководитель\s+(?:направления\s+аудита|проектов\s+по\s+информационной\s+безопасности)\b"
+        ),
+    ),
 )
 
 EDUCATION_DESCRIPTION_PATTERN = re.compile(

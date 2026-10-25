@@ -18,11 +18,11 @@ SkillScope is scoped to five Central Asian markets plus Georgia and Russia, and 
 
 ## Operating Context
 
-The default entry is My route: visitors choose Data analysis, Web development or Software testing. Each field has a plain-language explanation, an everyday example and a short guided task that runs in the browser. Only one stage is shown at a time: explanation, task or next learning step. Vacancy evidence and deeper learning topics are optional disclosures. A separate expandable section retains comparison and known-skill exploration for all ten roles. Overview, Roles & skills, and Salaries support further investigation. Market Radar circle areas show frequency; positions are illustrative.
+The default entry is Overview; visitors can then open My route to choose Data analysis, Web development or Software testing. Each field has a plain-language explanation, an everyday example and a short guided task that runs in the browser. Only one stage is shown at a time: explanation, task or next learning step. Vacancy evidence and deeper learning topics are optional disclosures. A separate expandable section retains comparison and known-skill exploration for all ten roles. Roles & skills and Salaries support further investigation. Market Radar circle areas show frequency; positions are illustrative.
 
 ## Capabilities and Constraints
 
-- The scope covers Data & AI, Software Engineering, DevOps & Cloud, Cybersecurity and QA across seven countries. The packaged 2026-10-12 snapshot contains all ten roles, with matching vacancies in Kyrgyzstan, Kazakhstan, Uzbekistan, Georgia and Russia. No configured role matched in Tajikistan or Turkmenistan on HeadHunter in this collection.
+- The scope covers Data & AI, Software Engineering, DevOps & Cloud, Cybersecurity and QA across seven countries. The packaged 2026-10-25 snapshot contains all ten roles, with matching vacancies in Kyrgyzstan, Kazakhstan, Uzbekistan, Georgia and Russia. No configured role matched in Tajikistan or Turkmenistan on HeadHunter in this collection.
 - HeadHunter search and vacancy detail APIs provide the source records. Results represent configured searches, not every hiring channel.
 - Role and skill classification uses explicit rules and dictionaries. Seniority is inferred from titles, descriptions and broad experience bands.
 - The three field guides are editorial content with English and Kyrgyz explanations and guided in-browser practice. There is no interest questionnaire or aptitude ranking. Tasks use a fictional sales table, a sandboxed HTML preview and an intentionally faulty age check. Drafts, reflections, next steps and marked skills stay in the browser; users can clear them on the privacy page.
@@ -43,7 +43,7 @@ The product name is SkillScope.
 - Project scope, source and transformation policy: `docs/data-card.md`.
 - Dashboard and API source: `frontend/src/` and `src/skillscope/`.
 - Processed snapshot and aggregate reports: `data/processed/` and `artifacts/reports/`.
-- The 2026-10-12 seven-country collection found 2,541 candidates; 2,297 passed
+- The 2026-10-25 seven-country collection processed 2,434 candidates; 2,191 passed
   the title rules and are included in the packaged identity-stripped demo. None
   matched the configured roles in Tajikistan or Turkmenistan.
 

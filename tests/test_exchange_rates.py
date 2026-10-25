@@ -14,9 +14,11 @@ def test_refresh_exchange_rates_saves_complete_snapshot(tmp_path, monkeypatch):
         {"date": "2026-10-12", "base": "USD", "quote": currency, "rate": index + 2}
         for index, currency in enumerate(currencies)
     ]
-    monkeypatch.setattr(
-        exchange_rates, "urlopen", lambda *_args, **_kwargs: io.BytesIO(json.dumps(rows).encode())
-    )
+    def fake_urlopen(request, *, timeout):
+        assert request.get_header("User-agent") == "SkillScope/0.1 (research project)"
+        return io.BytesIO(json.dumps(rows).encode())
+
+    monkeypatch.setattr(exchange_rates, "urlopen", fake_urlopen)
     output = tmp_path / "src" / "skillscope"
     output.mkdir(parents=True)
 

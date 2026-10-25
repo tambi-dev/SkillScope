@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from urllib.request import urlopen
+from urllib.request import Request, urlopen
 
 
 def refresh_exchange_rates(project_root: Path, snapshot_date: str) -> None:
@@ -13,7 +13,8 @@ def refresh_exchange_rates(project_root: Path, snapshot_date: str) -> None:
         "https://api.frankfurter.dev/v2/rates"
         f"?date={snapshot_date}&base=USD&quotes={','.join(currencies)}"
     )
-    with urlopen(url, timeout=15) as response:
+    request = Request(url, headers={"User-Agent": "SkillScope/0.1 (research project)"})
+    with urlopen(request, timeout=15) as response:
         rows = json.load(response)
     rates = {
         row["quote"]: row["rate"] for row in rows
