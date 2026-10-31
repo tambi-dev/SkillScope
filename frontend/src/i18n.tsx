@@ -6,6 +6,10 @@ type Values = Record<string, string | number>;
 
 const kyrgyz: Record<string, string> = {
   ...careerKyrgyz,
+  "HH report · Kyrgyzstan · Q3 2026": "HH баяндамасы · Кыргызстан · 2026-жылдын III чейреги",
+  "IT vacancies fell 16.4% year on year across HH’s full IT category.": "HH платформасынын жалпы IT категориясында вакансиялардын саны өткөн жылдын ушул мезгилине салыштырмалуу 16,4% азайган.",
+  "Read HH report": "HH баяндамасын окуу",
+  "This quarterly report covers a different period and broader roles than the snapshot above.": "Бул чейректик баяндама жогорудагы жыйнактан башка мезгилди жана көбүрөөк кесиптик ролдорду камтыйт.",
   "Compare published salaries, then open real examples to see their experience requirements and skill mentions.": "Жарыяланган айлыктарды салыштырып, тажрыйба талаптарын жана аталган көндүмдөрдү чыныгы мисалдардан караңыз.",
   "Experience requirements": "Тажрыйба талаптары",
   "All experience levels": "Бардык тажрыйба деңгээлдери",

@@ -202,6 +202,11 @@ h2 { font-size: 30px; font-weight: 600; letter-spacing: -.035em; line-height: 1.
 .role-demand-count { text-align: right; font-family: var(--mono); }
 .role-not-sampled { grid-column: 2 / 4; color: var(--muted); font-size: 11px; text-align: right; }
 .section-foot { color: var(--muted); font-size: 11px; line-height: 1.7; margin-top: 19px; max-width: 74ch; }
+.regional-context { border-top: 1px solid var(--line); padding-top: 16px; margin: 24px 0; color: var(--muted); font-size: 13px; line-height: 1.7; }
+.regional-context p { max-width: 85ch; }
+.regional-context p + p { margin-top: 4px; }
+.regional-context strong { display: block; margin-bottom: 4px; color: var(--ink); }
+.regional-context a { white-space: nowrap; text-decoration: underline; text-underline-offset: 3px; }
 .entry-signal { background: #e8edda; border-radius: 12px; padding: 22px 24px; }
 .entry-signal > div { display: flex; flex-direction: column; gap: 7px; }
 .entry-signal > div > span { font-size: 12px; font-weight: 600; }

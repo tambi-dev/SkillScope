@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import MarketRadar from "./MarketRadar";
 import MyRoute from "./MyRoute";
+import KyrgyzstanContext from "./KyrgyzstanContext";
 import SalaryPanel from "./SalaryPanel";
 import { configuredMarkets, orderMarkets } from "./markets";
 import AskSkillScope from "./AskSkillScope";
@@ -439,6 +440,7 @@ function App() {
             <article className="kpi-card"><h3>{t("No experience required")}</h3><div className="kpi-value">{experienceKnown ? `${Math.round((noExperienceRequired / experienceKnown) * 100)}%` : "—"}</div><p>{experienceKnown ? t("{count} of {total} with known experience", { count: noExperienceRequired, total: experienceKnown }) : t("No experience data in this sample")}</p></article>
           </section>
 
+          {shownSelection.market === "kg" && <KyrgyzstanContext />}
           {shownSelection.market === "all" && <section className="market-composition" aria-labelledby="composition-heading">
             <div className="composition-heading"><h3 id="composition-heading">{t("Seven markets in scope. One snapshot.")}</h3><p>{dominantMarket ? t("{market} makes up {share}% of this view. Select a country for a clearer comparison.", { market: dominantMarket.label, share: Math.round(dominantMarket.vacancies / sampleSize * 100) }) : t("Country mix shapes the combined results. Select a market to explore.")}</p></div>
             <div className="country-mix">{countryMix.map((item) => <button key={item.value} onClick={() => setMarket(item.value)} aria-label={t("Explore {market}: {count} vacancies", { market: item.label, count: item.vacancies })}>

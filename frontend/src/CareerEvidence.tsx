@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getOverview, getRoles, getSkills } from "./api";
+import KyrgyzstanContext from "./KyrgyzstanContext";
 import type { GuideId } from "./careerGuides";
 import { useLanguage } from "./i18n";
 import type { MarketCode, RoleDemandItem, SkillsResponse } from "./types";
@@ -36,6 +37,7 @@ export default function CareerEvidence({ guide, market, markets, onMarketChange,
           </>}
         </>}
     <p className="career-note">{t("These are sampled vacancies, not your chance of getting hired. Frequently mentioned skills are not a first-day learning checklist.")}{market === "all" && " " + t("The combined sample mixes countries unevenly. ")}</p>
+    {current && market === "kg" && <KyrgyzstanContext />}
     <button type="button" className="career-link" onClick={onExploreRole}>{t("Explore this role’s skill evidence")}</button>
   </div>;
 }

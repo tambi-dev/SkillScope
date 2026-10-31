@@ -1,6 +1,6 @@
 # SkillScope — project status
 
-Last updated: 2026-10-25
+Last updated: 2026-11-01
 
 ## Current milestone
 
@@ -21,6 +21,11 @@ a saved next learning step, with optional current vacancy evidence.
 
 ## Development history
 
+- Checked Kyrgyzstan search coverage against HH's current IT category and confirmed
+  four missed listings by their full duties. Added four exact search variants
+  (32 to 36 queries per market) for future runs; the packaged snapshot stays dated
+  25 October. Added a separate attributed Q3 2026 context note for Kyrgyzstan.
+  See `docs/coverage-kg-2026-10-31.md`; changes in coverage must not be read as growth.
 - Added salary-only experience filtering with an all-level default and
   on-demand anonymised vacancy examples. Examples share the summary scope and
   preserve original salary amounts; the API whitelists public fields and normalises

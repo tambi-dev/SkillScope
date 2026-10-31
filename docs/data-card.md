@@ -31,6 +31,13 @@ manual role review and skill-dictionary coverage check for the earlier 2026-10-1
 five-market collection (338 included vacancies). It does not measure precision or
 recall for the packaged 2026-10-25 demo.
 
+The [31 October Kyrgyzstan coverage check](coverage-kg-2026-10-31.md) identified
+four listings missed by the search queries despite matching existing role rules.
+Four exact query variants were added for future collections; the packaged
+25 October snapshot is unchanged. Changes across this search update may reflect
+broader coverage rather than hiring growth. The site also links to HH's separate
+Q3 2026 report as quarterly context for Kyrgyzstan, outside our snapshot statistics.
+
 ## Known limitations
 
 - HeadHunter does not cover every hiring channel in the seven configured markets.

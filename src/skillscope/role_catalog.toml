@@ -63,7 +63,7 @@ priority = 100
 [roles.backend_developer]
 category = "software_engineering"
 label = "Backend Developer"
-queries = ["backend developer", "backend разработчик"]
+queries = ["backend developer", "backend разработчик", "backend engineer"]
 title_patterns = [
   '\bbackend\s+(?:developer|engineer)\b',
   '\bback\s+end\s+(?:developer|engineer)\b',
@@ -77,7 +77,7 @@ priority = 50
 [roles.frontend_developer]
 category = "software_engineering"
 label = "Frontend Developer"
-queries = ["frontend developer", "frontend разработчик"]
+queries = ["frontend developer", "frontend разработчик", "frontend engineer"]
 title_patterns = [
   '\bfrontend\s+(?:developer|engineer)\b',
   '\bfront\s+end\s+(?:developer|engineer)\b',
@@ -106,7 +106,7 @@ priority = 90
 [roles.devops_engineer]
 category = "devops_cloud"
 label = "DevOps Engineer"
-queries = ["DevOps engineer", "инженер DevOps"]
+queries = ["DevOps engineer", "инженер DevOps", "системный администратор DevOps"]
 title_patterns = ['\bdevops\b', '\bдевопс\b']
 priority = 50
 
@@ -120,6 +120,7 @@ queries = [
   "SOC analyst",
   "информационная безопасность",
   "кибербезопасность",
+  "кибербезопасности",
   "специалист ИБ",
   "инженер ИБ",
 ]
